@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- List View -->
+    <record id="category_category_list_view" model="ir.ui.view">
+        <field name="name">category.category.list</field>
+        <field name="model">category.category</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_category_category" model="ir.actions.act_window">
+        <field name="name">Document Category</field>
+        <field name="res_model">category.category</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face"/>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_category_category"
+        name="Document Category"
+        parent="documents.Config"
+        sequence="20"
+        action="action_category_category"/>
+</odoo>

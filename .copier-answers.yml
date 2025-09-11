@@ -1,0 +1,6 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: '937636112'
+_src_path: https://github.com/dka-odoo/offshore-addons.git
+include_prettierxml: true
+include_ruff_format: true
+odoo_version: 17.0
