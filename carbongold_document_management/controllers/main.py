@@ -20,7 +20,7 @@ class DocumentController(http.Controller):
         if category_ids is None:
             category_ids = []
         documents_per_page = 20
-        domain = []
+        domain = [("is_published", "!=", False)]
 
         if search:
             domain += [("name", "ilike", search)]
@@ -66,7 +66,14 @@ class DocumentController(http.Controller):
 
     @http.route(["/document/<string:name>/<int:document_id>"], type="http", auth="public", website=True, sitemap=True)
     def document_detail(self, name, document_id, **kwargs):
-        values = {"document": request.env["documents.document"].browse(document_id)}
+        document = request.env["documents.document"].sudo().browse(document_id)
+        if not document.is_published:
+            return request.not_found()
+
+        document.write({
+            'document_click_count': document.document_click_count+1
+        })
+        values = {"document": request.env["documents.document"].sudo().browse(document_id)}
         return request.render("carbongold_document_management.detail_document_page", values)
 
     @http.route(["/document/download/<int:document>"], type="http", auth="public", website=True)
@@ -79,6 +86,10 @@ class DocumentController(http.Controller):
             content = base64.b64decode(document_id.datas)
         except Exception as error:
             raise UserError(error)
+
+        document_id.write({
+            'document_download_count':document_id.document_download_count + 1
+        })
 
         return request.make_response(
             content,

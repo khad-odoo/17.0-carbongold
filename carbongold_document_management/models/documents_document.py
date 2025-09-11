@@ -14,6 +14,14 @@ class Documents(models.Model):
     rating_count = fields.Integer()
     author = fields.Char("Author")
     doc_description = fields.Char("Description")
+    document_click_count = fields.Integer("Document Click Count", default=0)
+    document_download_count = fields.Integer("Document Download Count", default=0)
+    published_document = fields.Integer("Published",compute='_compute_published_document', default=0,store=True)
+
+    @api.depends('is_published')
+    def _compute_published_document(self):
+        for rec in self:
+            rec.published_document = 1 if rec.is_published else 0
 
     def action_publish(self):
         for record in self:
@@ -26,6 +34,7 @@ class Documents(models.Model):
         with_description = options["displayDescription"]
         search_fields = ["name"]
         fetch_fields = ["id", "name"]
+        domain = [website.website_domain(), [("is_published", "!=", False)]]
         mapping = {
             "name": {"name": "name", "type": "text", "match": True},
             "website_url": {"name": "url", "type": "text", "truncate": False},
@@ -38,7 +47,8 @@ class Documents(models.Model):
             mapping["image_url"] = {"name": "image_url", "type": "html"}
         return {
             "model": "documents.document",
-            "base_domain": [website.website_domain()],
+            "base_domain": domain,
+            "requires_sudo": True,
             "search_fields": search_fields,
             "fetch_fields": fetch_fields,
             "mapping": mapping,

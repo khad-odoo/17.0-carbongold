@@ -11,4 +11,41 @@ if records:
     records.action_publish()
             </field>
     </record>
+
+    <record id="view_documents_report_search" model="ir.ui.view">
+        <field name="name">documents.document.search.report</field>
+        <field name="model">documents.document</field>
+        <field name="arch" type="xml">
+            <search string="Documents Report">
+                <filter string="Downloads" name="downloads"
+                    domain="[('document_download_count','>',0)]"
+                />
+                <filter string="Clicks" name="clicked"
+                    domain="[('document_click_count','>',0)]"
+                />
+                <filter string="Published" name="published"
+                domain="[('published_document','=','1')]"
+                />
+                <filter string="Not Published" name="not_published"
+                    domain="[('published_document','=','0')]"
+                />
+                <filter string="User Ratings" name="avg_user_rating"
+                    domain="[('rating_avg','>','0')]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_documents_report" model="ir.actions.act_window">
+        <field name="name">Documents Analysis</field>
+        <field name="res_model">documents.document</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="search_view_id" ref="view_documents_report_search"/>
+    </record>
+
+    <menuitem id="carbongold_document_management_report_menu"
+        name="Report"
+        parent="documents.menu_root"
+        action="action_documents_report"
+        sequence="3"/>
 </odoo>
