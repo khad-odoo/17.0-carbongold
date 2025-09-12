@@ -16,12 +16,6 @@ class Documents(models.Model):
     doc_description = fields.Char("Description")
     document_click_count = fields.Integer("Document Click Count", default=0)
     document_download_count = fields.Integer("Document Download Count", default=0)
-    published_document = fields.Integer("Published",compute='_compute_published_document', default=0,store=True)
-
-    @api.depends('is_published')
-    def _compute_published_document(self):
-        for rec in self:
-            rec.published_document = 1 if rec.is_published else 0
 
     def action_publish(self):
         for record in self:
