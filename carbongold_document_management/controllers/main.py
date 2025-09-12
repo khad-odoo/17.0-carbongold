@@ -73,8 +73,7 @@ class DocumentController(http.Controller):
         document.write({
             'document_click_count': document.document_click_count+1
         })
-        values = {"document": request.env["documents.document"].sudo().browse(document_id)}
-        return request.render("carbongold_document_management.detail_document_page", values)
+        return request.render("carbongold_document_management.detail_document_page", {"document": document})
 
     @http.route(["/document/download/<int:document>"], type="http", auth="public", website=True)
     def document_download(self, document, **kwargs):
