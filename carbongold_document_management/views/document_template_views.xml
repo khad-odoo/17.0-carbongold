@@ -311,24 +311,25 @@
                 <div class="modal-content website-document">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Document</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close" />
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
                     </div>
                     <div class="modal-body">
-                        <div class="form-label">
-                            <label>Name of Document</label>
+                        <div class="alert alert-danger d-none validation-message" role="alert"></div>
+
+                        <div class="mb-2">
+                            <label class="form-label">Name of Document <span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control" />
                         </div>
-                        <div class="form-label">
-                            <label>Author</label>
+                        <div class="mb-2">
+                            <label class="form-label">Author</label>
                             <input type="text" name="author" class="form-control" />
                         </div>
-                        <div class="form-label">
-                            <label>Description</label>
+                        <div class="mb-2">
+                            <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" />
                         </div>
-                        <div class="form-label">
-                            <label>Category</label>
+                        <div class="mb-2">
+                            <label class="form-label">Category <span class="text-danger">*</span></label>
                             <select name="category" class="form-control">
                                 <option value="">Select Category</option>
                                 <t t-foreach="categories or []" t-as="category">
@@ -338,15 +339,15 @@
                                 </t>
                             </select>
                         </div>
-                        <div class="form-label">
-                            <label>Attachment Type</label>
+                        <div class="mb-2">
+                            <label class="form-label">Attachment Type <span class="text-danger">*</span></label>
                             <select name="attachment_type" class="form-control document-att-type">
                                 <option value="file">File</option>
                                 <option value="link">Link</option>
                             </select>
                         </div>
-                        <div class="form-label">
-                            <label>Attach Document</label>
+                        <div class="mb-2">
+                            <label class="form-label">Attach Document <span class="text-danger">*</span></label>
                             <input type="file"
                                 name="document_file"
                                 class="form-control"
@@ -356,8 +357,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary saveDocumentBtn">Save Document</button>
                     </div>
                 </div>

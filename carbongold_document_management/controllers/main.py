@@ -101,17 +101,15 @@ class DocumentController(http.Controller):
     @http.route(['/document/save_document'], type='http', auth='user', methods=['POST'], website=True, csrf=False)
     def save_document(self, **post):
         name = post.get("name")
-        description = post.get("description")
         attachment_type = post.get("attachment_type")
-        category_id = int(post.get("category"))
-        author = post.get('author')
+        document = request.env["documents.document"]
 
         vals = {
             "name": name,
-            "author": author,
-            "doc_description": description,
+            "author": post.get('author', ""),
+            "doc_description": post.get("description", ""),
             "owner_id": request.env.user.id,
-            "document_category_id": category_id,
+            "document_category_id": int(post.get("category")),
             "folder_id": request.env.ref('carbongold_document_management.documents_upload_folder').id,
         }
 
@@ -123,7 +121,11 @@ class DocumentController(http.Controller):
             if upload_file:
                 try:
                     file_content = upload_file.read()
+                    max_upload_size = document.get_document_max_upload_limit()
                     filename = upload_file.filename or ""
+                    if max_upload_size and len(file_content) > max_upload_size:
+                        return request.make_json_response(False)
+
                     file_ext = "." + filename.split(".")[-1].lower() if "." in filename else ""
                     if file_ext not in ALLOWED_EXTENSIONS:
                         return request.make_json_response(False)
@@ -142,6 +144,8 @@ class DocumentController(http.Controller):
             else:
                 return request.make_json_response(False)
 
-        document = request.env["documents.document"].sudo().create(vals)
+        document_id = document.sudo().create(vals)
+        if document_id and attachment_type == "link":
+            document_id._compute_name_and_preview()
         
-        return request.make_json_response(bool(document))
+        return request.make_json_response(bool(document_id))
