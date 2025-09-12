@@ -109,8 +109,8 @@
                                                 class="rounded"
                                                 style="width:80px; height:80px; object-fit:cover;"/>
                                             <img
-                                                t-elif="doc.type == 'url' and doc.url"
-                                                t-att-src="'%s' % doc.url"
+                                                t-elif="doc.type == 'url' and doc.url_preview_image"
+                                                t-att-src="'%s' % doc.url_preview_image"
                                                 class="rounded"
                                                 style="width:80px; height:80px; object-fit:cover;"/>
                                             <img
@@ -158,8 +158,8 @@
                                                                 class="rounded"
                                                                 style="width:80px; height:80px; object-fit:cover;"/>
                                                             <img
-                                                                t-elif="doc.type == 'url' and doc.url"
-                                                                t-att-src="'%s' % doc.url"
+                                                                t-elif="doc.type == 'url' and doc.url_preview_image"
+                                                                t-att-src="'%s' % doc.url_preview_image"
                                                                 class="rounded"
                                                                 style="width:80px; height:80px; object-fit:cover;"/>
                                                             <img
@@ -247,8 +247,8 @@
                             class="img-fluid rounded shadow-sm"
                             style="height: 300px; width:400px; object-fit: cover;"/>
                         <img
-                            t-elif="document.type == 'url' and document.url"
-                            t-att-src="'%s' % document.url"
+                            t-elif="document.type == 'url' and document.url_preview_image"
+                            t-att-src="'%s' % document.url_preview_image"
                             class="img-fluid rounded shadow-sm"
                             style="height: 300px; width:400px; object-fit: cover;"/>
                         <img

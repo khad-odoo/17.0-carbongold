@@ -16,12 +16,6 @@ class Documents(models.Model):
     doc_description = fields.Char("Description")
     document_click_count = fields.Integer("Document Click Count", default=0)
     document_download_count = fields.Integer("Document Download Count", default=0)
-    published_document = fields.Integer("Published",compute='_compute_published_document', default=0,store=True)
-
-    @api.depends('is_published')
-    def _compute_published_document(self):
-        for rec in self:
-            rec.published_document = 1 if rec.is_published else 0
 
     def action_publish(self):
         for record in self:
@@ -33,7 +27,7 @@ class Documents(models.Model):
         with_image = options["displayImage"]
         with_description = options["displayDescription"]
         search_fields = ["name"]
-        fetch_fields = ["id", "name"]
+        fetch_fields = ["id", "name", "type", "url_preview_image"]
         domain = [website.website_domain(), [("is_published", "!=", False)]]
         mapping = {
             "name": {"name": "name", "type": "text", "match": True},
@@ -63,5 +57,10 @@ class Documents(models.Model):
             document = self.env["documents.document"].browse(data["id"])
             data["url"] = f"/document/{slug(document)}/{data['id']}"
             if with_image:
-                data["image_url"] = f"/web/image/documents.document/{data['id']}/thumbnail"
+                if data["type"] == "binary":
+                    data["image_url"] = f"/web/image/documents.document/{data['id']}/thumbnail"
+                elif data["type"] == "url" and data["url_preview_image"]:
+                    data["image_url"] = f"{data['url_preview_image']}"
+                else:
+                    data["image_url"] = "/base/static/img/avatar_grey.png"
         return results_data

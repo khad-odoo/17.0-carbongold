@@ -23,15 +23,12 @@ if records:
                 <filter string="Clicks" name="clicked"
                     domain="[('document_click_count','>',0)]"
                 />
-                <filter string="Published" name="published"
-                domain="[('published_document','=','1')]"
-                />
-                <filter string="Not Published" name="not_published"
-                    domain="[('published_document','=','0')]"
-                />
                 <filter string="User Ratings" name="avg_user_rating"
                     domain="[('rating_avg','>','0')]"
                 />
+                <group expand="1" string="Group By">
+                    <filter string="Published" name="group_is_published" context="{'group_by':'is_published'}"/>
+                </group>
             </search>
         </field>
     </record>
