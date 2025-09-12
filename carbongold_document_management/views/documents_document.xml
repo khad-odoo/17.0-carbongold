@@ -36,6 +36,17 @@ if records:
         </field>
     </record>
 
+    <record id="documents_view_list_inherite_carbongold_document_management" model="ir.ui.view">
+        <field name="name">documents.document._inherite.carbongold.document.management</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="is_published" widget="boolean_toggle" optional="show" />
+            </xpath>
+        </field>
+    </record>
+
     <record id="action_documents_report" model="ir.actions.act_window">
         <field name="name">Documents Analysis</field>
         <field name="res_model">documents.document</field>
