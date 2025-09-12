@@ -33,7 +33,7 @@ class Documents(models.Model):
         with_image = options["displayImage"]
         with_description = options["displayDescription"]
         search_fields = ["name"]
-        fetch_fields = ["id", "name"]
+        fetch_fields = ["id", "name", "type", "url_preview_image"]
         domain = [website.website_domain(), [("is_published", "!=", False)]]
         mapping = {
             "name": {"name": "name", "type": "text", "match": True},
@@ -63,5 +63,10 @@ class Documents(models.Model):
             document = self.env["documents.document"].browse(data["id"])
             data["url"] = f"/document/{slug(document)}/{data['id']}"
             if with_image:
-                data["image_url"] = f"/web/image/documents.document/{data['id']}/thumbnail"
+                if data["type"] == "binary":
+                    data["image_url"] = f"/web/image/documents.document/{data['id']}/thumbnail"
+                elif data["type"] == "url" and data["url_preview_image"]:
+                    data["image_url"] = f"{data['url_preview_image']}"
+                else:
+                    data["image_url"] = "/base/static/img/avatar_grey.png"
         return results_data
