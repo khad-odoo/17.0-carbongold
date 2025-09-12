@@ -144,7 +144,5 @@ class DocumentController(http.Controller):
                 return request.make_json_response(False)
 
         document = request.env["documents.document"].sudo().create(vals)
-        if document:
-            return request.make_json_response(True)
-        else:
-            return request.make_json_response(False)
+        
+        return request.make_json_response(bool((document)))

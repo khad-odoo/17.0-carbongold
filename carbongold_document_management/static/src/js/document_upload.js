@@ -46,7 +46,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const file = fileInput.files[0];
         // Validation
         if (!name || !author || !description) {
-            this.notification.add(_t("Please enter all details."), { type: "warning" });
+            this.notification.add(_t("Please fill all details."), { type: "warning" });
             return;
         }
         if (!category) {
@@ -66,7 +66,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
             }
         }
         if (attachmentType === "link" && !link) {
-            this.notification.add(_t("Please enter a valid document link."), { type: "warning" });
+            this.notification.add(_t("Please fill a valid document link."), { type: "warning" });
             return;
         }
 
@@ -109,7 +109,6 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         this.el.querySelector("input[name='name']").value = "";
         this.el.querySelector("input[name='author']").value = "";
         this.el.querySelector("textarea[name='description']").value = "";
-        this.el.querySelector("select[name='attachment_type']").value = "file";
         this.el.querySelector("input[name='document_file']").value = "";
         this.el.querySelector("input[name='document_link']").value = "";
     }
