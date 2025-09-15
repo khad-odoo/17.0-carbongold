@@ -3,7 +3,7 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { _t } from "@web/core/l10n/translation";
 
-const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_MB = 63;
 
 publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
     selector: ".website-document",
@@ -35,6 +35,20 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
     async _onSaveDocument(ev) {
         ev.preventDefault();
 
+        const modal = document.getElementById("getDocumentModal");
+        const messageBox = modal.querySelector(".validation-message");
+        // Helper to show error in alert box
+        const showError = (message) => {
+            messageBox.textContent = message;
+            messageBox.classList.remove("d-none");
+        };
+
+        // Helper to clear error
+        const clearError = () => {
+            messageBox.textContent = "";
+            messageBox.classList.add("d-none");
+        };
+
         const name = this.el.querySelector("input[name='name']").value;
         const author = this.el.querySelector("input[name='author']").value;
         const description = this.el.querySelector("textarea[name='description']").value;
@@ -44,30 +58,19 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const link = this.el.querySelector("input[name='document_link']").value.trim();
 
         const file = fileInput.files[0];
-        // Validation
-        if (!name || !author || !description) {
-            this.notification.add(_t("Please fill all details."), { type: "warning" });
-            return;
-        }
-        if (!category) {
-            this.notification.add(_t("Please select a document category."), { type: "warning" });
-            return;
-        }
+        clearError();
+
+        if (!name) return showError("Please enter the name of the document.");
+        if (!category) return showError("Please select a document category.");
         if (attachmentType === "file") {
-            if (!file) {
-                this.notification.add(_t("Please select a file to upload."), { type: "warning" });
-                return;
-            }
-            // Validate size
+        if (!file) return showError("Please select a file to upload.");
             const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
             if (file.size > maxSizeBytes) {
-                this.notification.add(_t(`File size must not exceed ${MAX_FILE_SIZE_MB} MB.`), { type: "danger" });
-                return;
+                return showError(`File size must not exceed ${MAX_FILE_SIZE_MB} MB.`);
             }
         }
         if (attachmentType === "link" && !link) {
-            this.notification.add(_t("Please fill a valid document link."), { type: "warning" });
-            return;
+            return showError("Please provide a valid document link.");
         }
 
         const formData = new FormData();
@@ -92,8 +95,6 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
 
             if (result) {
                 this.notification.add(_t("Document uploaded successfully!"), { type: "success" });
-
-                const modal = document.getElementById("getDocumentModal");
                 if (modal) modal.classList.remove("show");
 
                 this._resetForm();
