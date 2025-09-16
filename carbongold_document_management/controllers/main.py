@@ -78,11 +78,15 @@ class DocumentController(http.Controller):
     @http.route(["/document/download/<int:document>"], type="http", auth="public", website=True)
     def document_download(self, document, **kwargs):
         document_id = request.env["documents.document"].sudo().browse(document)
-        if not document_id.datas:
+        datas =  document_id.attachment_id.datas
+        filename = document_id.name or document_id.attachment_id.name
+        mimetype = document_id.attachment_id.mimetype or 'application/octet-stream'
+
+        if not document_id.attachment_id.datas:
             return request.not_found()
 
         try:
-            content = base64.b64decode(document_id.datas)
+            content = base64.b64decode(datas)
         except Exception as error:
             raise UserError(error)
 
@@ -93,9 +97,10 @@ class DocumentController(http.Controller):
         return request.make_response(
             content,
             headers=[
-                ("Cache-Control", "no-store"),
-                ("Content-Disposition", content_disposition(document_id.name)),
-            ],
+                ('Content-Type', mimetype),
+                ('Cache-Control', 'no-store'),
+                ('Content-Disposition', content_disposition(filename)),
+            ]
         )
 
     @http.route(['/document/save_document'], type='http', auth='user', methods=['POST'], website=True, csrf=False)
