@@ -1,9 +1,10 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import re
+
 from odoo import api, fields, models
 
 from odoo.addons.http_routing.models.ir_http import slug
-import re
 
 
 class Documents(models.Model):
@@ -66,7 +67,7 @@ class Documents(models.Model):
                     data["image_url"] = "/base/static/img/avatar_grey.png"
         return results_data
 
-    def _get_youtubeUrlToken(self):
+    def _get_youtube_url_token(self):
         if not self.url:
             return False
         pattern = re.compile(

@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import publicWidget from "@web/legacy/js/public/public_widget";
-import { _t } from "@web/core/l10n/translation";
+import {_t} from "@web/core/l10n/translation";
 
 const MAX_FILE_SIZE_MB = 63;
 
@@ -63,7 +63,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         if (!name) return showError("Please enter the name of the document.");
         if (!category) return showError("Please select a document category.");
         if (attachmentType === "file") {
-        if (!file) return showError("Please select a file to upload.");
+            if (!file) return showError("Please select a file to upload.");
             const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
             if (file.size > maxSizeBytes) {
                 return showError(`File size must not exceed ${MAX_FILE_SIZE_MB} MB.`);
@@ -81,8 +81,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         formData.append("category", category);
         if (file) {
             formData.append("document_file", file);
-        }
-        else if (link) {
+        } else if (link) {
             formData.append("document_link", link);
         }
 
@@ -94,15 +93,15 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
             const result = await response.json();
 
             if (result) {
-                this.notification.add(_t("Document uploaded successfully!"), { type: "success" });
+                this.notification.add(_t("Document uploaded successfully!"), {type: "success"});
                 if (modal) modal.classList.remove("show");
 
                 this._resetForm();
             } else {
-                this.notification.add(result.error || _t("Document was not uploaded."), { type: "danger" });
+                this.notification.add(result.error || _t("Document was not uploaded."), {type: "danger"});
             }
         } catch (error) {
-            this.notification.add(_t("An error occurred while uploading."), { type: "danger" });
+            this.notification.add(_t("An error occurred while uploading."), {type: "danger"});
         }
     },
 
@@ -112,5 +111,5 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         this.el.querySelector("textarea[name='description']").value = "";
         this.el.querySelector("input[name='document_file']").value = "";
         this.el.querySelector("input[name='document_link']").value = "";
-    }
+    },
 });

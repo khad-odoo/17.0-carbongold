@@ -17,15 +17,9 @@ if records:
         <field name="model">documents.document</field>
         <field name="arch" type="xml">
             <search string="Documents Report">
-                <filter string="Downloads" name="downloads"
-                    domain="[('document_download_count','>',0)]"
-                />
-                <filter string="Clicks" name="clicked"
-                    domain="[('document_click_count','>',0)]"
-                />
-                <filter string="User Ratings" name="avg_user_rating"
-                    domain="[('rating_avg','>','0')]"
-                />
+                <filter string="Downloads" name="downloads" domain="[('document_download_count','>',0)]"/>
+                <filter string="Clicks" name="clicked" domain="[('document_click_count','>',0)]"/>
+                <filter string="User Ratings" name="avg_user_rating" domain="[('rating_avg','>','0')]"/>
                 <group expand="1" string="Group By">
                     <filter string="Published" name="group_is_published" context="{'group_by':'is_published'}"/>
                 </group>
@@ -39,7 +33,7 @@ if records:
         <field name="inherit_id" ref="documents.documents_view_list"/>
         <field name="arch" type="xml">
             <xpath expr="//tree" position="inside">
-                <field name="is_published" widget="boolean_toggle" optional="show" />
+                <field name="is_published" widget="boolean_toggle" optional="show"/>
             </xpath>
         </field>
     </record>
@@ -51,7 +45,8 @@ if records:
         <field name="search_view_id" ref="view_documents_report_search"/>
     </record>
 
-    <menuitem id="carbongold_document_management_report_menu"
+    <menuitem
+        id="carbongold_document_management_report_menu"
         name="Report"
         parent="documents.menu_root"
         action="action_documents_report"

@@ -9,10 +9,22 @@ from odoo.osv import expression
 
 from odoo.addons.portal.controllers.portal import pager as website_pager
 
+
 ALLOWED_EXTENSIONS = {
-    ".pdf", ".doc", ".docx", ".pptx", ".xls", ".xlsx", ".csv", ".txt",
-    ".jpg", ".jpeg", ".png", ".webp"
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".pptx",
+    ".xls",
+    ".xlsx",
+    ".csv",
+    ".txt",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
 }
+
 
 class DocumentController(http.Controller):
     @http.route(["/documents", "/documents/page/<int:page>"], type="http", auth="public", website=True, sitemap=True)
@@ -25,8 +37,6 @@ class DocumentController(http.Controller):
         if search:
             domain += [("name", "ilike", search)]
 
-        document_count = request.env["documents.document"].sudo().search_count(domain)
-
         if category_ids:
             if isinstance(category_ids, str):
                 category_ids = [int(x) for x in request.httprequest.args.getlist("category_ids")]
@@ -34,6 +44,7 @@ class DocumentController(http.Controller):
                 category_ids = [int(category_ids)]
             domain = expression.AND([domain, [("document_category_id", "in", category_ids)]])
 
+        document_count = request.env["documents.document"].sudo().search_count(domain)
         pager = website_pager(
             url="/documents",
             total=document_count,
@@ -59,6 +70,7 @@ class DocumentController(http.Controller):
             "search": search,
             "view_type": view_type,
             "categories": request.env["category.category"].sudo().search([]),
+            "parent_categories": request.env["category.category"].sudo().search([("parent_id", "=", False)]),
             "search_count": document_count,
             "selected_categories": category_ids,
         }
@@ -70,17 +82,15 @@ class DocumentController(http.Controller):
         if not document.is_published:
             return request.not_found()
 
-        document.write({
-            'document_click_count': document.document_click_count+1
-        })
+        document.write({"document_click_count": document.document_click_count + 1})
         return request.render("carbongold_document_management.detail_document_page", {"document": document})
 
     @http.route(["/document/download/<int:document>"], type="http", auth="public", website=True)
     def document_download(self, document, **kwargs):
         document_id = request.env["documents.document"].sudo().browse(document)
-        datas =  document_id.attachment_id.datas
+        datas = document_id.attachment_id.datas
         filename = document_id.name or document_id.attachment_id.name
-        mimetype = document_id.attachment_id.mimetype or 'application/octet-stream'
+        mimetype = document_id.attachment_id.mimetype or "application/octet-stream"
 
         if not document_id.attachment_id.datas:
             return request.not_found()
@@ -90,20 +100,18 @@ class DocumentController(http.Controller):
         except Exception as error:
             raise UserError(error)
 
-        document_id.write({
-            'document_download_count':document_id.document_download_count + 1
-        })
+        document_id.write({"document_download_count": document_id.document_download_count + 1})
 
         return request.make_response(
             content,
             headers=[
-                ('Content-Type', mimetype),
-                ('Cache-Control', 'no-store'),
-                ('Content-Disposition', content_disposition(filename)),
-            ]
+                ("Content-Type", mimetype),
+                ("Cache-Control", "no-store"),
+                ("Content-Disposition", content_disposition(filename)),
+            ],
         )
 
-    @http.route(['/document/save_document'], type='http', auth='user', methods=['POST'], website=True, csrf=False)
+    @http.route(["/document/save_document"], type="http", auth="user", methods=["POST"], website=True, csrf=False)
     def save_document(self, **post):
         name = post.get("name")
         attachment_type = post.get("attachment_type")
@@ -111,11 +119,11 @@ class DocumentController(http.Controller):
 
         vals = {
             "name": name,
-            "author": post.get('author', ""),
+            "author": post.get("author", ""),
             "doc_description": post.get("description", ""),
             "owner_id": request.env.user.id,
             "document_category_id": int(post.get("category")),
-            "folder_id": request.env.ref('carbongold_document_management.documents_upload_folder').id,
+            "folder_id": request.env.ref("carbongold_document_management.documents_upload_folder").id,
         }
 
         if attachment_type == "link":
@@ -135,12 +143,16 @@ class DocumentController(http.Controller):
                     if file_ext not in ALLOWED_EXTENSIONS:
                         return request.make_json_response(False)
 
-                    attachment = request.env["ir.attachment"].sudo().create({
-                        "name": name,
-                        "datas": base64.b64encode(file_content),
-                        "mimetype": upload_file.content_type or "application/octet-stream",
-                        "res_model": "documents.document",
-                    })
+                    attachment = (
+                        request.env["ir.attachment"]
+                        .sudo()
+                        .create({
+                            "name": name,
+                            "datas": base64.b64encode(file_content),
+                            "mimetype": upload_file.content_type or "application/octet-stream",
+                            "res_model": "documents.document",
+                        })
+                    )
                     if attachment:
                         vals["attachment_id"] = attachment.id
                         vals["type"] = "binary"
@@ -152,5 +164,5 @@ class DocumentController(http.Controller):
         document_id = document.sudo().create(vals)
         if document_id and attachment_type == "link":
             document_id._compute_name_and_preview()
-        
+
         return request.make_json_response(bool(document_id))
