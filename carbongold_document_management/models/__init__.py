@@ -2,4 +2,5 @@
 
 from . import category_category
 from . import documents_document
+from . import document_review
 from . import website

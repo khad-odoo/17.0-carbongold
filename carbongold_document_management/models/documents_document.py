@@ -3,20 +3,35 @@
 from odoo import api, fields, models
 
 from odoo.addons.http_routing.models.ir_http import slug
-
+import uuid
 
 class Documents(models.Model):
     _name = "documents.document"
     _inherit = ["documents.document", "website.searchable.mixin", "website.published.multi.mixin"]
 
     document_category_id = fields.Many2one(comodel_name="category.category", string="Category")
-    rating_avg = fields.Integer()
-    rating_count = fields.Integer()
     author = fields.Char("Author")
     doc_description = fields.Char("Description")
     document_click_count = fields.Integer("Document Click Count", default=0)
     document_download_count = fields.Integer("Document Download Count", default=0)
+    reviews = fields.One2many('document.review', 'document_id', string='Reviews')
+    access_token = fields.Char('Security Token', default=lambda self: uuid.uuid4().hex)
+    # Computed rating fields
+    rating_avg = fields.Float("Average Rating", compute='_compute_rating_stats', store=True)
+    rating_count = fields.Integer("Review Count", compute='_compute_rating_stats', store=True)
+    allow_reviews = fields.Boolean("Allow Reviews", default=True)
 
+    @api.depends('reviews.rating', 'reviews.is_published')
+    def _compute_rating_stats(self):
+        for record in self:
+            reviews_with_rating = record.reviews.filtered(lambda r: r.rating > 0 and r.is_published and not r.is_reply)
+            if reviews_with_rating:
+                record.rating_avg = sum(reviews_with_rating.mapped('rating')) / len(reviews_with_rating)
+                record.rating_count = len(reviews_with_rating)
+            else:
+                record.rating_avg = 0.0
+                record.rating_count = 0
+                
     def action_publish(self):
         for record in self:
             if not record.is_published:

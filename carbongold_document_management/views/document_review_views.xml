@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_document_review_search" model="ir.ui.view">
+        <field name="name">document.review.search</field>
+        <field name="model">document.review</field>
+        <field name="arch" type="xml">
+            <search string="Document Reviews">
+                <!-- Search Fields -->
+                <field name="comment" string="Review Content"
+                    filter_domain="[('comment', 'ilike', self)]" />
+                <field name="partner_id" string="Reviewer" />
+                <field name="document_id" string="Document" />
+                <field name="rating" string="Rating" />
+
+                <!-- Filters -->
+                <filter string="Published Reviews" name="published"
+                    domain="[('is_published', '=', True)]" />
+                <filter string="Unpublished Reviews" name="unpublished"
+                    domain="[('is_published', '=', False)]" />
+
+                <separator />
+
+                <filter string="Reviews Only" name="reviews_only"
+                    domain="[('is_reply', '=', False)]" />
+                <filter string="Replies Only" name="replies_only"
+                    domain="[('is_reply', '=', True)]" />
+
+                <separator />
+
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter string="Document" name="group_document"
+                        context="{'group_by': 'document_id'}" />
+                    <filter string="Reviewer" name="group_reviewer"
+                        context="{'group_by': 'partner_id'}" />
+                    <filter string="Rating" name="group_rating"
+                        context="{'group_by': 'rating'}" />
+                    <filter string="Is Reply?" name="group_type"
+                        context="{'group_by': 'is_reply'}" />
+                    <filter string="Publication Status" name="group_published"
+                        context="{'group_by': 'is_published'}" />
+                    <filter string="Review Date" name="group_date"
+                        context="{'group_by': 'create_date:month'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="document_review_view_kanban" model="ir.ui.view">
+        <field name="name">document.review.view.kanban</field>
+        <field name="model">document.review</field>
+        <field name="arch" type="xml">
+
+            <kanban create="1" edit="1" class="o_rating_rating_kanban">
+                <field name="rating" />
+                <field name="document_id" />
+                <field name="comment" />
+                <field name="partner_id" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <t t-set="val_stars" t-value="Math.round(record.rating.raw_value * 10) / 10" />
+                        <t t-set="val_integer" t-value="Math.floor(val_stars)" />
+                        <t t-set="val_decimal" t-value="val_stars - val_integer" />
+                        <t t-set="empty_star" t-value="5 - (val_integer + Math.ceil(val_decimal))" />
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="d-flex flex-row">
+                                <div class="o_rating_kanban_left me-3">
+                                    <h1 class="o_rating_value text-center text-primary"
+                                        t-esc="val_stars" />
+                                    <i t-foreach="[...Array(val_integer).keys()]" t-as="num"
+                                        t-key="num"
+                                        class="fa fa-star"
+                                        aria-label="A star"
+                                        role="img" />
+                                    <i t-if="val_decimal"
+                                        class="fa fa-star-half-o"
+                                        aria-label="Half a star"
+                                        role="img" />
+                                    <i t-foreach="[...Array(empty_star).keys()]" t-as="num"
+                                        t-key="num"
+                                        class="fa fa-star text-black-25"
+                                        aria-label="A star"
+                                        role="img" />
+                                </div>
+                                <div>
+                                    <div class="o_kanban_card_header">
+                                        <div class="o_kanban_card_header_title">
+                                            <span class="fw-bold">
+                                                <field name="partner_id" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_content mt0 d-flex flex-column">
+
+                                        <span>
+                                            <i class="fa fa-clock-o me-2" aria-label="Create date" />
+                                            <field name="create_date" />
+                                        </span>
+                                        <div class="d-flex mt-2">
+                                            <span t-esc="record.comment.raw_value" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="document_review_view_tree" model="ir.ui.view">
+        <field name="name">document.review.view.tree</field>
+        <field name="model">document.review</field>
+        <field name="arch" type="xml">
+            <tree create="1" edit="1">
+                <field name="create_date" string="Review Date" />
+                <field name="partner_id" />
+                <field name="document_id" string="Related Document" />
+                <field name="rating" />
+                <field name="comment" />
+                <field name="is_published" widget="boolean_toggle" />
+                <field name="is_reply" optional="show" />
+                <field name="reply_to_id" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_document_reviews" model="ir.actions.act_window">
+        <field name="name">Document Reviews</field>
+        <field name="res_model">document.review</field>
+        <field name="view_mode">kanban,tree</field>
+        <field name="search_view_id" ref="view_document_review_search" />
+        <field name="context">{'search_default_reviews_only': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reviews found!
+            </p>
+            <p>
+                Document reviews and replies from website users will appear here.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="carbongold_document_management_reviews_menu"
+        name="Reviews"
+        parent="documents.menu_root"
+        action="action_document_reviews"
+        sequence="4" />
+
+</odoo>
