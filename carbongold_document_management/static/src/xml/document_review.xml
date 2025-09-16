@@ -1,0 +1,247 @@
+<templates id="template" xml:space="preserve">
+<t t-name="carbongold_document_management.DocumentReviewComponent">
+    <div class="document-review-component">
+
+            <!-- Review Form Section -->
+        <div class="review-form-section mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Reviews &amp; Comments</h4>
+                
+                <button class="btn btn-primary" t-on-click="this.toggleReviewForm" t-if="this.canWriteReview">
+                    <i class="fa fa-star me-2"></i>
+                    <t t-if="state.showReviewForm">Cancel</t>
+                    <t t-else="" t-esc="this.reviewButtonText"/>
+                </button>
+                
+                <a href="/web/login" class="btn btn-primary" t-if="!state.isLoggedIn">
+                    <i class="fa fa-sign-in me-2"></i>
+                    <small>Login to Review</small>
+                </a>
+            </div>
+
+                <!-- Review Form -->
+            <div class="card review-form" t-if="state.showReviewForm">
+                <div class="card-body">
+                        <!-- Rating Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Rating <span class="text-danger">*</span></label>
+                        <div class="star-rating">
+                            <t t-foreach="[1, 2, 3, 4, 5]" t-as="star" t-key="star">
+                                <i t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
+                                   t-on-click="this.setRating"
+                                   t-att-data-rating="star"
+                                   style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"></i>
+                            </t>
+                        </div>
+                        <div class="mt-2" t-if="state.newReview.rating > 0">
+                            <small class="text-success">
+                                <i class="fa fa-check-circle me-1"></i>
+                                Rating: <strong t-esc="state.newReview.rating"/> out of 5 stars
+                            </small>
+                        </div>
+                    </div>
+
+                        <!-- Portal Composer Style Input -->
+                    <div class="mb-3">
+                        <label class="form-label">Your Review <span class="text-danger">*</span></label>
+                        <div class="d-flex">
+
+                            <div class="flex-grow-1">
+                                <div class="o_portal_chatter_composer_input">
+                                    <div class="d-flex flex-column rounded-3">
+                                        <div class="position-relative flex-grow-1">
+                                            <textarea rows="3" 
+                                                    class="form-control rounded-3 shadow-none fs-6" 
+                                                    placeholder="Write your review..."
+                                                    t-model="state.newReview.comment"
+                                                    style="resize:none;"
+                                                    maxlength="1000"></textarea>
+                                        </div>
+                                        <!-- <div class="d-flex flex-row align-self-end p-2">
+                                            <div class="d-flex px-1">
+                                                <button class="btn fa fa-paperclip border-0" 
+                                                        type="button" 
+                                                        title="Add attachment"
+                                                        t-on-click="this.onAttachmentButtonClick"/>
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                        <!-- Attachments Display -->
+                                    <div class="o_portal_chatter_attachments mt-2" t-if="state.newReview.attachments.length > 0">
+                                        <div class="d-flex flex-grow-1 flex-wrap gap-1">
+                                            <div t-foreach="state.newReview.attachments" t-as="attachment" t-key="attachment_index" 
+                                                 class="bg-light p-1 rounded position-relative">
+                                                <div class="o_portal_chatter_attachment text-center">
+                                                    <button class="btn btn-sm btn-outline-danger position-absolute top-0 end-0" 
+                                                            style="margin: -3px; padding: 2px 4px;"
+                                                            title="Delete"
+                                                            t-on-click="() => this.removeAttachment(attachment_index)">
+                                                        <i class="fa fa-times" style="font-size: 10px;"/>
+                                                    </button>
+                                                    <div class="d-flex flex-row">
+                                                        <div class="oe_attachment_embedded o_image" 
+                                                             t-att-title="attachment.name"/>
+                                                        <div class="o_portal_chatter_attachment_name align-self-center text-truncate ms-1">
+                                                            <small t-esc="attachment.name"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                    <!-- Hidden File Input -->
+                                <!-- <div class="d-none">
+                                    <input type="file" 
+                                           class="o_review_file_input" 
+                                           multiple="multiple"
+                                           accept="image/*,.pdf,.doc,.docx,.txt"
+                                           t-on-change="this.onFileInputChange"/>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- Submit Button -->
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-secondary me-2" t-on-click="this.toggleReviewForm">Cancel</button>
+                        <button class="btn btn-primary" 
+                                t-on-click="this.submitReview"
+                                t-att-disabled="!state.newReview.rating || !state.newReview.comment.trim()">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Reviews List -->
+        <div class="reviews-list">
+            <div t-if="state.loading" class="text-center p-3">
+                <i class="fa fa-spinner fa-spin"></i>
+                <p class="mt-2"><small>Loading reviews...</small></p>
+            </div>
+            
+            <div t-elif="state.reviews.length === 0" class="text-center text-muted p-4">
+                <i class="fa fa-comments-o fa-2x mb-2 d-block"></i>
+                <h6>No reviews yet</h6>
+                <small>Be the first to share your thoughts about this document!</small>
+            </div>
+            
+            <t t-else="">
+                <div t-foreach="state.reviews" t-as="review" t-key="review.id" class="review-card card mb-3">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-start">
+                            <img t-att-src="review.author_avatar || '/web/static/img/avatar.png'" 
+                                 class="rounded-circle me-2" 
+                                 width="36" height="36"/>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-2">
+                                    <h6 class="mb-0 me-2 fs-5 fw-bold" t-esc="review.author_name"/>
+
+                                        <!-- Rating Stars -->
+                                    <div class="rating-stars me-2" t-if="review.rating > 0">
+                                        <t t-foreach="[1,2,3,4,5]" t-as="star" t-key="star">
+                                            <i t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'" style="font-size: 1rem;"></i>
+                                        </t>
+                                    </div>
+                                    
+                                    <small class="text-muted ms-auto fs-6" t-esc="review.create_date"/>
+                                </div>
+
+                                    <!-- Review Content (Plain text now) -->
+                                <div class="review-content mb-2">
+                                    <p class="mb-2 fs-6" t-esc="review.comment" style="white-space: pre-wrap;"/>
+                                </div>
+
+                                    <!-- Review Attachments -->
+                                <div t-if="review.attachment_ids and review.attachment_ids.length > 0" class="attachments mb-2">
+                                    <small class="text-muted d-block mb-1">Attachments:</small>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <t t-foreach="review.attachment_ids" t-as="attachment" t-key="attachment.id">
+                                            <div class="bg-light p-1 rounded">
+                                                <a t-att-href="'/web/content/' + attachment.id + '?download=true'" 
+                                                   class="d-flex flex-row text-decoration-none"
+                                                   target="_blank">
+                                                    <div class="oe_attachment_embedded o_image" 
+                                                         t-att-title="attachment.name"/>
+                                                    <div class="align-self-center text-truncate ms-1">
+                                                        <small t-esc="attachment.name"/>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                    <!-- Reply buttons -->
+                                <div class="review-actions">
+                                    <button class="btn btn-outline-secondary" 
+                                            t-on-click="() => this.toggleReplyForm(review.id)"
+                                            t-if="this.canReplyToReview(review) and !state.replyForms[review.id]">
+                                        <i class="fa fa-reply me-1"></i>
+                                        <small>Reply</small>
+                                    </button>
+                                    
+                                    <a href="/web/login" class="btn btn-link" t-if="!state.isLoggedIn">
+                                        <i class="fa fa-sign-in me-1"></i>
+                                        <small>Login to Reply</small>
+                                    </a>
+
+                                </div>
+
+                                    <!-- Reply Form -->
+                                <div t-if="state.replyForms[review.id]" class="reply-form mt-2 p-2 bg-light">
+                                    <label class="form-label fs-5"><small>Reply to <strong t-esc="review.author_name"/></small></label>
+                                    <textarea class="form-control mb-2 fs-6" 
+                                            rows="2"
+                                            placeholder="Write your reply..."
+                                            t-model="state.replyForms[review.id].comment"
+                                            maxlength="500"></textarea>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-secondary me-2" 
+                                                t-on-click="() => this.toggleReplyForm(review.id)">
+                                            <small>Cancel</small>
+                                        </button>
+                                        <button class="btn btn-primary" 
+                                                t-on-click="() => this.submitReply(review.id)"
+                                                t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
+                                            <small>Send</small>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                    <!-- Replies -->
+                                <div t-if="review.replies and review.replies.length > 0" class="replies mt-2">
+                                    <div t-foreach="review.replies" t-as="reply" t-key="reply.id" 
+                                         class="reply card bg-light ms-3 mb-2">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-start">
+                                                <img t-att-src="reply.author_avatar || '/web/static/img/avatar.png'" 
+                                                     class="rounded-circle me-2" 
+                                                     width="24" height="24"/>
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <small class="me-2 fs-5 fw-bold" t-esc="reply.author_name"/>
+                                                        <small class="text-muted fs-6" t-esc="reply.create_date"/>
+                                                    </div>
+                                                        <!-- Plain text for replies -->
+                                                    <p class="mb-0 fs-6" t-esc="reply.comment" style="white-space: pre-wrap;"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </div>
+</t>
+
+
+</templates>

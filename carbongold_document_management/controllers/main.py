@@ -71,9 +71,11 @@ class DocumentController(http.Controller):
             return request.not_found()
 
         document.write({
-            'document_click_count': document.document_click_count+1
+            'document_click_count': document.document_click_count + 1
         })
-        return request.render("carbongold_document_management.detail_document_page", {"document": document})
+        
+        values = self._get_document_page_values(document, **kwargs)
+        return request.render("carbongold_document_management.detail_document_page", values)
 
     @http.route(["/document/download/<int:document>"], type="http", auth="public", website=True)
     def document_download(self, document, **kwargs):
@@ -149,3 +151,41 @@ class DocumentController(http.Controller):
             document_id._compute_name_and_preview()
         
         return request.make_json_response(bool(document_id))
+
+    
+    def _get_document_page_values(self, document, **kwargs):
+        current_user = request.env.user
+        
+        values = {
+            'document': document,
+            'rating_avg': document.rating_avg,
+            'rating_count': document.rating_count,
+        }
+        
+        public_user_id = request.env.ref('base.public_user').id
+        is_anonymous = current_user.id == public_user_id
+        is_authenticated = not is_anonymous  # Any user that's not the anonymous public user
+        
+        # Check if current authenticated user has already reviewed
+        user_has_reviewed = False
+        if is_authenticated:
+            user_review = request.env['document.review'].search([
+                ('document_id', '=', document.id),
+                ('partner_id', '=', current_user.partner_id.id),
+                ('is_reply', '=', False),
+            ], limit=1)
+            user_has_reviewed = bool(user_review)
+        
+        # Simple component props
+        component_values = {
+            'documentId': document.id,
+            'documentName': document.name,
+            'isLoggedIn': is_authenticated,
+            'userHasReviewed': user_has_reviewed,
+            'currentUserId': current_user.id if is_authenticated else False,
+            'currentPartnerName': current_user.partner_id.name if is_authenticated else '',
+            'csrfToken': request.csrf_token(),
+        }
+        
+        values['component_values'] = component_values
+        return values
