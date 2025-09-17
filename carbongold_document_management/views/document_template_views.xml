@@ -47,43 +47,46 @@
         inherit_id="website.website_search_box_input"
         primary="True">
         <xpath expr="//form" position="inside">
-            <input name="view_type" type="hidden" t-att-value="view_type"/>
+            <input name="view_type" type="hidden" t-att-value="view_type" />
             <t t-call="carbongold_document_management.document_categories_list">
-                <t t-set="is_search_bar" t-value="true"/>
+                <t t-set="is_search_bar" t-value="true" />
             </t>
         </xpath>
     </template>
 
     <template id="document_search" name="Search Box">
-        <t t-call="carbongold_document_management.website_search_box_input_inherite_carbongold_document_management">
-            <t t-set="_classes" t-valuef="px-3"/>
-            <t t-set="_form_classes" t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 d-lg-inline"/>
-            <t t-set="_submit_classes" t-valuef="btn btn-light"/>
-            <t t-set="_input_classes" t-valuef="border-0 text-bg-light"/>
-            <t t-set="search_type" t-value="'document'"/>
-            <t t-set="action" t-valuef="/documents"/>
-            <t t-set="display_description" t-valuef="false"/>
-            <t t-set="display_detail" t-valuef="false"/>
-            <t t-set="display_image" t-valuef="true"/>
-            <t t-set="view_type" t-value="view_type"/>
+        <t
+            t-call="carbongold_document_management.website_search_box_input_inherite_carbongold_document_management">
+            <t t-set="_classes" t-valuef="px-3" />
+            <t t-set="_form_classes"
+                t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 d-lg-inline" />
+            <t t-set="_submit_classes" t-valuef="btn btn-light" />
+            <t t-set="_input_classes" t-valuef="border-0 text-bg-light" />
+            <t t-set="search_type" t-value="'document'" />
+            <t t-set="action" t-valuef="/documents" />
+            <t t-set="display_description" t-valuef="false" />
+            <t t-set="display_detail" t-valuef="false" />
+            <t t-set="display_image" t-valuef="true" />
+            <t t-set="view_type" t-value="view_type" />
         </t>
     </template>
 
     <template id="document_add_grid_or_list_option" name="Grid or List button">
         <t t-set="_activeClasses" t-translation="off">btn-outline-primary</t>
-        <div t-attf-class="o_wsale_apply_layout btn-group d-flex" t-att-data-active-classes="_activeClasses">
+        <div t-attf-class="o_wsale_apply_layout btn-group d-flex"
+            t-att-data-active-classes="_activeClasses">
             <a t-att-href="'/documents?view_type=grid'">
                 <button
                     type="button"
                     t-attf-class="btn #{_activeClasses if view_type != 'list' else None} o_wsale_apply_grid">
-                    <i class="fa fa-th-large"/>
+                    <i class="fa fa-th-large" />
                 </button>
             </a>
             <a t-att-href="'/documents?view_type=list'">
                 <button
                     type="button"
                     t-attf-class="btn #{_activeClasses if view_type == 'list' else None} o_wsale_apply_list">
-                    <i class="oi oi-view-list"/>
+                    <i class="oi oi-view-list" />
                 </button>
             </a>
         </div>
@@ -140,12 +143,16 @@
                     <div class="row o_wsale_products_main_row align-items-start flex-nowrap">
                         <aside class="d-none d-lg-block position-sticky col-3 px-3 clearfix">
                             <div class="products_categories mb-3 mt-4">
-                                <h6 class="o_categories_collapse_title mb-3"><b>Categories</b></h6>
+                                <h6 class="o_categories_collapse_title mb-3">
+                                    <b>Categories</b>
+                                </h6>
                                 <div class="wsale_products_categories_list">
                                     <form id="doc_category_form" method="get" action="/documents">
-                                        <t t-call="carbongold_document_management.document_categories_list"/>
-                                        <input type="hidden" name="search" t-att-value="search"/>
-                                        <input type="hidden" name="view_type" t-att-value="view_type"/>
+                                        <t
+                                            t-call="carbongold_document_management.document_categories_list" />
+                                        <input type="hidden" name="search" t-att-value="search" />
+                                        <input type="hidden" name="view_type"
+                                            t-att-value="view_type" />
                                     </form>
                                 </div>
                             </div>
@@ -157,9 +164,10 @@
                             <div
                                 class="products_header btn-toolbar flex-nowrap align-items-center justify-content-between gap-3 mb-3">
                                 <t t-call="carbongold_document_management.document_search">
-                                    <t t-set="search" t-value="search"/>
+                                    <t t-set="search" t-value="search" />
                                 </t>
-                                <t t-call="carbongold_document_management.document_add_grid_or_list_option"/>
+                                <t
+                                    t-call="carbongold_document_management.document_add_grid_or_list_option" />
                                 <t t-if="not request.env.user._is_public()">
                                     <t t-call="carbongold_document_management.upload_document"/>
                                 </t>
@@ -180,22 +188,24 @@
                                                 <t t-set="img_class" t-value="''"/>
                                             </t>
                                             <div class="flex-grow-1">
-                                                <h5 class="mb-1"><t
-                                                        t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')"/></h5>
+                                                <h5 class="mb-1">
+                                                    <t
+                                                        t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')" />
+                                                </h5>
                                                 <span>
-                                                    <t t-set="rating" t-value="int(doc.rating_avg or 0)"/>
+                                                    <t t-set="rating"
+                                                        t-value="int(doc.rating_avg or 0)" />
                                                     <t t-foreach="range(5)" t-as="i">
                                                         <i
-                                                            t-attf-class="#{'fa fa-star text-warning' if i &gt; rating else 'fa fa-star text-muted'}"/>
+                                                            t-attf-class="#{'fa fa-star text-warning' if i &gt; rating else 'fa fa-star text-muted'}" />
                                                     </t>
                                                 </span>
-                                                <small class="text-muted">
-                                                    (<t t-esc="doc.rating_count or 0"/>)
-                                                </small>
+                                                <small class="text-muted"> (<t
+                                                        t-esc="doc.rating_count or 0" />) </small>
                                                 <div t-if="doc.doc_description">
                                                     <small
                                                         class="text-muted"
-                                                        t-esc="doc.doc_description[:250] + ('...' if len(doc.doc_description) &gt; 250 else '')"/>
+                                                        t-esc="doc.doc_description[:250] + ('...' if len(doc.doc_description) &gt; 250 else '')" />
                                                 </div>
                                             </div>
                                         </div>
@@ -203,14 +213,16 @@
                                 </div>
 
                                 <!-- Grid View -->
-                                <div t-if="view_type=='grid'" class="row row-cols-1 row-cols-md-2 g-4">
+                                <div t-if="view_type=='grid'"
+                                    class="row row-cols-1 row-cols-md-2 g-4">
                                     <t t-foreach="documents" t-as="doc">
                                         <div class="col">
                                             <div
                                                 class="card h-100 shadow-sm border-0"
                                                 style="cursor: pointer;"
                                                 t-attf-onclick="location.href='/document/#{doc.name}/#{doc.id}';">
-                                                <div class="card-body gap-3" style="max-height:195px;">
+                                                <div class="card-body gap-3"
+                                                    style="max-height:195px;">
                                                     <div class="row">
                                                         <div class="col-md-3">
                                                             <t
@@ -226,27 +238,28 @@
                                                             <div class="align-items-center mb-1">
                                                                 <h5 class="mb-0 fw-bold">
                                                                     <t
-                                                                        t-esc="doc.name[:55] + ('...' if len(doc.name) &gt; 55 else '')"/>
+                                                                        t-esc="doc.name[:55] + ('...' if len(doc.name) &gt; 55 else '')" />
                                                                 </h5>
                                                                 <span>
                                                                     <t
                                                                         t-set="rating"
-                                                                        t-value="int(doc.rating_avg or 0)"/>
+                                                                        t-value="int(doc.rating_avg or 0)" />
                                                                     <t t-foreach="range(5)" t-as="i">
                                                                         <i
-                                                                            t-attf-class="#{'fa fa-star text-warning' if i &gt; rating else 'fa fa-star text-muted'}"/>
+                                                                            t-attf-class="#{'fa fa-star text-warning' if i &gt; rating else 'fa fa-star text-muted'}" />
                                                                     </t>
                                                                 </span>
-                                                                <small class="text-muted">
-                                                                    (<t t-esc="doc.rating_count or 0"/>)
-                                                                </small>
+                                                                <small class="text-muted"> (<t
+                                                                        t-esc="doc.rating_count or 0" />
+                                                                    ) </small>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
-                                                            <p class="text-muted mb-2 mt-3" t-if="doc.doc_description">
+                                                            <p class="text-muted mb-2 mt-3"
+                                                                t-if="doc.doc_description">
                                                                 <t
                                                                     class="text-muted"
-                                                                    t-esc="doc.doc_description[:150] + ('...' if len(doc.doc_description) &gt; 150 else '')"/>
+                                                                    t-esc="doc.doc_description[:150] + ('...' if len(doc.doc_description) &gt; 150 else '')" />
                                                             </p>
                                                         </div>
                                                     </div>
@@ -261,17 +274,18 @@
                             <div t-else="" class="text-center text-muted mt-5 mb-5">
                                 <t t-if="not search">
                                     <h3>No documents available</h3>
-                                    <p t-if="selected_categories">No documents in the selected categories.</p>
+                                    <p t-if="selected_categories">No documents in the selected
+                                        categories.</p>
                                 </t>
                                 <t t-else="">
                                     <h3>No results</h3>
-                                    <p>No results found for "<strong t-esc='search'/>".</p>
+                                    <p>No results found for "<strong t-esc='search' />".</p>
                                 </t>
                             </div>
 
                             <!-- Pager -->
                             <div class="products_pager d-flex justify-content-center pt-5 pb-3">
-                                <t t-call="website.pager"/>
+                                <t t-call="website.pager" />
                             </div>
                         </div>
                     </div>
@@ -289,7 +303,7 @@
                             <a href="/documents">All Documents</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <t t-esc="document.name"/>
+                            <t t-esc="document.name" />
                         </li>
                     </ol>
                 </div>
@@ -348,15 +362,34 @@
                     </div>
 
                     <div class="col-xl-9">
-                        <div class="mb-3 d-flex align-items-center gap-2">
-                            <t t-set="rating" t-value="int(document.rating_avg or 0)"/>
-                            <t t-foreach="range(5)" t-as="i">
-                                <i
-                                    t-attf-class="#{'fa fa-star text-warning' if i &gt; rating else 'fa fa-star text-muted'}"/>
-                            </t>
-                            <small class="text-muted">
-                                (<t t-esc="document.rating_count or 0"/> reviews)
-                            </small>
+                        <!-- Rating Summary Display -->
+                        <div class="rating-summary mb-3" t-if="rating_count > 0">
+                            <div class="d-flex align-items-center">
+                                <div class="rating-stars me-3">
+                                    <t t-set="full_stars" t-value="int(rating_avg)" />
+                                    <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
+                                    <t t-set="empty_stars"
+                                        t-value="5 - full_stars - (1 if half_star else 0)" />
+                                    <t t-foreach="range(full_stars)" t-as="star">
+                                        <i class="fa fa-star text-warning"></i>
+                                    </t>
+                                    <t t-if="half_star">
+                                        <i class="fa fa-star-half-o text-warning"></i>
+                                    </t>
+                                    <t t-foreach="range(empty_stars)" t-as="star">
+                                        <i class="fa fa-star-o text-muted"></i>
+                                    </t>
+                                </div>
+                                <span class="rating-text">
+                                    <strong t-esc="'%.1f' % rating_avg" /> out of 5 (<t
+                                        t-esc="rating_count" /> <t t-if="rating_count == 1">
+                                    review</t><t
+                                        t-else="">reviews</t>) </span>
+                            </div>
+                        </div>
+                        <!-- No Reviews State -->
+                        <div class="no-reviews-summary text-muted mb-3" t-if="rating_count == 0">
+                            <i class="fa fa-star-o me-2"></i>No reviews yet </div>
                         </div>
                     </div>
                     <div class="col-xl-12">
@@ -366,10 +399,23 @@
                         </p>
                         <div class="mb-4"><p class="text-muted" t-esc="document.doc_description"/></div>
                     </div>
-                </div>
+
+                     <!-- Reviews and Comments Section with OWL Component -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+
+                            <div
+                                class="d-flex flex-column justify-content-center h5 flex-grow-1 mb-md-5">
+                                <owl-component name="carbongold_document_management.document_review"
+                                    t-att-props="json.dumps(component_values)" />
+                            </div>
+                        </div>
+                    </div>
+                
             </section>
         </t>
     </template>
+
 
     <template id="upload_document" name="Upload Document">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#getDocumentModal">
@@ -380,7 +426,8 @@
                 <div class="modal-content website-document">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Document</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close" />
                     </div>
                     <div class="modal-body">
                         <div class="alert alert-danger d-none validation-message" role="alert"/>
@@ -430,7 +477,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel</button>
                         <button type="button" class="btn btn-primary saveDocumentBtn">Save Document</button>
                     </div>
                 </div>
