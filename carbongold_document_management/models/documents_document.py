@@ -1,8 +1,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import re
+
 from odoo import api, fields, models
 
 from odoo.addons.http_routing.models.ir_http import slug
+import re
 import uuid
 
 class Documents(models.Model):
@@ -79,3 +82,12 @@ class Documents(models.Model):
                 else:
                     data["image_url"] = "/base/static/img/avatar_grey.png"
         return results_data
+
+    def _get_youtube_url_token(self):
+        if not self.url:
+            return False
+        pattern = re.compile(
+            r'(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|v/))([a-zA-Z0-9_-]{11})'
+        )
+        match = pattern.search(self.url)
+        return match.group(1) if match else False

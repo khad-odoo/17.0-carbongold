@@ -3,11 +3,18 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 
 publicWidget.registry.DocumentCategoryFilter = publicWidget.Widget.extend({
-    selector: "#doc_category_form",
+    selector: ".carbon_category_list",
     events: {
-        "change .doc-cat-checkbox": "_onCategoryChange",
+        "change .parent-cat": "_onParentChange",
     },
-    _onCategoryChange: function () {
-        this.el.submit();
+
+    _onParentChange: function (ev) {
+        var $parent = $(ev.currentTarget);
+        var parentId = $parent.data("parent-id");
+        var isChecked = $parent.is(":checked");
+        this.$el
+            .find('.child-cat[data-parent-id="' + parentId + '"]')
+            .prop("checked", isChecked)
+            .trigger("change");
     },
 });

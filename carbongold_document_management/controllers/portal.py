@@ -12,10 +12,12 @@ class DocumentReviewController(http.Controller):
                 return {'error': "Cannot review this document."}
 
             current_user = request.env.user
+
             
             if document.owner_id and document.owner_id.id == current_user.id:
                 return {'error': "Document owner cannot review their own document."}
             
+
             existing = request.env['document.review'].search([
                 ('document_id', '=', document_id),
                 ('partner_id', '=', current_user.partner_id.id),
@@ -23,7 +25,7 @@ class DocumentReviewController(http.Controller):
             ])
             if existing:
                 return {'error': "You have already reviewed this document."}
-            
+
             # Create review
             review_vals = {
                 'document_id': document_id,
@@ -34,7 +36,7 @@ class DocumentReviewController(http.Controller):
             }
 
             review = request.env['document.review'].create(review_vals)
-            
+
             # Handle attachments - update their res_model and res_id from pending state
             if attachment_ids:
                 attachments = request.env['ir.attachment'].sudo().browse(attachment_ids)
@@ -71,13 +73,14 @@ class DocumentReviewController(http.Controller):
             orig_review = request.env['document.review'].sudo().browse(review_id)
             if not orig_review.exists():
                 return {'error': "Review not found."}
-            
+
+  
             current_user = request.env.user
             
             # FIXED: Check if replying to own review using IDs
             if orig_review.partner_id.id == current_user.partner_id.id:
                 return {'error': "You cannot reply to your own review."}
-            
+
             # Check if already replied (use current user's permissions)
             existing = request.env['document.review'].search([
                 ('partner_id', '=', current_user.partner_id.id),
@@ -86,7 +89,7 @@ class DocumentReviewController(http.Controller):
             ])
             if existing:
                 return {'error': 'You have already replied to this review.'}
-            
+
             # Create reply (use current user's permissions for creating their own reply)
             reply_vals = {
                 'document_id': orig_review.document_id.id,
@@ -97,7 +100,6 @@ class DocumentReviewController(http.Controller):
             }
 
             reply_rec = request.env['document.review'].create(reply_vals)
-            
             return {'success': True, 'reply_id': reply_rec.id}
         except Exception as e:
             return {'error': str(e)}
@@ -109,15 +111,14 @@ class DocumentReviewController(http.Controller):
         document = request.env['documents.document'].sudo().browse(document_id)
         if not document.exists() or not document.is_published:
             return []
-            
+
         reviews = request.env['document.review'].search([
             ('document_id', '=', document_id),
             ('is_reply', '=', False),
             ('is_published', '=', True)
         ])
-        
         result = []
-        
+
         for review in reviews:
             review_data = {
                 'id': review.id,
@@ -129,7 +130,7 @@ class DocumentReviewController(http.Controller):
                 'attachment_ids': [{'id': a.id, 'name': a.name} for a in review.attachment_ids],
                 'replies': [],
             }
-            
+
             # Add all replies
             for reply in review.replies:
                 if reply.is_published:
@@ -140,7 +141,7 @@ class DocumentReviewController(http.Controller):
                         'author_avatar': f'/web/image/res.partner/{reply.partner_id.id}/avatar_128',
                         'create_date': reply.create_date.strftime('%B %d, %Y at %I:%M %p'),
                     })
-            
+
             result.append(review_data)
-        
+
         return result

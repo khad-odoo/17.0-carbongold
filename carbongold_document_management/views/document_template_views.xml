@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="document_categories_list" name="Documents Categories">
-        <t t-foreach="categories" t-as="c">
+        <t t-foreach="parent_categories" t-as="parent_cat">
             <ul
-                t-att-class="'nav flex-column nav-hierarchy mt-1 ps-3' if not is_search_bar else 'd-none' ">
-                <div class="form-check d-inline-block">
-                    <input
-                        type="checkbox"
-                        class="form-check-input doc-cat-checkbox"
-                        name="category_ids"
-                        t-att-id="'cat_%s' % c.id"
-                        t-att-value="c.id"
-                        t-att-checked="'checked' if c.id in selected_categories else None" />
-                    <label class="form-check-label fw-normal" t-att-for="'cat_%s' % c.id"
-                        t-esc="c.name" />
-                </div>
+                t-att-class="'nav flex-column nav-hierarchy mt-1 ps-3 carbon_category_list' if not is_search_bar else 'd-none carbon_category_list'">
+                <!-- Parent -->
+                <li>
+                    <div class="form-check mt-3">
+                        <input
+                            type="checkbox"
+                            class="form-check-input doc-cat-checkbox parent-cat"
+                            name="category_ids"
+                            t-att-data-parent-id="parent_cat.id"
+                            t-att-id="'cat_%s' % parent_cat.id"
+                            t-att-value="parent_cat.id"
+                            t-att-checked="'checked' if parent_cat.id in selected_categories else None"/>
+                        <label class="form-check-label fw-bold" t-att-for="'cat_%s' % parent_cat.id">
+                            <t t-esc="parent_cat.name"/>
+                        </label>
+                    </div>
+                </li>
+                <!-- Subcategories -->
+                <t t-foreach="parent_cat.child_ids" t-as="subc">
+                    <li class="ms-4 mt-1">
+                        <div class="form-check">
+                            <input
+                                type="checkbox"
+                                class="form-check-input doc-cat-checkbox child-cat"
+                                name="category_ids"
+                                t-att-data-parent-id="parent_cat.id"
+                                t-att-id="'cat_%s' % subc.id"
+                                t-att-value="subc.id"
+                                t-att-checked="'checked' if subc.id in selected_categories else None"/>
+                            <label class="form-check-label" t-att-for="'cat_%s' % subc.id">
+                                <t t-esc="subc.name"/>
+                            </label>
+                        </div>
+                    </li>
+                </t>
             </ul>
         </t>
     </template>
@@ -69,6 +92,50 @@
         </div>
     </template>
 
+    <template id="document_image_preview" name="Document Image">
+        <div class="o_kanban_image">
+            <t t-set="isPdf" t-value="record.mimetype in ['application/pdf', 'application/pdf;base64']"/>
+            <t
+                t-set="hasThumbnail"
+                t-value="(isPdf and record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
+            <t t-set="youtubeVideoToken" t-value="record._get_youtube_url_token() if record.url else False"/>
+            <div name="document_preview" class="o_kanban_image_wrapper">
+                <img
+                    t-if="youtubeVideoToken"
+                    t-attf-style="#{style}"
+                    alt="Document"
+                    t-att-class="'o_attachment_image' + img_class"
+                    t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
+                <a t-elif="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
+                    <img
+                        t-if="record.url_preview_image"
+                        t-attf-style="#{style}"
+                        t-att-class="img_class"
+                        t-att-src="record.url_preview_image"
+                        alt="Link preview"/>
+                    <t t-else="">
+                        <span t-att-class="'fa fa-link fa-3x text-muted' + img_class" t-attf-style="#{style}"/>
+                    </t>
+                </a>
+                <t t-elif="hasThumbnail">
+                    <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
+                    <div class="o_documents_image">
+                        <img
+                            t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
+                            t-att-class="img_class"
+                            t-attf-style="#{style}"
+                            alt="Document preview"/>
+                    </div>
+                </t>
+                <div
+                    t-else=""
+                    t-attf-style="#{style}"
+                    class="o_image o_image_thumbnail"
+                    t-att-data-mimetype="record.mimetype"/>
+            </div>
+        </div>
+    </template>
+
     <template id="all_documents" name="All Documents">
         <t t-call="website.layout">
             <div id="wrap" class="o_wsale_products_page">
@@ -102,7 +169,7 @@
                                 <t
                                     t-call="carbongold_document_management.document_add_grid_or_list_option" />
                                 <t t-if="not request.env.user._is_public()">
-                                    <t t-call="carbongold_document_management.upload_document" />
+                                    <t t-call="carbongold_document_management.upload_document"/>
                                 </t>
                             </div>
                             <div t-if="documents" class="pt-3 pt-lg-0">
@@ -113,21 +180,13 @@
                                             t-attf-onclick="location.href='/document/#{doc.name}/#{doc.id}';"
                                             style="cursor: pointer;"
                                             class="list-group-item list-group-item-action d-flex align-items-start gap-3 p-3">
-                                            <img
-                                                t-if="doc.thumbnail and doc.type == 'binary'"
-                                                t-att-src="'/web/image/documents.document/%s/thumbnail' % doc.id"
-                                                class="rounded"
-                                                style="width:80px; height:80px; object-fit:cover;" />
-                                            <img
-                                                t-elif="doc.type == 'url' and doc.url_preview_image"
-                                                t-att-src="'%s' % doc.url_preview_image"
-                                                class="rounded"
-                                                style="width:80px; height:80px; object-fit:cover;" />
-                                            <img
-                                                t-else=""
-                                                t-att-src="'/base/static/img/avatar_grey.png'"
-                                                class="rounded"
-                                                style="width:80px; height:80px; object-fit:cover;" />
+                                            <t t-call="carbongold_document_management.document_image_preview">
+                                                <t t-set="record" t-value="doc"/>
+                                                <t
+                                                    t-set="style"
+                                                    t-value="'width:80px; height:80px; object-fit:cover;'"/>
+                                                <t t-set="img_class" t-value="''"/>
+                                            </t>
                                             <div class="flex-grow-1">
                                                 <h5 class="mb-1">
                                                     <t
@@ -166,21 +225,14 @@
                                                     style="max-height:195px;">
                                                     <div class="row">
                                                         <div class="col-md-3">
-                                                            <img
-                                                                t-if="doc.thumbnail and doc.type == 'binary'"
-                                                                t-att-src="'/web/image/documents.document/%s/thumbnail' % doc.id"
-                                                                class="rounded"
-                                                                style="width:80px; height:80px; object-fit:cover;" />
-                                                            <img
-                                                                t-elif="doc.type == 'url' and doc.url_preview_image"
-                                                                t-att-src="'%s' % doc.url_preview_image"
-                                                                class="rounded"
-                                                                style="width:80px; height:80px; object-fit:cover;" />
-                                                            <img
-                                                                t-else=""
-                                                                t-att-src="'/base/static/img/avatar_grey.png'"
-                                                                class="rounded"
-                                                                style="width:80px; height:80px; object-fit:cover;" />
+                                                            <t
+                                                                t-call="carbongold_document_management.document_image_preview">
+                                                                <t t-set="record" t-value="doc"/>
+                                                                <t
+                                                                    t-set="style"
+                                                                    t-value="'width:80px; height:80px; object-fit:cover;'"/>
+                                                                <t t-set="img_class" t-value="'rounded'"/>
+                                                            </t>
                                                         </div>
                                                         <div class="col-md-9">
                                                             <div class="align-items-center mb-1">
@@ -255,95 +307,100 @@
                         </li>
                     </ol>
                 </div>
+
                 <div class="row g-4 mt-4">
-                    <div class="col-md-4 text-center">
-                        <img
-                            t-if="document.thumbnail and document.type == 'binary'"
-                            t-att-src="'/web/image/documents.document/%s/thumbnail' % document.id"
-                            class="img-fluid rounded shadow-sm"
-                            style="height: 300px; width:400px; object-fit: cover;" />
-                        <img
-                            t-elif="document.type == 'url' and document.url_preview_image"
-                            t-att-src="'%s' % document.url_preview_image"
-                            class="img-fluid rounded shadow-sm"
-                            style="height: 300px; width:400px; object-fit: cover;" />
-                        <img
-                            t-else=""
-                            t-att-src="'/base/static/img/avatar_grey.png'"
-                            class="img-fluid rounded shadow-sm"
-                            style="height: 300px; width:300px; object-fit: cover;" />
+                    <div class="col-xl-3 text-center">
+                        <t t-call="carbongold_document_management.document_image_preview">
+                            <t t-set="record" t-value="document"/>
+                            <t t-set="style" t-value="'height: 140px; width:160px; object-fit: cover;'"/>
+                            <t t-set="img_class" t-value="'img-fluid rounded shadow-sm'"/>
+                        </t>
+                    </div>
+                    <div class="col-xl-9">
+                        <h2 class="fw-bold mb-3"><t t-esc="document.name"/></h2>
+                        <p t-if="document.owner_id" class="mb-3">
+                            <strong>Owner:</strong>
+                            <span t-esc="document.owner_id.name"/>
+                        </p>
+                        <p t-if="document.author" class="mb-3">
+                            <strong>Author:</strong>
+                            <span t-esc="document.author"/>
+                        </p>
                     </div>
 
-                    <!-- Document Info with Rating Section -->
-                    <div class="col-12 col-md-8 col-lg-9 d-flex flex-column">
-                        <div class="d-flex flex-column">
-                            <h1 t-field="document.name" />
-                            <div class="mb-0 mb-xl-3" t-field="document.doc_description" />
-
-                            <!-- Document metadata -->
-                            <div class="document-metadata mb-3">
-                                <p t-if="document.document_category_id" class="mb-2">
-                                    <strong>Category:</strong>
-                                    <span t-esc="document.document_category_id.name" />
-                                </p>
-                                <p t-if="document.owner_id" class="mb-2">
-                                    <strong>Owner:</strong>
-                                    <span t-esc="document.owner_id.name" />
-                                </p>
-                                <p t-if="document.author" class="mb-2">
-                                    <strong>Author:</strong>
-                                    <span t-esc="document.author" />
-                                </p>
-                            </div>
-
-                            <!-- Action buttons -->
-                            <div class="document-actions mb-4">
-                                <div t-if="document.type == 'binary' and document.datas">
-                                    <a t-att-href="'/document/download/%s' % document.id"
-                                        class="btn btn-primary">
-                                        <i class="fa fa-download me-1" /> Download </a>
+                    <div class="col-xl-3 text-center">
+                        <div class="mb-4" t-if="document.type == 'binary' and document.datas">
+                            <a
+                                t-att-href="'/document/download/%s' % document.id"
+                                class="d-block p-3 rounded-3 text-decoration-none d-flex align-items-start"
+                                style="background-color:#f0faf4; border:1px solid #cdeccd; color:#28a745;">
+                                <i class="fa fa-arrow-down fa-3x mb-2"/>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold" style="font-size:1.1rem; color:#28a745;">Download now</div>
+                                    <div class="text-muted small">from developer's website</div>
                                 </div>
-                                <div t-elif="document.type == 'url' and document.url">
-                                    <a t-att-href="'%s' % document.url" target="_blank"
-                                        class="btn btn-primary">
-                                        <i class="fa fa-eye me-1" /> View </a>
-                                </div>
-                            </div>
+                            </a>
+                        </div>
 
-                            <!-- Rating Summary Display -->
-                            <div class="rating-summary mb-3" t-if="rating_count > 0">
-                                <div class="d-flex align-items-center">
-                                    <div class="rating-stars me-3">
-                                        <t t-set="full_stars" t-value="int(rating_avg)" />
-                                        <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
-                                        <t t-set="empty_stars"
-                                            t-value="5 - full_stars - (1 if half_star else 0)" />
-
-                                        <t t-foreach="range(full_stars)" t-as="star">
-                                            <i class="fa fa-star text-warning"></i>
-                                        </t>
-                                        <t t-if="half_star">
-                                            <i class="fa fa-star-half-o text-warning"></i>
-                                        </t>
-                                        <t t-foreach="range(empty_stars)" t-as="star">
-                                            <i class="fa fa-star-o text-muted"></i>
-                                        </t>
+                        <div class="mb-4" t-elif="document.type == 'url' and document.url">
+                            <a
+                                t-att-href="document.url"
+                                target="_blank"
+                                class="d-block p-3 rounded-3 text-decoration-none d-flex align-items-start"
+                                style="background-color:#f0faf4; border:1px solid #cdeccd; color:#28a745;">
+                                <i class="fa fa-external-link fa-3x mb-2"/>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold" style="font-size:1.1rem; color:#28a745;">
+                                        Open Website
                                     </div>
-                                    <span class="rating-text">
-                                        <strong t-esc="'%.1f' % rating_avg" /> out of 5 (<t
-                                            t-esc="rating_count" /> <t t-if="rating_count == 1">
-                                        review</t><t
-                                            t-else="">reviews</t>) </span>
+                                    <div class="text-muted small">
+                                        from developer's website
+                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- No Reviews State -->
-                            <div class="no-reviews-summary text-muted mb-3" t-if="rating_count == 0">
-                                <i class="fa fa-star-o me-2"></i>No reviews yet </div>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Reviews and Comments Section with OWL Component -->
+                    <div class="col-xl-9">
+                        <!-- Rating Summary Display -->
+                        <div class="rating-summary mb-3" t-if="rating_count > 0">
+                            <div class="d-flex align-items-center">
+                                <div class="rating-stars me-3">
+                                    <t t-set="full_stars" t-value="int(rating_avg)" />
+                                    <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
+                                    <t t-set="empty_stars"
+                                        t-value="5 - full_stars - (1 if half_star else 0)" />
+                                    <t t-foreach="range(full_stars)" t-as="star">
+                                        <i class="fa fa-star text-warning"></i>
+                                    </t>
+                                    <t t-if="half_star">
+                                        <i class="fa fa-star-half-o text-warning"></i>
+                                    </t>
+                                    <t t-foreach="range(empty_stars)" t-as="star">
+                                        <i class="fa fa-star-o text-muted"></i>
+                                    </t>
+                                </div>
+                                <span class="rating-text">
+                                    <strong t-esc="'%.1f' % rating_avg" /> out of 5 (<t
+                                        t-esc="rating_count" /> <t t-if="rating_count == 1">
+                                    review</t><t
+                                        t-else="">reviews</t>) </span>
+                            </div>
+                        </div>
+                        <!-- No Reviews State -->
+                        <div class="no-reviews-summary text-muted mb-3" t-if="rating_count == 0">
+                            <i class="fa fa-star-o me-2"></i>No reviews yet </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <p t-if="document.document_category_id" class="mb-3">
+                            <strong>Category:</strong>
+                            <span t-esc="document.document_category_id.name"/>
+                        </p>
+                        <div class="mb-4"><p class="text-muted" t-esc="document.doc_description"/></div>
+                    </div>
+
+                     <!-- Reviews and Comments Section with OWL Component -->
                     <div class="row mt-5">
                         <div class="col-12">
 
@@ -354,16 +411,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                
             </section>
         </t>
     </template>
 
+
     <template id="upload_document" name="Upload Document">
-        <button type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#getDocumentModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#getDocumentModal">
             Upload Document
         </button>
         <div class="modal fade" id="getDocumentModal" tabindex="-1" aria-hidden="true" role="dialog">
@@ -375,19 +430,19 @@
                             aria-label="Close" />
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-danger d-none validation-message" role="alert"></div>
+                        <div class="alert alert-danger d-none validation-message" role="alert"/>
 
                         <div class="mb-2">
                             <label class="form-label">Name of Document <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control" />
+                            <input type="text" name="name" class="form-control"/>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Author</label>
-                            <input type="text" name="author" class="form-control" />
+                            <input type="text" name="author" class="form-control"/>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" />
+                            <textarea name="description" class="form-control"/>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Category <span class="text-danger">*</span></label>
@@ -395,7 +450,7 @@
                                 <option value="">Select Category</option>
                                 <t t-foreach="categories or []" t-as="category">
                                     <option t-att-value="category.id">
-                                        <t t-esc="category.name" />
+                                        <t t-esc="category.name"/>
                                     </option>
                                 </t>
                             </select>
@@ -409,12 +464,16 @@
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Attach Document <span class="text-danger">*</span></label>
-                            <input type="file"
+                            <input
+                                type="file"
                                 name="document_file"
                                 class="form-control"
-                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp" />
-                            <input type="text" name="document_link" class="form-control d-none"
-                                placeholder="Enter link" />
+                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp"/>
+                            <input
+                                type="text"
+                                name="document_link"
+                                class="form-control d-none"
+                                placeholder="Enter link"/>
                         </div>
                     </div>
                     <div class="modal-footer">
