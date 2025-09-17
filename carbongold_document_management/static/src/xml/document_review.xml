@@ -1,14 +1,14 @@
 <templates id="template" xml:space="preserve">
 <t t-name="carbongold_document_management.DocumentReviewComponent">
-    <div class="document-review-component">
+    <section>
 
             <!-- Review Form Section -->
-        <div class="review-form-section mb-4">
+        <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Reviews &amp; Comments</h4>
                 
                 <button class="btn btn-primary" t-on-click="this.toggleReviewForm" t-if="this.canWriteReview">
-                    <i class="fa fa-star me-2"></i>
+                    <i class="fa fa-comment me-2"></i>
                     <t t-if="state.showReviewForm">Cancel</t>
                     <t t-else="" t-esc="this.reviewButtonText"/>
                 </button>
@@ -20,9 +20,13 @@
             </div>
 
                 <!-- Review Form -->
-            <div class="card review-form" t-if="state.showReviewForm">
+                 <div class="row justify-content-start">
+                    <div class="col-lg-8 col-xl-6">
+
+                  
+            <div class="card" t-if="state.showReviewForm">
                 <div class="card-body">
-                        <!-- Rating Selection -->
+                                <!-- Rating Selection -->
                     <div class="mb-3">
                         <label class="form-label">Rating <span class="text-danger">*</span></label>
                         <div class="star-rating">
@@ -41,9 +45,9 @@
                         </div>
                     </div>
 
-                        <!-- Portal Composer Style Input -->
+                                <!-- Portal Composer Style Input -->
                     <div class="mb-3">
-                        <label class="form-label">Your Review <span class="text-danger">*</span></label>
+                        <label class="form-label">Your Review</label>
                         <div class="d-flex">
 
                             <div class="flex-grow-1">
@@ -57,7 +61,8 @@
                                                     style="resize:none;"
                                                     maxlength="1000"></textarea>
                                         </div>
-                                        <!-- <div class="d-flex flex-row align-self-end p-2">
+                                                    <!-- <div class="d-flex flex-row align-self-end
+                                                    p-2">
                                             <div class="d-flex px-1">
                                                 <button class="btn fa fa-paperclip border-0" 
                                                         type="button" 
@@ -67,7 +72,7 @@
                                         </div> -->
                                     </div>
 
-                                        <!-- Attachments Display -->
+                                                <!-- Attachments Display -->
                                     <div class="o_portal_chatter_attachments mt-2" t-if="state.newReview.attachments.length > 0">
                                         <div class="d-flex flex-grow-1 flex-wrap gap-1">
                                             <div t-foreach="state.newReview.attachments" t-as="attachment" t-key="attachment_index" 
@@ -92,8 +97,8 @@
                                     </div>
                                 </div>
 
-                                    <!-- Hidden File Input -->
-                                <!-- <div class="d-none">
+                                            <!-- Hidden File Input -->
+                                            <!-- <div class="d-none">
                                     <input type="file" 
                                            class="o_review_file_input" 
                                            multiple="multiple"
@@ -104,17 +109,19 @@
                         </div>
                     </div>
 
-                        <!-- Submit Button -->
-                    <div class="d-flex justify-content-end">
+                                <!-- Submit Button -->
+                    <div class="d-flex justify-content-start">
                         <button class="btn btn-secondary me-2" t-on-click="this.toggleReviewForm">Cancel</button>
                         <button class="btn btn-primary" 
                                 t-on-click="this.submitReview"
-                                t-att-disabled="!state.newReview.rating || !state.newReview.comment.trim()">
+                                t-att-disabled="!state.newReview.rating ">
                             Send
                         </button>
                     </div>
                 </div>
             </div>
+                    </div>
+                </div>
         </div>
 
             <!-- Reviews List -->
@@ -138,21 +145,25 @@
                                  class="rounded-circle me-2" 
                                  width="36" height="36"/>
                             <div class="flex-grow-1">
-                                <div class="d-flex align-items-center mb-2">
+                                <div class="mb-2">
+
+                                <div class="d-flex align-items-center">
+                                    
                                     <h6 class="mb-0 me-2 fs-5 fw-bold" t-esc="review.author_name"/>
 
-                                        <!-- Rating Stars -->
+                                            <!-- Rating Stars -->
                                     <div class="rating-stars me-2" t-if="review.rating > 0">
                                         <t t-foreach="[1,2,3,4,5]" t-as="star" t-key="star">
                                             <i t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'" style="font-size: 1rem;"></i>
                                         </t>
                                     </div>
+                                </div>
                                     
                                     <small class="text-muted ms-auto fs-6" t-esc="review.create_date"/>
                                 </div>
 
                                     <!-- Review Content (Plain text now) -->
-                                <div class="review-content mb-2">
+                                <div t-if="review.comment" class="review-content mb-2">
                                     <p class="mb-2 fs-6" t-esc="review.comment" style="white-space: pre-wrap;"/>
                                 </div>
 
@@ -177,15 +188,15 @@
                                 </div>
 
                                     <!-- Reply buttons -->
-                                <div class="review-actions">
-                                    <button class="btn btn-outline-secondary" 
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary" 
                                             t-on-click="() => this.toggleReplyForm(review.id)"
                                             t-if="this.canReplyToReview(review) and !state.replyForms[review.id]">
                                         <i class="fa fa-reply me-1"></i>
                                         <small>Reply</small>
                                     </button>
                                     
-                                    <a href="/web/login" class="btn btn-link" t-if="!state.isLoggedIn">
+                                    <a href="/web/login" class="btn btn-sm btn-link" t-if="!state.isLoggedIn">
                                         <i class="fa fa-sign-in me-1"></i>
                                         <small>Login to Reply</small>
                                     </a>
@@ -193,23 +204,29 @@
                                 </div>
 
                                     <!-- Reply Form -->
-                                <div t-if="state.replyForms[review.id]" class="reply-form mt-2 p-2 bg-light">
-                                    <label class="form-label fs-5"><small>Reply to <strong t-esc="review.author_name"/></small></label>
-                                    <textarea class="form-control mb-2 fs-6" 
-                                            rows="2"
-                                            placeholder="Write your reply..."
-                                            t-model="state.replyForms[review.id].comment"
-                                            maxlength="500"></textarea>
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-secondary me-2" 
-                                                t-on-click="() => this.toggleReplyForm(review.id)">
-                                            <small>Cancel</small>
-                                        </button>
-                                        <button class="btn btn-primary" 
-                                                t-on-click="() => this.submitReply(review.id)"
-                                                t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
-                                            <small>Send</small>
-                                        </button>
+                                <div t-if="state.replyForms[review.id]" class="reply-form mt-2">
+                                    <div class="row">
+                                        <div class="col-lg-9 col-xl-8">
+                                            <div class="p-2 bg-light rounded">
+                                                <label class="form-label fs-5"><small>Reply to <strong t-esc="review.author_name"/></small></label>
+                                                <textarea class="form-control mb-2 fs-6" 
+                                                        rows="2"
+                                                        placeholder="Write your reply..."
+                                                        t-model="state.replyForms[review.id].comment"
+                                                        maxlength="500"></textarea>
+                                                <div class="d-flex justify-content-start">
+                                                    <button class="btn btn-sm btn-secondary me-2" 
+                                                            t-on-click="() => this.toggleReplyForm(review.id)">
+                                                        <small>Cancel</small>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary" 
+                                                            t-on-click="() => this.submitReply(review.id)"
+                                                            t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
+                                                        <small>Send</small>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -240,7 +257,7 @@
                 </div>
             </t>
         </div>
-    </div>
+    </section>
 </t>
 
 

@@ -172,7 +172,6 @@ class DocumentController(http.Controller):
         return request.make_json_response(bool(document_id))
 
 
-    
     def _get_document_page_values(self, document, **kwargs):
         current_user = request.env.user
 
@@ -182,14 +181,17 @@ class DocumentController(http.Controller):
             'rating_count': document.rating_count,
         }
 
-        
         public_user_id = request.env.ref('base.public_user').id
         is_anonymous = current_user.id == public_user_id
         is_authenticated = not is_anonymous  # Any user that's not the anonymous public user
 
+        is_document_owner = False
+        if is_authenticated and document.owner_id:
+            is_document_owner = document.owner_id.id == current_user.id
+
         # Check if current authenticated user has already reviewed
         user_has_reviewed = False
-        if is_authenticated:
+        if is_authenticated and not is_document_owner:  # Only check if not owner
             user_review = request.env['document.review'].search([
                 ('document_id', '=', document.id),
                 ('partner_id', '=', current_user.partner_id.id),
@@ -197,11 +199,11 @@ class DocumentController(http.Controller):
             ], limit=1)
             user_has_reviewed = bool(user_review)
 
-        # Simple component props
         component_values = {
             'documentId': document.id,
             'documentName': document.name,
             'isLoggedIn': is_authenticated,
+            'isDocumentOwner': is_document_owner,
             'userHasReviewed': user_has_reviewed,
             'currentUserId': current_user.id if is_authenticated else False,
             'currentPartnerName': current_user.partner_id.name if is_authenticated else '',

@@ -25,20 +25,19 @@ export class DocumentReviewComponent extends Component {
             loading: false,
             isLoggedIn: this.props.isLoggedIn || false,
             userHasReviewed: this.props.userHasReviewed || false,
+            isDocumentOwner: this.props.isDocumentOwner || false
         });
         
         onWillStart(() => this.loadReviews());
     }
     
     get canWriteReview() {
-        return this.state.isLoggedIn && !this.state.userHasReviewed;
+        return this.state.isLoggedIn && !this.state.userHasReviewed && !this.state.isDocumentOwner;
     }
     
     get reviewButtonText() {
         if (this.state.userHasReviewed) {
             return _t("Edit Your Review");
-        } else if (this.state.reviews.length === 0) {
-            return _t("Be the First to Review");
         } else {
             return _t("Write a Review");
         }
@@ -173,8 +172,8 @@ async _uploadAttachment(file) {
             return;
         }
         
-        if (!this.state.newReview.comment.trim()) {
-            this.notification.add(_t("Please enter a review comment"), { type: "warning" });
+        if (this.state.isDocumentOwner) {
+            this.notification.add(_t("Document owners cannot review their own documents"), { type: "warning" });
             return;
         }
         
@@ -235,6 +234,12 @@ async _uploadAttachment(file) {
             this.notification.add(_t("Please enter a reply"), { type: "warning" });
             return;
         }
+
+        if (this.state.isDocumentOwner) {
+        this.notification.add(_t("Document owners cannot reply to reviews"), { type: "warning" });
+        return;
+    }
+    
         
         try {
             const result = await this.rpc('/document/review/reply', {
@@ -257,7 +262,8 @@ async _uploadAttachment(file) {
     canReplyToReview(review) {
         if (!this.state.isLoggedIn) return false;
         if (review.author_name === this.currentPartnerName) return false;
-        
+        if (this.state.isDocumentOwner) return false;  
+
         // Check if user already replied to this review
         const userReplies = review.replies.filter(reply => 
             reply.author_name === this.currentPartnerName
