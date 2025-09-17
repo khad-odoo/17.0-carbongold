@@ -171,6 +171,8 @@ class DocumentController(http.Controller):
 
         return request.make_json_response(bool(document_id))
 
+
+    
     def _get_document_page_values(self, document, **kwargs):
         current_user = request.env.user
 
@@ -180,6 +182,7 @@ class DocumentController(http.Controller):
             'rating_count': document.rating_count,
         }
 
+        
         public_user_id = request.env.ref('base.public_user').id
         is_anonymous = current_user.id == public_user_id
         is_authenticated = not is_anonymous  # Any user that's not the anonymous public user

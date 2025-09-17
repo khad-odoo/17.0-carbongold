@@ -13,8 +13,10 @@ class DocumentReviewController(http.Controller):
 
             current_user = request.env.user
 
+            
             if document.owner_id and document.owner_id.id == current_user.id:
                 return {'error': "Document owner cannot review their own document."}
+            
 
             existing = request.env['document.review'].search([
                 ('document_id', '=', document_id),
@@ -50,9 +52,9 @@ class DocumentReviewController(http.Controller):
                     review.write({
                         'attachment_ids': [(6, 0, pending_attachments.ids)]
                     })
-
+            
             document_updated = request.env['documents.document'].sudo().browse(document_id)
-
+            
             return {
                 'success': True, 
                 'review_id': review.id,
@@ -72,8 +74,9 @@ class DocumentReviewController(http.Controller):
             if not orig_review.exists():
                 return {'error': "Review not found."}
 
+  
             current_user = request.env.user
-
+            
             # FIXED: Check if replying to own review using IDs
             if orig_review.partner_id.id == current_user.partner_id.id:
                 return {'error': "You cannot reply to your own review."}
@@ -97,7 +100,6 @@ class DocumentReviewController(http.Controller):
             }
 
             reply_rec = request.env['document.review'].create(reply_vals)
-
             return {'success': True, 'reply_id': reply_rec.id}
         except Exception as e:
             return {'error': str(e)}
@@ -115,7 +117,6 @@ class DocumentReviewController(http.Controller):
             ('is_reply', '=', False),
             ('is_published', '=', True)
         ])
-
         result = []
 
         for review in reviews:
