@@ -2,7 +2,6 @@
 <t t-name="carbongold_document_management.DocumentReviewComponent">
     <section>
 
-            <!-- Review Form Section -->
         <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Reviews &amp; Comments</h4>
@@ -19,119 +18,134 @@
                 </a>
             </div>
 
-                <!-- Review Form -->
-                 <div class="row justify-content-start">
-                    <div class="col-lg-8 col-xl-6">
+            <div class="row justify-content-start">
+                <div class="col-lg-8 col-xl-6">
 
-                  
-            <div class="card" t-if="state.showReviewForm">
-                <div class="card-body">
-                                <!-- Rating Selection -->
-                    <div class="mb-3">
-                        <label class="form-label">Rating <span class="text-danger">*</span></label>
-                        <div class="star-rating">
-                            <t t-foreach="[1, 2, 3, 4, 5]" t-as="star" t-key="star">
-                                <i t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
-                                   t-on-click="this.setRating"
-                                   t-att-data-rating="star"
-                                   style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"></i>
-                            </t>
-                        </div>
-                        <div class="mt-2" t-if="state.newReview.rating > 0">
-                            <small class="text-success">
-                                <i class="fa fa-check-circle me-1"></i>
-                                Rating: <strong t-esc="state.newReview.rating"/> out of 5 stars
-                            </small>
-                        </div>
-                    </div>
+                    <div class="card" t-if="state.showReviewForm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Rating <span class="text-danger">*</span></label>
+                                <div class="star-rating">
+                                    <t t-foreach="[1, 2, 3, 4, 5]" t-as="star" t-key="star">
+                                        <i t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
+                                        t-on-click="this.setRating"
+                                        t-att-data-rating="star"
+                                        style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"></i>
+                                    </t>
+                                </div>
+                            </div>
 
-                                <!-- Portal Composer Style Input -->
-                    <div class="mb-3">
-                        <label class="form-label">Your Review</label>
-                        <div class="d-flex">
+                            <div class="mb-3">
+                                <label class="form-label">Your Review</label>
+                                <div class="d-flex">
 
-                            <div class="flex-grow-1">
-                                <div class="o_portal_chatter_composer_input">
-                                    <div class="d-flex flex-column rounded-3">
-                                        <div class="position-relative flex-grow-1">
-                                            <textarea rows="3" 
-                                                    class="form-control rounded-3 shadow-none fs-6" 
-                                                    placeholder="Write your review..."
-                                                    t-model="state.newReview.comment"
-                                                    style="resize:none;"
-                                                    maxlength="1000"></textarea>
-                                        </div>
-                                                    <!-- <div class="d-flex flex-row align-self-end
-                                                    p-2">
-                                            <div class="d-flex px-1">
-                                                <button class="btn fa fa-paperclip border-0" 
-                                                        type="button" 
-                                                        title="Add attachment"
-                                                        t-on-click="this.onAttachmentButtonClick"/>
-                                            </div>
-                                        </div> -->
-                                    </div>
-
-                                                <!-- Attachments Display -->
-                                    <div class="o_portal_chatter_attachments mt-2" t-if="state.newReview.attachments.length > 0">
-                                        <div class="d-flex flex-grow-1 flex-wrap gap-1">
-                                            <div t-foreach="state.newReview.attachments" t-as="attachment" t-key="attachment_index" 
-                                                 class="bg-light p-1 rounded position-relative">
-                                                <div class="o_portal_chatter_attachment text-center">
-                                                    <button class="btn btn-sm btn-outline-danger position-absolute top-0 end-0" 
-                                                            style="margin: -3px; padding: 2px 4px;"
-                                                            title="Delete"
-                                                            t-on-click="() => this.removeAttachment(attachment_index)">
-                                                        <i class="fa fa-times" style="font-size: 10px;"/>
-                                                    </button>
-                                                    <div class="d-flex flex-row">
-                                                        <div class="oe_attachment_embedded o_image" 
-                                                             t-att-title="attachment.name"/>
-                                                        <div class="o_portal_chatter_attachment_name align-self-center text-truncate ms-1">
-                                                            <small t-esc="attachment.name"/>
-                                                        </div>
+                                    <div class="flex-grow-1">
+                                        <div class="o_portal_chatter_composer_input">
+                                            <div class="d-flex flex-column rounded-3">
+                                                <div class="position-relative flex-grow-1">
+                                                    <textarea rows="3" 
+                                                            class="form-control rounded-3 shadow-none fs-6" 
+                                                            placeholder="Write your review..."
+                                                            t-model="state.newReview.comment"
+                                                            style="resize:none;"
+                                                            maxlength="1000"></textarea>
+                                                </div>
+                                                            <div class="d-flex flex-row align-self-end
+                                                            p-2">
+                                                    <div class="d-flex px-1">
+                                                        <t t-if="state.loading">
+                                                                <i class="fa fa-spinner fa-spin"></i>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <button class="btn fa fa-paperclip border-0" 
+                                                                    type="button" 
+                                                                    title="Add attachment"
+                                                                    t-on-click="this.onAttachmentButtonClick"/>
+                                                        </t>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                                <!-- Attachments Display -->
+                                                <div class="document_attachments mt-2"
+                                                    t-if="state.newReview.attachments.length &gt; 0">
+                                                    <small class="text-muted d-block mb-2">
+                                                        <i class="fa fa-paperclip me-1"></i>
+                                                        Attachments (<t
+                                                            t-esc="state.newReview.attachments.length" />
+                                                        )
+                                                </small>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <div t-foreach="state.newReview.attachments"
+                                                            t-as="attachment"
+                                                            t-key="attachment_index"
+                                                            class="document_attachment bg-light p-2 rounded border d-flex align-items-center"
+                                                            t-att-data-id="attachment.id">
+
+                                                            <!-- Delete button -->
+                                                            <button
+                                                                class="document_attachment_delete btn btn-sm btn-outline-danger"
+                                                                title="Delete"
+                                                                t-on-click="() => this.removeAttachment(attachment_index)">
+                                                                <i class="fa fa-trash"
+                                                                    ></i>
+                                                            </button>
+
+                                                            <!-- File icon -->
+                                                            <i
+                                                                t-att-class="'fa me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"></i>
+
+                                                            <!-- File info -->
+                                                            <div class="flex-grow-1">
+                                                                <div
+                                                                    class="document_attachment_name text-truncate"
+                                                                    
+                                                                    t-att-title="attachment.name">
+                                                                    <small class="fw-medium"
+                                                                        t-esc="attachment.name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                        </div>
+
+                                            <!-- Hidden File Input -->
+                                        <div class="d-none">
+                                            <input type="file" 
+                                                class="o_review_file_input" 
+                                                multiple="multiple"
+                                                accept="image/*,.pdf,.doc,.docx,.txt"
+                                                t-on-change="this.onFileInputChange"/>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                            <!-- Hidden File Input -->
-                                            <!-- <div class="d-none">
-                                    <input type="file" 
-                                           class="o_review_file_input" 
-                                           multiple="multiple"
-                                           accept="image/*,.pdf,.doc,.docx,.txt"
-                                           t-on-change="this.onFileInputChange"/>
-                                </div> -->
+                                <!-- Submit Button -->
+                            <div class="d-flex justify-content-start">
+                                <button class="btn btn-secondary me-2" t-on-click="this.toggleReviewForm">Cancel</button>
+                                <button class="btn btn-primary" 
+                                        t-on-click="this.submitReview"
+                                        t-att-disabled="!state.newReview.rating ">
+                                    <t t-if="state.loading">
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                    </t>
+                                    <t t-else="">
+                                        Send
+                                    </t>
+                                </button>
                             </div>
                         </div>
                     </div>
-
-                                <!-- Submit Button -->
-                    <div class="d-flex justify-content-start">
-                        <button class="btn btn-secondary me-2" t-on-click="this.toggleReviewForm">Cancel</button>
-                        <button class="btn btn-primary" 
-                                t-on-click="this.submitReview"
-                                t-att-disabled="!state.newReview.rating ">
-                            Send
-                        </button>
-                    </div>
                 </div>
             </div>
-                    </div>
-                </div>
         </div>
 
             <!-- Reviews List -->
-        <div class="reviews-list">
-            <div t-if="state.loading" class="text-center p-3">
-                <i class="fa fa-spinner fa-spin"></i>
-                <p class="mt-2"><small>Loading reviews...</small></p>
-            </div>
-            
-            <div t-elif="state.reviews.length === 0" class="text-center text-muted p-4">
+        <div>
+
+            <div t-if="state.reviews.length === 0" class="text-center text-muted p-4">
                 <i class="fa fa-comments-o fa-2x mb-2 d-block"></i>
                 <h6>No reviews yet</h6>
                 <small>Be the first to share your thoughts about this document!</small>
@@ -152,40 +166,44 @@
                                     <h6 class="mb-0 me-2 fs-5 fw-bold" t-esc="review.author_name"/>
 
                                             <!-- Rating Stars -->
-                                    <div class="rating-stars me-2" t-if="review.rating > 0">
+                                    <div class="rating-stars me-2" t-if="review.rating &gt; 0">
                                         <t t-foreach="[1,2,3,4,5]" t-as="star" t-key="star">
                                             <i t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'" style="font-size: 1rem;"></i>
                                         </t>
                                     </div>
                                 </div>
                                     
-                                    <small class="text-muted ms-auto fs-6" t-esc="review.create_date"/>
+                                    <small class="text-muted ms-auto fs-8" t-esc="review.create_date"/>
                                 </div>
 
-                                    <!-- Review Content (Plain text now) -->
                                 <div t-if="review.comment" class="review-content mb-2">
                                     <p class="mb-2 fs-6" t-esc="review.comment" style="white-space: pre-wrap;"/>
                                 </div>
 
                                     <!-- Review Attachments -->
-                                <div t-if="review.attachment_ids and review.attachment_ids.length > 0" class="attachments mb-2">
-                                    <small class="text-muted d-block mb-1">Attachments:</small>
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <t t-foreach="review.attachment_ids" t-as="attachment" t-key="attachment.id">
-                                            <div class="bg-light p-1 rounded">
-                                                <a t-att-href="'/web/content/' + attachment.id + '?download=true'" 
-                                                   class="d-flex flex-row text-decoration-none"
-                                                   target="_blank">
-                                                    <div class="oe_attachment_embedded o_image" 
-                                                         t-att-title="attachment.name"/>
-                                                    <div class="align-self-center text-truncate ms-1">
-                                                        <small t-esc="attachment.name"/>
+                                    <div
+                                        t-if="review.attachment_ids and review.attachment_ids.length > 0"
+                                        class="attachments mb-2">
+                                        <div class="d-flex flex-wrap gap-1">
+                                            <t t-foreach="review.attachment_ids" t-as="attachment"
+                                                t-key="attachment.id">
+                                                <a
+                                                    t-att-href="'/web/content/' + attachment.id + '?download=true&amp;access_token=' + attachment.access_token"
+                                                    class="document_attachment bg-light p-2 rounded border d-flex align-items-center"
+                                                    target="_blank"
+                                                    t-att-title="'Download ' + attachment.name">
+
+                                                    <i
+                                                        t-att-class="'fa fa-2x me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"></i>
+
+                                                    <div class="document_attachment_name">
+                                                        <small class="fw-medium fs-8"
+                                                            t-esc="attachment.name" />
                                                     </div>
                                                 </a>
-                                            </div>
-                                        </t>
+                                            </t>
+                                        </div>
                                     </div>
-                                </div>
 
                                     <!-- Reply buttons -->
                                 <div>
@@ -209,11 +227,12 @@
                                         <div class="col-lg-9 col-xl-8">
                                             <div class="p-2 bg-light rounded">
                                                 <label class="form-label fs-5"><small>Reply to <strong t-esc="review.author_name"/></small></label>
-                                                <textarea class="form-control mb-2 fs-6" 
-                                                        rows="2"
+                                                        <textarea rows="2"
+                                                        class="form-control rounded-3 shadow-none mb-2 fs-6"
                                                         placeholder="Write your reply..."
                                                         t-model="state.replyForms[review.id].comment"
-                                                        maxlength="500"></textarea>
+                                                        style="resize:none;"
+                                                        maxlength="1000"></textarea>
                                                 <div class="d-flex justify-content-start">
                                                     <button class="btn btn-sm btn-secondary me-2" 
                                                             t-on-click="() => this.toggleReplyForm(review.id)">
@@ -242,7 +261,7 @@
                                                 <div class="flex-grow-1">
                                                     <div class="d-flex align-items-center mb-1">
                                                         <small class="me-2 fs-5 fw-bold" t-esc="reply.author_name"/>
-                                                        <small class="text-muted fs-6" t-esc="reply.create_date"/>
+                                                        <small class="text-muted fs-8" t-esc="reply.create_date"/>
                                                     </div>
                                                         <!-- Plain text for replies -->
                                                     <p class="mb-0 fs-6" t-esc="reply.comment" style="white-space: pre-wrap;"/>

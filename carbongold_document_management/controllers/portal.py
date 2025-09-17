@@ -1,11 +1,13 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import http
+from odoo import http,_
 from odoo.http import request
+import json, base64, uuid, mimetypes
+from odoo.exceptions import AccessError, MissingError, UserError
 
 class DocumentReviewController(http.Controller):
     @http.route('/document/review/submit', type='json', auth='user', methods=['POST'], csrf=True)
-    def submit_review(self, document_id, comment, rating=0, attachment_ids=None, attachment_tokens=None):
+    def submit_review(self, document_id, comment, rating=0, attachment_ids=None):
         try:
             document = request.env['documents.document'].sudo().browse(document_id)
             if not document.exists() or not document.is_published:
@@ -42,7 +44,7 @@ class DocumentReviewController(http.Controller):
                 attachments = request.env['ir.attachment'].sudo().browse(attachment_ids)
                 # Filter only pending attachments that belong to this user
                 pending_attachments = attachments.filtered(
-                    lambda a: a.res_model == 'mail.compose.message' and a.res_id == 0
+                    lambda a: a.res_model == 'document.review' and a.res_id == 0
                 )
                 if pending_attachments:
                     pending_attachments.write({
@@ -145,3 +147,78 @@ class DocumentReviewController(http.Controller):
             result.append(review_data)
 
         return result
+
+    @http.route('/review/attachment/add', type='http', auth='user', methods=['POST'], csrf=True)
+    def review_attachment_add(self, **kwargs):
+        try:
+            file_data = kwargs.get('file')
+            if not file_data:
+                return request.make_response(
+                    json.dumps({'error': 'No file provided'}),
+                    headers=[('Content-Type', 'application/json')]
+                )
+            
+            file_content = file_data.read()
+            if len(file_content) > 5 * 1024 * 1024:
+                return request.make_response(
+                    json.dumps({'error': 'File too large (max MB)'}),
+                    headers=[('Content-Type', 'application/json')]
+                )
+            
+            filename = file_data.filename
+            
+            # UPDATED: Block only dangerous executable files
+            dangerous_extensions = ['.exe', '.bat', '.cmd', '.jar', '.msi', '.app']
+            if any(filename.lower().endswith(ext) for ext in dangerous_extensions):
+                return request.make_response(
+                    json.dumps({'error': 'File type not allowed for security reasons'}),
+                    headers=[('Content-Type', 'application/json')]
+                )
+            
+            mimetype = file_data.content_type or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            
+            # Create attachment in pending state
+            attachment = request.env['ir.attachment'].sudo().create({
+                'name': filename,
+                'datas': base64.b64encode(file_content),
+                'mimetype': mimetype,
+                'res_model': 'document.review',
+                'res_id': 0,
+                'access_token': str(uuid.uuid4()),
+                'public': False,
+            })
+            
+            response_data = {
+                'id': attachment.id,
+                'name': attachment.name,
+                'mimetype': attachment.mimetype,
+                'file_size': attachment.file_size,
+                'access_token': attachment.access_token,
+                'state': 'pending'
+            }
+            
+            return request.make_response(
+                json.dumps(response_data),
+                headers=[('Content-Type', 'application/json')]
+            )
+            
+        except Exception as e:
+            return request.make_response(
+                json.dumps({'error': str(e)}),
+                headers=[('Content-Type', 'application/json')]
+            )
+
+    @http.route('/review/attachment/remove', type='json', auth='user', methods=['POST'])
+    def remove(self, attachment_id, access_token=None):
+        att = request.env['ir.attachment'].sudo().search([
+            ('id', '=', int(attachment_id)),
+            ('res_model', '=', 'document.review'),
+            ('res_id', '=', 0),
+            ('access_token', '=', access_token),
+        ])
+        if not att:
+            raise UserError(_('Attachment not found or already linked'))
+        if att.create_uid.id != request.env.user.id:
+            raise AccessError(_('Not owner'))
+        att.unlink()
+        return True

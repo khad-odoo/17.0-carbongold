@@ -3,7 +3,7 @@
 }
 
 .star-clickable:hover {
-    color: #ffc107 !important;
+    color: #FACC2E !important;
     transform: scale(1.1);
 }
 
@@ -17,4 +17,27 @@
 
 .card, .card-body{
     border: 0 !important;
+}
+
+.fs-8 {
+    font-size: .75rem;
+}
+
+.document_attachment {
+    position: relative;
+
+    .document_attachment_name {
+        max-width: 200px;
+    }
+
+    .document_attachment_delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        opacity: 0;
+    }
+
+    &:hover .document_attachment_delete {
+        opacity: 1;
+    }
 }

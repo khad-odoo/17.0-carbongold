@@ -15,7 +15,7 @@ class DocumentReview(models.Model):
     partner_id = fields.Many2one('res.partner', string='Reviewer', required=True)
     comment = fields.Text('Review Comment', required=False)
     rating = fields.Float('Rating', default=0, help="Rating from 1 to 5 stars")
-    attachment_ids = fields.Many2many('ir.attachment', 'review_attachment_rel', 'review_id', 'attachment_id', string='Attachments')
+    attachment_ids = fields.Many2many('ir.attachment', 'review_attachment_rel', 'review_id', 'attachment_id', string='Attachments', ondelete='cascade')
     is_reply = fields.Boolean('Is Reply', default=False)
     reply_to_id = fields.Many2one('document.review', string='Reply To', domain="[('is_reply', '=', False)]")
     access_token = fields.Char('Security Token', default=lambda self: uuid.uuid4().hex)

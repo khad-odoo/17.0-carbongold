@@ -192,13 +192,14 @@ class DocumentController(http.Controller):
         # Check if current authenticated user has already reviewed
         user_has_reviewed = False
         if is_authenticated and not is_document_owner:  # Only check if not owner
-            user_review = request.env['document.review'].search([
-                ('document_id', '=', document.id),
-                ('partner_id', '=', current_user.partner_id.id),
-                ('is_reply', '=', False),
-            ], limit=1)
-            user_has_reviewed = bool(user_review)
 
+            user_reviews = document.reviews.filtered(
+                lambda r: not r.is_reply and r.partner_id.id == current_user.partner_id.id
+            )
+            user_has_reviewed = bool(user_reviews)
+        reviews_data = self._get_reviews_data(document)
+        
+        # Component props
         component_values = {
             'documentId': document.id,
             'documentName': document.name,
@@ -208,7 +209,50 @@ class DocumentController(http.Controller):
             'currentUserId': current_user.id if is_authenticated else False,
             'currentPartnerName': current_user.partner_id.name if is_authenticated else '',
             'csrfToken': request.csrf_token(),
+            'reviews': reviews_data,
         }
-
+        
         values['component_values'] = component_values
         return values
+
+    def _get_reviews_data(self, document):
+        
+        reviews_data = []
+        
+        for review in document.reviews:
+            if not review.is_reply and review.is_published:
+                review_data = {
+                    'id': review.id,
+                    'comment': review.comment,
+                    'rating': review.rating,
+                    'author_name': review.author_name,
+                    'author_avatar': f'/web/image/res.partner/{review.partner_id.id}/avatar_128',
+                    'create_date': review.create_date.strftime('%B %d, %Y at %I:%M %p'),
+                    'attachment_ids': self._get_attachment_data(review.attachment_ids),
+                    'replies': [],
+                }
+                
+                published_replies = review.replies.filtered(lambda r: r.is_published)
+                
+                for reply in published_replies:
+                    review_data['replies'].append({
+                        'id': reply.id,
+                        'comment': reply.comment,
+                        'author_name': reply.author_name,
+                        'author_avatar': f'/web/image/res.partner/{reply.partner_id.id}/avatar_128',
+                        'create_date': reply.create_date.strftime('%B %d, %Y at %I:%M %p'),
+                        'attachment_ids': self._get_attachment_data(reply.attachment_ids),
+                    })
+                
+                reviews_data.append(review_data)
+        
+        return reviews_data
+
+    def _get_attachment_data(self, attachments):
+        return [{
+            'id': att.id,
+            'name': att.name,
+            'mimetype': att.mimetype,
+            'file_size': att.file_size,
+            'access_token': att.access_token,
+        } for att in attachments]

@@ -198,31 +198,14 @@
                                                         t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')" />
                                                 </h5>
                                                 <div class="d-flex gap-2">
-                                                    <div
-                                                        class="o_website_rating_static mb-2">
-                                                        <t t-set="full_stars"
-                                                            t-value="int(doc.rating_avg)" />
-                                                        <t t-set="half_star"
-                                                            t-value="doc.rating_avg % 1 >= 0.5" />
-                                                        <t t-set="empty_stars"
-                                                            t-value="5 - full_stars - (1 if half_star else 0)" />
-                                                        <t
-                                                            t-foreach="range(full_stars)"
-                                                            t-as="star">
-                                                            <i
-                                                                class="fa fa-star text-warning"></i>
-                                                        </t>
-                                                        <t t-if="half_star">
-                                                            <i
-                                                                class="fa fa-star-half-o text-warning"></i>
-                                                        </t>
-                                                        <t
-                                                            t-foreach="range(empty_stars)"
-                                                            t-as="star">
-                                                            <i
-                                                                class="fa fa-star-o text-muted"></i>
-                                                        </t>
-                                                    </div>
+                                                    <t
+                                                        t-call="carbongold_document_management.star_ratings">
+                                                        <t t-set="rating_avg"
+                                                            t-value="doc.rating_avg" />
+                                                        <t t-set="rating_count"
+                                                            t-value="doc.rating_count" />
+
+                                                    </t>
                                                     <span class="text-muted"> (<t
                                                             t-esc="doc.rating_count or 0" />) </span>
                                                 </div>
@@ -267,31 +250,14 @@
                                                                 </h5>
 
                                                                 <div class="d-flex gap-2">
-                                                                    <div
-                                                                        class="o_website_rating_static mb-2">
-                                                                        <t t-set="full_stars"
-                                                                            t-value="int(doc.rating_avg)" />
-                                                                        <t t-set="half_star"
-                                                                            t-value="doc.rating_avg % 1 >= 0.5" />
-                                                                        <t t-set="empty_stars"
-                                                                            t-value="5 - full_stars - (1 if half_star else 0)" />
-                                                                        <t
-                                                                            t-foreach="range(full_stars)"
-                                                                            t-as="star">
-                                                                            <i
-                                                                                class="fa fa-star text-warning"></i>
-                                                                        </t>
-                                                                        <t t-if="half_star">
-                                                                            <i
-                                                                                class="fa fa-star-half-o text-warning"></i>
-                                                                        </t>
-                                                                        <t
-                                                                            t-foreach="range(empty_stars)"
-                                                                            t-as="star">
-                                                                            <i
-                                                                                class="fa fa-star-o text-muted"></i>
-                                                                        </t>
-                                                                    </div>
+                                                                    <t
+                                                                        t-call="carbongold_document_management.star_ratings">
+                                                                        <t t-set="rating_avg"
+                                                                            t-value="doc.rating_avg" />
+                                                                        <t t-set="rating_count"
+                                                                            t-value="doc.rating_count" />
+
+                                                                    </t>
                                                                     <span class="text-muted"> (<t
                                                                             t-esc="doc.rating_count or 0" />
                                                                         ) </span>
@@ -421,23 +387,12 @@
                             </h1>
 
                             <div>
-                                <div class="o_website_rating_static mb-2">
-                                    <t t-set="full_stars" t-value="int(rating_avg)" />
-                                    <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
-                                    <t t-set="empty_stars"
-                                        t-value="5 - full_stars - (1 if half_star else 0)" />
-                                    <t t-foreach="range(full_stars)" t-as="star">
-                                        <i class="fa fa-star text-warning"></i>
-                                    </t>
-                                    <t t-if="half_star">
-                                        <i class="fa fa-star-half-o text-warning"></i>
-                                    </t>
-                                    <t t-foreach="range(empty_stars)" t-as="star">
-                                        <i class="fa fa-star-o text-muted"></i>
-                                    </t>
-                                </div>
-                                <div class="o_message_counter"><span class="fa fa-comments"></span><span
-                                        class="o_message_count">
+                                <t t-call="carbongold_document_management.star_ratings">
+                                    <t t-set="rating_avg" t-value="rating_avg" />
+                                    <t t-set="rating_count" t-value="rating_count" />
+
+                                </t>
+                                <div class="text-muted"><span class="fa fa-comments"></span><span>
                                         <t t-out="rating_count" />
                                     </span>
                                     reviews</div>
@@ -541,6 +496,24 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </template>
+
+    <template id="star_ratings" name="Star Ratings">
+        <div class="mb-2">
+            <t t-set="full_stars" t-value="int(rating_avg)" />
+            <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
+            <t t-set="empty_stars"
+                t-value="5 - full_stars - (1 if half_star else 0)" />
+            <t t-foreach="range(full_stars)" t-as="star">
+                <i class="fa fa-star text-warning"></i>
+            </t>
+            <t t-if="half_star">
+                <i class="fa fa-star-half-o text-warning"></i>
+            </t>
+            <t t-foreach="range(empty_stars)" t-as="star">
+                <i class="fa fa-star-o text-muted"></i>
+            </t>
         </div>
     </template>
 

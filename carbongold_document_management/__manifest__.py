@@ -11,7 +11,7 @@ CarbonGold Document Management | TaskID: 5066289
 The Goal of this module is enhance the show and upload
 Document feature on portal side.
 """,
-    "depends": ["website_documents", "portal_rating"],
+    "depends": ["website_documents"],
     "data": [
         "security/ir.model.access.csv",
         "data/website_data.xml",

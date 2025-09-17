@@ -15,15 +15,15 @@
 
                 <!-- Filters -->
                 <filter string="Published Reviews" name="published"
-                    domain="[('is_published', '=', True)]" />
-                <filter string="Unpublished Reviews" name="unpublished"
-                    domain="[('is_published', '=', False)]" />
+                    domain="[('is_published', '=', True), ('is_reply', '=', False)]" />
+                <filter string="Published Replies" name="published_replies"
+                    domain="[('is_published', '=', True), ('is_reply', '=', True)]" />
 
                 <separator />
 
-                <filter string="Reviews Only" name="reviews_only"
+                <filter string="Reviews" name="reviews"
                     domain="[('is_reply', '=', False)]" />
-                <filter string="Replies Only" name="replies_only"
+                <filter string="Replies" name="replies"
                     domain="[('is_reply', '=', True)]" />
 
                 <separator />
@@ -58,6 +58,7 @@
                 <field name="document_id" />
                 <field name="comment" />
                 <field name="partner_id" />
+                <field name="is_reply" />
                 <templates>
                     <t t-name="kanban-box">
                         <t t-set="val_stars" t-value="Math.round(record.rating.raw_value * 10) / 10" />
@@ -66,7 +67,7 @@
                         <t t-set="empty_star" t-value="5 - (val_integer + Math.ceil(val_decimal))" />
                         <div class="oe_kanban_card oe_kanban_global_click">
                             <div class="d-flex flex-row">
-                                <div class="o_rating_kanban_left me-3">
+                                <div class="o_rating_kanban_left me-3" invisible="is_reply">
                                     <h1 class="o_rating_value text-center text-primary"
                                         t-esc="val_stars" />
                                     <i t-foreach="[...Array(val_integer).keys()]" t-as="num"
@@ -123,7 +124,6 @@
                 <field name="comment" />
                 <field name="is_published" widget="boolean_toggle" />
                 <field name="is_reply" optional="show" />
-                <field name="reply_to_id" optional="hide" />
             </tree>
         </field>
     </record>
@@ -134,7 +134,7 @@
         <field name="res_model">document.review</field>
         <field name="view_mode">kanban,tree</field>
         <field name="search_view_id" ref="view_document_review_search" />
-        <field name="context">{'search_default_reviews_only': 1}</field>
+        <field name="context">{'search_default_reviews': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No reviews found!
