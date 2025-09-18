@@ -8,9 +8,10 @@ class DocumentReview(models.Model):
     _name = "document.review"
     _description = "Document Review"
     _order = 'create_date desc, id desc'
-    _rec_name = 'comment'
+    _rec_name = 'res_name'
 
-    create_date = fields.Datetime(string="Reviewed on", default=fields.Datetime.now)
+    res_name = fields.Char(string='Name', compute='_compute_res_name', store=True)
+    create_date = fields.Datetime(string="Submitted on", default=fields.Datetime.now)
     document_id = fields.Many2one('documents.document', string='Document', required=True, index=True, ondelete='cascade')
     partner_id = fields.Many2one('res.partner', string='Reviewer', required=True)
     comment = fields.Text('Review Comment', required=False)
@@ -25,6 +26,11 @@ class DocumentReview(models.Model):
     author_name = fields.Char(related='partner_id.name', string='Author Name', readonly=True)
     author_avatar = fields.Binary(related='partner_id.avatar_128', string='Author Avatar', readonly=True)
     replies = fields.One2many('document.review', 'reply_to_id', string='Replies')
+    
+    @api.depends('document_id.name')
+    def _compute_res_name(self):
+        for rating in self:
+            rating.res_name = rating.document_id.name
 
     @api.constrains('rating')
     def _check_rating_range(self):

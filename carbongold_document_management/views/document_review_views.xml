@@ -121,10 +121,64 @@
                 <field name="partner_id" />
                 <field name="document_id" string="Related Document" />
                 <field name="rating" />
-                <field name="comment" />
+                <field name="comment" string="Comment" />
                 <field name="is_published" widget="boolean_toggle" />
                 <field name="is_reply" optional="show" />
             </tree>
+        </field>
+    </record>
+
+    <record id="document_review_view_form" model="ir.ui.view">
+        <field name="name">document.review.view.form</field>
+        <field name="model">document.review</field>
+        <field name="arch" type="xml">
+            <form string="Document Review">
+
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="document_id" readonly="1" />
+                            <field name="partner_id" readonly="1" />
+                            <field name="rating" invisible="is_reply" />
+                            <field name="create_date" />
+                        </group>
+                        <group>
+                            <field name="is_reply" />
+                            <field name="comment" string="Comment" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Attachments" invisible="not attachment_ids">
+                            <group>
+                                <label for="attachment_ids" />
+                                <div name="attachment_ids_details">
+                                    <field name="attachment_ids" widget="many2many_binary"
+                                        string="Attach a file" class="oe_inline"
+                                    />
+                                </div>
+                            </group>
+                        </page>
+
+                        <page string="Replies" invisible="not replies">
+                            <group>
+                                <field name="replies"
+                                    context="{'default_reply_to_id': id, 'default_is_reply': True}"
+                                    readonly="1">
+                                    <tree editable="false">
+                                        <field name="partner_id" />
+                                        <field name="comment" />
+                                        <field name="create_date" />
+                                        <field name="is_published" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
         </field>
     </record>
 
@@ -132,7 +186,7 @@
     <record id="action_document_reviews" model="ir.actions.act_window">
         <field name="name">Document Reviews</field>
         <field name="res_model">document.review</field>
-        <field name="view_mode">kanban,tree</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_document_review_search" />
         <field name="context">{'search_default_reviews': 1}</field>
         <field name="help" type="html">
