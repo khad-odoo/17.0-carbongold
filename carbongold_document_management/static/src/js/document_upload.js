@@ -93,10 +93,10 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
             const result = await response.json();
 
             if (result) {
-                this.notification.add(_t("Document uploaded successfully!"), {type: "success"});
                 if (modal) modal.classList.remove("show");
-
                 this._resetForm();
+                const DocumentMessageBox = document.querySelector(".document-alert");
+                DocumentMessageBox.classList.remove("d-none");
             } else {
                 this.notification.add(result.error || _t("Document was not uploaded."), {type: "danger"});
             }

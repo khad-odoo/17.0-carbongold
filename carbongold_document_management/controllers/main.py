@@ -23,6 +23,7 @@ ALLOWED_EXTENSIONS = {
     ".jpeg",
     ".png",
     ".webp",
+    ".zip",
 }
 
 

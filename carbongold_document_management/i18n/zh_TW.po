@@ -1,0 +1,745 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* carbongold_document_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-19 13:05+0000\n"
+"PO-Revision-Date: 2025-09-19 13:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "<b>Categories</b>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "<i class=\"fa fa-clock-o me-2\" aria-label=\"Create date\"/>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "<option value=\"\">Select Category</option>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid ""
+"<select name=\"attachment_type\" class=\"form-control document-att-type\">\n"
+"                                <option value=\"file\">File</option>\n"
+"                                <option value=\"link\">Link</option>\n"
+"                            </select>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "<strong>Author:</strong>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "<strong>Hurrey!</strong> Your document uploaded successfully!"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "<strong>Owner:</strong>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "A star"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Add Document"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Add attachment"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "All Documents"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__allow_reviews
+msgid "Allow Reviews"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_upload.js:0
+#, python-format
+msgid "An error occurred while uploading."
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Attach Document <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Attach a file"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Attachment Type <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/controllers/portal.py:0
+#, python-format
+msgid "Attachment not found or already linked"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__attachment_ids
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Attachments"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Attachments ("
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__author
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Author"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__author_avatar
+msgid "Author Avatar"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__author_name
+msgid "Author Name"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__rating_avg
+msgid "Average Rating"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Be the first to share your thoughts about this document!"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__can_publish
+msgid "Can Publish"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+#, python-format
+msgid "Cancel"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_category_id
+msgid "Category"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Category <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__child_ids
+msgid "Child Categories"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Clicks"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Close"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+msgid "Comment"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Could not remove attachment %s"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Could not save file <strong>%s</strong>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__create_uid
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Delete"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__doc_description
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Description"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__display_name
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_documents_document
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__document_id
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Document"
+msgstr "文件"
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_category_category
+#: model:ir.ui.menu,name:carbongold_document_management.menu_category_category
+msgid "Document Category"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_click_count
+msgid "Document Click Count"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_download_count
+msgid "Document Download Count"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_document_review
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Document Review"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_document_reviews
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Document Reviews"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Document owners cannot reply to reviews"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Document owners cannot review their own documents"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+msgid "Document preview"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.actions.act_window,help:carbongold_document_management.action_document_reviews
+msgid "Document reviews and replies from website users will appear here."
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_upload.js:0
+#, python-format
+msgid "Document was not uploaded."
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:website.menu,name:carbongold_document_management.menu_documents
+msgid "Documents"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_documents_report
+msgid "Documents Analysis"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_category_category
+msgid "Documents Category"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Documents Report"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "Download"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Downloads"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Edit Your Review"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Enter link"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Error submitting reply"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Error submitting review"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Group By"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "Half a star"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__id
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__id
+msgid "ID"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__is_published
+msgid "Is Published"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__is_reply
+msgid "Is Reply"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Is Reply?"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__write_uid
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__write_date
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+msgid "Link preview"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Login to Reply"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Login to Review"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__name
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__res_name
+msgid "Name"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Name of Document <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No documents available"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid ""
+"No documents in the selected\n"
+"                                        categories."
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No results"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No results found for \""
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.actions.act_window,help:carbongold_document_management.action_document_reviews
+msgid "No reviews found!"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "No reviews yet"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/controllers/portal.py:0
+#, python-format
+msgid "Not owner"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "Open Website"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__parent_id
+msgid "Parent Category"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Please enter a reply"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Please select a rating"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Publication Status"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.actions.server,name:carbongold_document_management.action_publish_on_public
+msgid "Publish On Public"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__is_published
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Published"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Published Replies"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Published Reviews"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__rating
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+#, python-format
+msgid "Rating"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_document_review__rating
+msgid "Rating from 1 to 5 stars"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+msgid "Related Document"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__replies
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Replies"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reply"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__reply_to_id
+msgid "Reply To"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Reply submitted successfully!"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reply to"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.ui.menu,name:carbongold_document_management.carbongold_document_management_report_menu
+msgid "Report"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_documents_document__website_id
+msgid "Restrict publishing to this website."
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__comment
+msgid "Review Comment"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Review Content"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__rating_count
+msgid "Review Count"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Review Date"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Review submitted successfully!"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__partner_id
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Reviewer"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__reviews
+#: model:ir.ui.menu,name:carbongold_document_management.carbongold_document_management_reviews_menu
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Reviews"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reviews & Comments"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Save Document"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__access_token
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Send"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__create_date
+msgid "Submitted on"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_documents_document__website_url
+msgid "The full URL to access the document through the website."
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Upload Document"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:documents.folder,name:carbongold_document_management.documents_upload_folder
+msgid "Upload Documents"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "User Ratings"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_published
+msgid "Visible on current website"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_website
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_id
+msgid "Website"
+msgstr "網站"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_url
+msgid "Website URL"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Write a Review"
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Write your reply..."
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Write your review..."
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/models/category_category.py:0
+#, python-format
+msgid "You cannot create recursive categories."
+msgstr ""
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Your Review"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "close"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "reviews"
+msgstr ""
