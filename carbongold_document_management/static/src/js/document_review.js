@@ -97,7 +97,6 @@ export class DocumentReviewComponent extends Component {
 
         this.state.loading = true;
 
-
         try {
             await Promise.all([...files].map(file => this._uploadSingleFile(file)));
         } catch (error) {

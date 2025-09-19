@@ -1,16 +1,34 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    "name": "CarbonGold Document Management",
+    "name": "Bitons Document Plus",
     "version": "17.0.1.0.0",
     "category": "Custome",
-    "summary": "CarbonGold Document Management",
+    "summary": "Bitons Document Plus",
     "description": """
-CarbonGold Document Management | TaskID: 5066289
+Bitons Document Plus | TaskID: 5066289
 ================================================
-The Goal of this module is enhance the show and upload
-Document feature on portal side.
+Overview: Document Plus module extends the Odoo Document addon to enhance document management and 
+presentation on the website. It enables administrators to easily publish and organize documents 
+for public download, with improved control over display and user interaction.
+
+Key Features:
+
+Thumbnail Management: Generate, customize, and manage document thumbnails for improved visual presentation.
+Website Integration: Easily embed documents into any webpage using the drag-and-drop Document+ block in the Odoo Website Editor.
+Document Management Tools:
+ - Rating and review system
+ - Comment functionality
+ - Categorization and tagging
+
+Reporting & Analytics: Track document performance, downloads, and user engagement with built-in reports.
+
+Benefits:
+ - Streamlined document publishing with customizable thumbnails.
+ - Enhanced user experience through interactive features.
+ - Better insights into document usage and popularity.
 """,
+
     "depends": ["website_documents"],
     "data": [
         "security/ir.model.access.csv",

@@ -54,9 +54,9 @@ class DocumentReviewController(http.Controller):
                     review.write({
                         'attachment_ids': [(6, 0, pending_attachments.ids)]
                     })
-            
+
             document_updated = request.env['documents.document'].sudo().browse(document_id)
-            
+
             return {
                 'success': True, 
                 'review_id': review.id,
@@ -76,7 +76,6 @@ class DocumentReviewController(http.Controller):
             if not orig_review.exists():
                 return {'error': "Review not found."}
 
-  
             current_user = request.env.user
             
             # FIXED: Check if replying to own review using IDs
