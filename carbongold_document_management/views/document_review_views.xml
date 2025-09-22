@@ -133,9 +133,7 @@
         <field name="model">document.review</field>
         <field name="arch" type="xml">
             <form string="Document Review">
-
                 <sheet>
-
                     <group>
                         <group>
                             <field name="document_id" readonly="1" />
@@ -145,10 +143,10 @@
                         </group>
                         <group>
                             <field name="is_reply" />
+                            <field name="is_published" />
                             <field name="comment" string="Comment" />
                         </group>
                     </group>
-
                     <notebook>
                         <page string="Attachments" invisible="not attachment_ids">
                             <group>
@@ -160,7 +158,6 @@
                                 </div>
                             </group>
                         </page>
-
                         <page string="Replies" invisible="not replies">
                             <group>
                                 <field name="replies"
@@ -176,12 +173,10 @@
                             </group>
                         </page>
                     </notebook>
-
                 </sheet>
             </form>
         </field>
     </record>
-
 
     <record id="action_document_reviews" model="ir.actions.act_window">
         <field name="name">Document Reviews</field>

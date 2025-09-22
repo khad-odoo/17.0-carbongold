@@ -89,3 +89,13 @@ class Documents(models.Model):
         )
         match = pattern.search(self.url)
         return match.group(1) if match else False
+
+    def action_view_documents_form(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'documents.document',
+            'view_id': self.env.ref("documents.document_view_form", False).id,
+            'res_id': self.id,
+        }

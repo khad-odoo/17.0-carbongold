@@ -140,6 +140,76 @@
         </div>
     </template>
 
+    <template id="upload_document" name="Upload Document">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#getDocumentModal">
+            Upload Document
+        </button>
+        <div class="modal fade" id="getDocumentModal" tabindex="-1" aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content website-document">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Document</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close" />
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger d-none validation-message" role="alert" />
+
+                        <div class="mb-2">
+                            <label class="form-label">Name of Document <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Author</label>
+                            <input type="text" name="author" t-att-value="env.user.partner_id.name" class="form-control" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Category <span class="text-danger">*</span></label>
+                            <select name="category" class="form-control">
+                                <option value="">Select Category</option>
+                                <t t-foreach="categories or []" t-as="category">
+                                    <option t-att-value="category.id">
+                                        <t t-esc="category.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Attachment Type <span class="text-danger">*</span></label>
+                            <select name="attachment_type" class="form-control document-att-type">
+                                <option value="file">File</option>
+                                <option value="link">Link</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Attach Document <span class="text-danger">*</span></label>
+                            <input
+                                type="file"
+                                name="document_file"
+                                class="form-control"
+                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp,.zip" />
+                            <input
+                                type="text"
+                                name="document_link"
+                                class="form-control d-none"
+                                placeholder="Enter link" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel</button>
+                        <button type="button" class="btn btn-primary saveDocumentBtn">Save Document</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="all_documents" name="All Documents">
         <t t-call="website.layout">
             <div class="oe_structure"></div>
@@ -300,199 +370,135 @@
     <template id="detail_document_page" name="Detail Document">
         <t t-call="website.layout">
             <div class="oe_structure"></div>
-            <section id="document_detail" class="container py-5">
-                <div class="mb-4">
-                    <ol class="breadcrumb p-0 mb-0 bg-transparent">
-                        <li class="breadcrumb-item">
-                            <a href="/documents">All Documents</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <t t-esc="document.name" />
-                        </li>
-                    </ol>
-                </div>
-
-                <div class="row g-4 mt-4">
-                    <div class="col-xl-3 text-center">
-                        <t t-call="carbongold_document_management.document_image_preview">
-                            <t t-set="record" t-value="document" />
-                            <t t-set="style"
-                                t-value="'height: 160px; width:240px; object-fit: cover;'" />
-                            <t t-set="img_class" t-value="'img-fluid rounded shadow-sm'" />
-                        </t>
-                    </div>
-                    <div class="col-xl-9">
-                        <h2 class="fw-bold mb-3">
-                            <t t-esc="document.name" />
-                        </h2>
-                        <div t-if="document.document_category_id" class="mb-3 d-flex gap-2">
-                            <span class="rounded-pill bg-300 border px-2">
-                                <t t-esc="document.document_category_id.name"/>
-                            </span>
-                        </div>
-
-                        <div class="mb-4" t-if="document.type == 'binary' and document.datas">
-                            <a
-                                t-att-href="'/document/download/%s' % document.id"
-                                class="rounded-3 text-decoration-none btn btn-primary" style="width:130px;">
-                                <div class="fw-bold">Download</div>
-                            </a>
-                        </div>
-
-                        <div class="mb-4" t-elif="document.type == 'url' and document.url">
-                            <a
-                                t-att-href="document.url"
-                                target="_blank"
-                                class="rounded-3 text-decoration-none btn btn-primary" style="width:150px;">
-                                <div class="fw-bold">Open Website</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-12">
+            <div class="oe_structure oe_empty">
+                <section id="document_detail" class="container py-5">
                     <div class="mb-4">
-                        <p class="text-muted" t-esc="document.doc_description" />
+                        <ol class="breadcrumb p-0 mb-0 bg-transparent">
+                            <li class="breadcrumb-item">
+                                <a href="/documents">All Documents</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <t t-esc="document.name" />
+                            </li>
+                        </ol>
                     </div>
 
-                    <p t-if="document.owner_id" class="mb-3">
-                        <strong>Owner:</strong>
-                        <span t-esc="document.owner_id.name"/>
-                    </p>
-                    <p t-if="document.author" class="mb-3">
-                        <strong>Author:</strong>
-                        <span t-esc="document.author"/>
-                    </p>
-                </div>
-
-                <div class="d-flex gap-2 text-center">
-                    <div class="d-flex gap-4 p-3 ms-3">
-                        <h1 class="fs-2 text-center">
-                            <t t-if="rating_count == 0">
-                                0
+                    <div class="row g-4 mt-4">
+                        <div class="col-xl-3 text-center">
+                            <t t-call="carbongold_document_management.document_image_preview">
+                                <t t-set="record" t-value="document" />
+                                <t t-set="style"
+                                    t-value="'height: 160px; width:240px; object-fit: cover;'" />
+                                <t t-set="img_class" t-value="'img-fluid rounded shadow-sm'" />
                             </t>
-                            <t t-else="">
-                                <t t-esc="'%.1f' % rating_avg" />
-                            </t>
-                        </h1>
-                        <div>
-                            <t t-call="carbongold_document_management.star_ratings">
-                                <t t-set="rating_avg" t-value="rating_avg" />
-                                <t t-set="rating_count" t-value="rating_count" />
-                            </t>
-                            <div class="text-muted"><span class="fa fa-comments"></span>
-                                <span>
-                                    <t t-out="rating_count" />
-                                </span>reviews
+                        </div>
+                        <div class="col-xl-9">
+                            <h2 class="fw-bold mb-3">
+                                <t t-esc="document.name" />
+                            </h2>
+                            <div t-if="document.document_category_id" class="mb-3 d-flex gap-2">
+                                <span class="rounded-pill bg-300 border px-2">
+                                    <t t-esc="document.document_category_id.name"/>
+                                </span>
+                            </div>
+                            <div class="mb-4 o_document_image" t-if="not request.env.user._is_public()">
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Reviews and Comments Section with OWL Component -->
-                <div class="row mt-5">
-                    <div class="col-12">
-
-                        <div
-                            class="d-flex flex-column justify-content-center h5 flex-grow-1 mb-md-5">
-                            <owl-component name="carbongold_document_management.document_review"
-                                t-att-props="json.dumps(component_values)" />
+                    <div class="col-xl-12">
+                        <div class="mb-4">
+                            <p class="text-muted" t-esc="document.doc_description" />
                         </div>
-                    </div>
-                </div>
 
-            </section>
+                        <p t-if="document.owner_id" class="mb-3">
+                            <strong>Owner:</strong>
+                            <span t-esc="document.owner_id.name"/>
+                        </p>
+                        <p t-if="document.author" class="mb-3">
+                            <strong>Author:</strong>
+                            <span t-esc="document.author"/>
+                        </p>
+                    </div>
+
+                    <div class="d-flex gap-2 text-center o_star_ratings">
+                    </div>
+
+                    <div class="row mt-5 o_document_comments">
+                    </div>
+                </section>
+            </div>
             <div class="oe_structure"></div>
         </t>
     </template>
 
-
-    <template id="upload_document" name="Upload Document">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-            data-bs-target="#getDocumentModal">
-            Upload Document
-        </button>
-        <div class="modal fade" id="getDocumentModal" tabindex="-1" aria-hidden="true" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content website-document">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Document</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close" />
+    <template id="star_ratings" name="Document Star Rating" active="True" customize_show="True" inherit_id="carbongold_document_management.detail_document_page" priority="10">
+        <xpath expr="//div[hasclass('o_star_ratings')]" position="inside">
+            <div class="d-flex gap-4 p-3 ms-3">
+                <h1 class="fs-2 text-center">
+                    <t t-if="rating_count == 0">
+                        0
+                    </t>
+                    <t t-else="">
+                        <t t-esc="'%.1f' % rating_avg" />
+                    </t>
+                </h1>
+                <div>
+                    <div class="mb-2">
+                        <t t-set="full_stars" t-value="int(rating_avg)" />
+                        <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
+                        <t t-set="empty_stars"
+                            t-value="5 - full_stars - (1 if half_star else 0)" />
+                        <t t-foreach="range(full_stars)" t-as="star">
+                            <i class="fa fa-star text-warning"></i>
+                        </t>
+                        <t t-if="half_star">
+                            <i class="fa fa-star-half-o text-warning"></i>
+                        </t>
+                        <t t-foreach="range(empty_stars)" t-as="star">
+                            <i class="fa fa-star-o text-muted"></i>
+                        </t>
                     </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger d-none validation-message" role="alert" />
-
-                        <div class="mb-2">
-                            <label class="form-label">Name of Document <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Author</label>
-                            <input type="text" name="author" t-att-value="env.user.partner_id.name" class="form-control" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Category <span class="text-danger">*</span></label>
-                            <select name="category" class="form-control">
-                                <option value="">Select Category</option>
-                                <t t-foreach="categories or []" t-as="category">
-                                    <option t-att-value="category.id">
-                                        <t t-esc="category.name" />
-                                    </option>
-                                </t>
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Attachment Type <span class="text-danger">*</span></label>
-                            <select name="attachment_type" class="form-control document-att-type">
-                                <option value="file">File</option>
-                                <option value="link">Link</option>
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Attach Document <span class="text-danger">*</span></label>
-                            <input
-                                type="file"
-                                name="document_file"
-                                class="form-control"
-                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp,.zip" />
-                            <input
-                                type="text"
-                                name="document_link"
-                                class="form-control d-none"
-                                placeholder="Enter link" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel</button>
-                        <button type="button" class="btn btn-primary saveDocumentBtn">Save Document</button>
+                    <div class="text-muted"><span class="fa fa-comments"></span>
+                        <span>
+                            <t t-out="rating_count" />
+                        </span>reviews
                     </div>
                 </div>
             </div>
-        </div>
+        </xpath>
     </template>
 
-    <template id="star_ratings" name="Star Ratings">
-        <div class="mb-2">
-            <t t-set="full_stars" t-value="int(rating_avg)" />
-            <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
-            <t t-set="empty_stars"
-                t-value="5 - full_stars - (1 if half_star else 0)" />
-            <t t-foreach="range(full_stars)" t-as="star">
-                <i class="fa fa-star text-warning"></i>
+    <template id="document_comments" name="Document Comment" active="True" customize_show="True" inherit_id="carbongold_document_management.detail_document_page" priority="10">
+        <xpath expr="//div[hasclass('o_document_comments')]" position="inside">
+            <div class="col-12">
+                <div
+                    class="d-flex flex-column justify-content-center h5 flex-grow-1 mb-md-5">
+                    <owl-component name="carbongold_document_management.document_review"
+                        t-att-props="json.dumps(component_values)" />
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="template_id" name="Document Image" active="True" customize_show="True" inherit_id="carbongold_document_management.detail_document_page" priority="10">
+        <xpath expr="//div[hasclass('o_document_image')]" position="inside">
+            <t t-if="document.type == 'binary' and document.datas">
+                <a
+                    t-att-href="'/document/download/%s' % document.id"
+                    class="rounded-3 text-decoration-none btn btn-primary" style="width:130px;">
+                    <div class="fw-bold">Download</div>
+                </a>
             </t>
-            <t t-if="half_star">
-                <i class="fa fa-star-half-o text-warning"></i>
+            <t t-elif="document.type == 'url' and document.url">
+                <a
+                    t-att-href="document.url"
+                    target="_blank"
+                    class="rounded-3 text-decoration-none btn btn-primary" style="width:150px;">
+                    <div class="fw-bold">Open Website</div>
+                </a>
             </t>
-            <t t-foreach="range(empty_stars)" t-as="star">
-                <i class="fa fa-star-o text-muted"></i>
-            </t>
-        </div>
+        </xpath>
     </template>
 
 </odoo>

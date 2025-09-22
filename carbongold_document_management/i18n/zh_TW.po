@@ -1,0 +1,752 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* carbongold_document_management
+# Translated by: CURSOR
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-19 13:05+0000\n"
+"PO-Revision-Date: 2025-09-19 13:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "<b>Categories</b>"
+msgstr "<b>分類</b>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "<i class=\"fa fa-clock-o me-2\" aria-label=\"Create date\"/>"
+msgstr ""
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "<option value=\"\">Select Category</option>"
+msgstr "<option value=\"\">選擇分類</option>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid ""
+"<select name=\"attachment_type\" class=\"form-control document-att-type\">\n"
+"                                <option value=\"file\">File</option>\n"
+"                                <option value=\"link\">Link</option>\n"
+"                            </select>"
+msgstr ""
+"<select name=\"attachment_type\" class=\"form-control document-att-type\">\n"
+"                                <option value=\"file\">檔案</option>\n"
+"                                <option value=\"link\">連結</option>\n"
+"                            </select>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "<strong>Author:</strong>"
+msgstr "<strong>作者：</strong>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "<strong>Hurrey!</strong> Your document uploaded successfully!"
+msgstr "<strong>太好了！</strong>您的文件已成功上傳！"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "<strong>Owner:</strong>"
+msgstr "<strong>擁有者：</strong>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "A star"
+msgstr "一顆星"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Add Document"
+msgstr "新增文件"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Add attachment"
+msgstr "新增附件"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "All Documents"
+msgstr "所有文件"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__allow_reviews
+msgid "Allow Reviews"
+msgstr "允許評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_upload.js:0
+#, python-format
+msgid "An error occurred while uploading."
+msgstr "上傳時發生錯誤。"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Attach Document <span class=\"text-danger\">*</span>"
+msgstr "附加文件 <span class=\"text-danger\">*</span>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Attach a file"
+msgstr "附加檔案"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Attachment Type <span class=\"text-danger\">*</span>"
+msgstr "附件類型 <span class=\"text-danger\">*</span>"
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/controllers/portal.py:0
+#, python-format
+msgid "Attachment not found or already linked"
+msgstr "找不到附件或已連結"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__attachment_ids
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Attachments"
+msgstr "附件"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Attachments ("
+msgstr "附件 ("
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__author
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Author"
+msgstr "作者"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__author_avatar
+msgid "Author Avatar"
+msgstr "作者頭像"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__author_name
+msgid "Author Name"
+msgstr "作者姓名"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__rating_avg
+msgid "Average Rating"
+msgstr "平均評分"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Be the first to share your thoughts about this document!"
+msgstr "成為第一個分享對此文件想法的人！"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__can_publish
+msgid "Can Publish"
+msgstr "可發布"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+#, python-format
+msgid "Cancel"
+msgstr "取消"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_category_id
+msgid "Category"
+msgstr "分類"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Category <span class=\"text-danger\">*</span>"
+msgstr "分類 <span class=\"text-danger\">*</span>"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__child_ids
+msgid "Child Categories"
+msgstr "子分類"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Clicks"
+msgstr "點擊次數"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Close"
+msgstr "關閉"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+msgid "Comment"
+msgstr "留言"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Could not remove attachment %s"
+msgstr "無法刪除附件 %s"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Could not save file <strong>%s</strong>"
+msgstr "無法儲存檔案 <strong>%s</strong>"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__create_uid
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__create_uid
+msgid "Created by"
+msgstr "建立者"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__create_date
+msgid "Created on"
+msgstr "建立日期"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Delete"
+msgstr "刪除"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__doc_description
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Description"
+msgstr "說明"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__display_name
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__display_name
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_documents_document
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__document_id
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Document"
+msgstr "文件"
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_category_category
+#: model:ir.ui.menu,name:carbongold_document_management.menu_category_category
+msgid "Document Category"
+msgstr "文件分類"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_click_count
+msgid "Document Click Count"
+msgstr "文件點擊次數"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__document_download_count
+msgid "Document Download Count"
+msgstr "文件下載次數"
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_document_review
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+msgid "Document Review"
+msgstr "文件評論"
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_document_reviews
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Document Reviews"
+msgstr "文件評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Document owners cannot reply to reviews"
+msgstr "文件擁有者無法回覆評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Document owners cannot review their own documents"
+msgstr "文件擁有者無法評論自己的文件"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+msgid "Document preview"
+msgstr "文件預覽"
+
+#. module: carbongold_document_management
+#: model_terms:ir.actions.act_window,help:carbongold_document_management.action_document_reviews
+msgid "Document reviews and replies from website users will appear here."
+msgstr "網站使用者的文件評論和回覆將顯示在這裡。"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_upload.js:0
+#, python-format
+msgid "Document was not uploaded."
+msgstr "文件未上傳。"
+
+#. module: carbongold_document_management
+#: model:website.menu,name:carbongold_document_management.menu_documents
+msgid "Documents"
+msgstr "文件"
+
+#. module: carbongold_document_management
+#: model:ir.actions.act_window,name:carbongold_document_management.action_documents_report
+msgid "Documents Analysis"
+msgstr "文件分析"
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_category_category
+msgid "Documents Category"
+msgstr "文件分類"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Documents Report"
+msgstr "文件報告"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "Download"
+msgstr "下載"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Downloads"
+msgstr "下載次數"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Edit Your Review"
+msgstr "編輯您的評論"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Enter link"
+msgstr "輸入連結"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Error submitting reply"
+msgstr "提交回覆時發生錯誤"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Error submitting review"
+msgstr "提交評論時發生錯誤"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Group By"
+msgstr "群組"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_kanban
+msgid "Half a star"
+msgstr "半顆星"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__id
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__id
+msgid "ID"
+msgstr "ID"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__is_published
+msgid "Is Published"
+msgstr "已發布"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__is_reply
+msgid "Is Reply"
+msgstr "是回覆"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Is Reply?"
+msgstr "是回覆嗎？"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__write_uid
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__write_uid
+msgid "Last Updated by"
+msgstr "最後更新者"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__write_date
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__write_date
+msgid "Last Updated on"
+msgstr "最後更新日期"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_image_preview
+msgid "Link preview"
+msgstr "連結預覽"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Login to Reply"
+msgstr "登入以回覆"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Login to Review"
+msgstr "登入以評論"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__name
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__res_name
+msgid "Name"
+msgstr "名稱"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Name of Document <span class=\"text-danger\">*</span>"
+msgstr "文件名稱 <span class=\"text-danger\">*</span>"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No documents available"
+msgstr "沒有可用的文件"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid ""
+"No documents in the selected\n"
+"                                        categories."
+msgstr ""
+"所選分類中\n"
+"                                        沒有文件。"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No results"
+msgstr "無結果"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "No results found for \""
+msgstr "找不到 \""
+
+#. module: carbongold_document_management
+#: model_terms:ir.actions.act_window,help:carbongold_document_management.action_document_reviews
+msgid "No reviews found!"
+msgstr "找不到評論！"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "No reviews yet"
+msgstr "尚無評論"
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/controllers/portal.py:0
+#, python-format
+msgid "Not owner"
+msgstr "非擁有者"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "Open Website"
+msgstr "開啟網站"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_category_category__parent_id
+msgid "Parent Category"
+msgstr "上層分類"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Please enter a reply"
+msgstr "請輸入回覆"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Please select a rating"
+msgstr "請選擇評分"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Publication Status"
+msgstr "發布狀態"
+
+#. module: carbongold_document_management
+#: model:ir.actions.server,name:carbongold_document_management.action_publish_on_public
+msgid "Publish On Public"
+msgstr "公開發布"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__is_published
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "Published"
+msgstr "已發布"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Published Replies"
+msgstr "已發布的回覆"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Published Reviews"
+msgstr "已發布的評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__rating
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+#, python-format
+msgid "Rating"
+msgstr "評分"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_document_review__rating
+msgid "Rating from 1 to 5 stars"
+msgstr "1 到 5 星的評分"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+msgid "Related Document"
+msgstr "相關文件"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__replies
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_form
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Replies"
+msgstr "回覆"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reply"
+msgstr "回覆"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__reply_to_id
+msgid "Reply To"
+msgstr "回覆給"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Reply submitted successfully!"
+msgstr "回覆提交成功！"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reply to"
+msgstr "回覆給"
+
+#. module: carbongold_document_management
+#: model:ir.ui.menu,name:carbongold_document_management.carbongold_document_management_report_menu
+msgid "Report"
+msgstr "報告"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_documents_document__website_id
+msgid "Restrict publishing to this website."
+msgstr "限制發布到此網站。"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__comment
+msgid "Review Comment"
+msgstr "評論內容"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Review Content"
+msgstr "評論內容"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__rating_count
+msgid "Review Count"
+msgstr "評論數量"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.document_review_view_tree
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Review Date"
+msgstr "評論日期"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Review submitted successfully!"
+msgstr "評論提交成功！"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__partner_id
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Reviewer"
+msgstr "評論者"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__reviews
+#: model:ir.ui.menu,name:carbongold_document_management.carbongold_document_management_reviews_menu
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_document_review_search
+msgid "Reviews"
+msgstr "評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Reviews & Comments"
+msgstr "評論與留言"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Save Document"
+msgstr "儲存文件"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__access_token
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__access_token
+msgid "Security Token"
+msgstr "安全權杖"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Send"
+msgstr "送出"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_document_review__create_date
+msgid "Submitted on"
+msgstr "提交日期"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,help:carbongold_document_management.field_documents_document__website_url
+msgid "The full URL to access the document through the website."
+msgstr "透過網站存取文件的完整 URL。"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.upload_document
+msgid "Upload Document"
+msgstr "上傳文件"
+
+#. module: carbongold_document_management
+#: model:documents.folder,name:carbongold_document_management.documents_upload_folder
+msgid "Upload Documents"
+msgstr "上傳文件"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.view_documents_report_search
+msgid "User Ratings"
+msgstr "使用者評分"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_published
+msgid "Visible on current website"
+msgstr "在目前網站上可見"
+
+#. module: carbongold_document_management
+#: model:ir.model,name:carbongold_document_management.model_website
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_id
+msgid "Website"
+msgstr "網站"
+
+#. module: carbongold_document_management
+#: model:ir.model.fields,field_description:carbongold_document_management.field_documents_document__website_url
+msgid "Website URL"
+msgstr "網站 URL"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/js/document_review.js:0
+#, python-format
+msgid "Write a Review"
+msgstr "撰寫評論"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Write your reply..."
+msgstr "撰寫您的回覆..."
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Write your review..."
+msgstr "撰寫您的評論..."
+
+#. module: carbongold_document_management
+#. odoo-python
+#: code:addons/carbongold_document_management/models/category_category.py:0
+#, python-format
+msgid "You cannot create recursive categories."
+msgstr "您無法建立遞迴分類。"
+
+#. module: carbongold_document_management
+#. odoo-javascript
+#: code:addons/carbongold_document_management/static/src/xml/document_review.xml:0
+#, python-format
+msgid "Your Review"
+msgstr "您的評論"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.all_documents
+msgid "close"
+msgstr "關閉"
+
+#. module: carbongold_document_management
+#: model_terms:ir.ui.view,arch_db:carbongold_document_management.detail_document_page
+msgid "reviews"
+msgstr "評論"
