@@ -4,7 +4,6 @@ import re
 
 from odoo import api, fields, models
 
-from odoo.addons.http_routing.models.ir_http import slug
 import re
 import uuid
 
@@ -72,8 +71,7 @@ class Documents(models.Model):
         results_data = super()._search_render_results(fetch_fields, mapping, icon, limit)
         with_image = "image_url" in mapping
         for data in results_data:
-            document = self.env["documents.document"].browse(data["id"])
-            data["url"] = f"/document/{slug(document)}/{data['id']}"
+            data["url"] = f"/document/{data['id']}"
             if with_image:
                 if data["type"] == "binary":
                     data["image_url"] = f"/web/image/documents.document/{data['id']}/thumbnail"

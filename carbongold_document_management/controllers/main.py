@@ -77,8 +77,8 @@ class DocumentController(http.Controller):
         }
         return request.render("carbongold_document_management.all_documents", values)
 
-    @http.route(["/document/<string:name>/<int:document_id>"], type="http", auth="public", website=True, sitemap=True)
-    def document_detail(self, name, document_id, **kwargs):
+    @http.route(["/document/<int:document_id>"], type="http", auth="public", website=True, sitemap=True)
+    def document_detail(self, document_id, **kwargs):
         document = request.env["documents.document"].sudo().browse(document_id)
         if not document.is_published:
             return request.not_found()

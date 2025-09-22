@@ -13,10 +13,6 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         "click .saveDocumentBtn": "_onSaveDocument",
     },
 
-    init() {
-        this.notification = this.bindService("notification");
-    },
-
     _onChangeAttachmentType(ev) {
         ev.preventDefault();
         const value = ev.target.value;
@@ -56,6 +52,14 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const category = this.el.querySelector("select[name='category']").value;
         const fileInput = this.el.querySelector("input[name='document_file']");
         const link = this.el.querySelector("input[name='document_link']").value.trim();
+        const DocumentMessageBox = document.querySelector(".document-alert");
+        const DocumentMessage = document.querySelector(".o_document_alert_msg");
+
+        const showAlert = (message, alertClass) => {
+            DocumentMessageBox.classList.remove("d-none");
+            DocumentMessageBox.classList.add(alertClass);
+            DocumentMessage.textContent = message
+        };
 
         const file = fileInput.files[0];
         clearError();
@@ -95,13 +99,12 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
             if (result) {
                 if (modal) modal.classList.remove("show");
                 this._resetForm();
-                const DocumentMessageBox = document.querySelector(".document-alert");
-                DocumentMessageBox.classList.remove("d-none");
+                showAlert("Your document uploaded successfully!", "alert-success")
             } else {
-                this.notification.add(result.error || _t("Document was not uploaded."), {type: "danger"});
+                showAlert("Document was not uploaded.", "alert-danger")
             }
         } catch (error) {
-            this.notification.add(_t("An error occurred while uploading."), {type: "danger"});
+            showAlert("An error occurred while uploading.", "alert-danger")
         }
     },
 

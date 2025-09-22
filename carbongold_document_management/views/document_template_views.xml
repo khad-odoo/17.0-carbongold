@@ -142,11 +142,12 @@
 
     <template id="all_documents" name="All Documents">
         <t t-call="website.layout">
+            <div class="oe_structure"></div>
             <div id="wrap" class="o_wsale_products_page">
                 <div class="container pt-2">
-                    <div class="row mr16 d-none document-alert mt-2">
-                        <div class="col-lg-12 mr16 ml16 alert alert-dismissable alert-success" role="status">
-                            <strong>Hurrey!</strong> Your document uploaded successfully!
+                    <div class="row mr16 mt-2">
+                        <div class="col-lg-12 mr16 ml16 alert alert-dismissable document-alert d-none" role="status">
+                            <strong class="o_document_alert_msg" />
                             <a href="#" class="close float-end" data-bs-dismiss="alert" aria-label="close" title="close">×</a>
                         </div>
                     </div>
@@ -187,7 +188,7 @@
                                 <div t-if="view_type=='list'" class="list-group">
                                     <t t-foreach="documents" t-as="doc">
                                         <div
-                                            t-attf-onclick="location.href='/document/#{doc.name}/#{doc.id}';"
+                                            t-attf-onclick="location.href='/document/#{doc.id}';"
                                             style="cursor: pointer;"
                                             class="list-group-item list-group-item-action d-flex align-items-start gap-3 p-3">
                                             <t
@@ -226,7 +227,7 @@
                                             <div
                                                 class="card h-100 shadow-sm border-0"
                                                 style="cursor: pointer;"
-                                                t-attf-onclick="location.href='/document/#{doc.name}/#{doc.id}';">
+                                                t-attf-onclick="location.href='/document/#{doc.id}';">
                                                 <div class="card-body gap-3"
                                                     style="max-height:195px;">
                                                     <div class="row">
@@ -292,11 +293,13 @@
                     </div>
                 </div>
             </div>
+            <div class="oe_structure"></div>
         </t>
     </template>
 
     <template id="detail_document_page" name="Detail Document">
         <t t-call="website.layout">
+            <div class="oe_structure"></div>
             <section id="document_detail" class="container py-5">
                 <div class="mb-4">
                     <ol class="breadcrumb p-0 mb-0 bg-transparent">
@@ -399,6 +402,7 @@
                 </div>
 
             </section>
+            <div class="oe_structure"></div>
         </t>
     </template>
 
