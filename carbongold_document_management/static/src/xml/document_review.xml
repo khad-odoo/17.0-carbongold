@@ -20,9 +20,10 @@
                 <div class="col-lg-8 col-xl-6">
                     <div class="card">
                         <div class="card-body">
-                            <div class="mb-3">
+                            <div class="mb-2">
+
                                 <label class="form-label">Rating <span class="text-danger">*</span></label>
-                                <div class="star-rating">
+                                <div>
                                     <t t-foreach="[1, 2, 3, 4, 5]" t-as="star" t-key="star">
                                         <i t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
                                         t-on-click="this.setRating"
@@ -30,13 +31,12 @@
                                         style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"></i>
                                     </t>
                                 </div>
-                            </div>
+                                </div>
 
-                            <div class="mb-3">
                                 <label class="form-label">Your Review</label>
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
-                                        <div class="o_portal_chatter_composer_input">
+                                        <div>
                                             <div class="d-flex flex-column rounded-3">
                                                 <div class="position-relative flex-grow-1">
                                                     <textarea rows="3" 
@@ -46,8 +46,24 @@
                                                         style="resize:none;"
                                                         maxlength="1000"></textarea>
                                                 </div>
-                                                <div class="d-flex flex-row align-self-end p-2">
-                                                    <div class="d-flex px-1">
+                                                <div class="d-flex flex-row justify-content-between p-2">
+                                                    <!-- Submit Button -->
+                                                    <div class="d-flex justify-content-start">
+                                                        <button class="btn btn-secondary me-2"
+                                                            t-on-click="this.toggleReviewForm">
+                                                            Cancel</button>
+                                                        <button class="btn btn-primary"
+                                                            t-on-click="this.submitReview"
+                                                            t-att-disabled="!state.newReview.rating ">
+                                                            <t t-if="state.loading">
+                                                                <i class="fa fa-spinner fa-spin"></i>
+                                                            </t>
+                                                            <t t-else="">
+                                                                Send
+                                                            </t>
+                                                        </button>
+                                                    </div>
+                                                    <div class="d-flex px-1 gap-1">
                                                         <t t-if="state.loading">
                                                                 <i class="fa fa-spinner fa-spin"></i>
                                                         </t>
@@ -57,8 +73,17 @@
                                                                 title="Add attachment"
                                                                 t-on-click="this.onAttachmentButtonClick"/>
                                                         </t>
+                                                        <button
+                                                            t-ref="emoji-button"
+                                                            class="btn border-0 rounded-pill"
+                                                            title="Add Emoji"
+                                                            aria-label="Add Emoji"
+                                                            t-on-click="onClickAddEmoji">
+                                                            <i class="fa fa-smile-o" />
+                                                        </button>
                                                     </div>
                                                 </div>
+                                                <Picker t-props="picker" />
                                             </div>
 
                                             <!-- Attachments Display -->
@@ -111,30 +136,15 @@
                                                 t-on-change="this.onFileInputChange"/>
                                         </div>
                                     </div>
-                                </div>
                             </div>
 
-                            <!-- Submit Button -->
-                            <div class="d-flex justify-content-start">
-                                <button class="btn btn-secondary me-2" t-on-click="this.toggleReviewForm">Cancel</button>
-                                <button class="btn btn-primary" 
-                                        t-on-click="this.submitReview"
-                                        t-att-disabled="!state.newReview.rating ">
-                                    <t t-if="state.loading">
-                                            <i class="fa fa-spinner fa-spin"></i>
-                                    </t>
-                                    <t t-else="">
-                                        Send
-                                    </t>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Reviews List -->
+            <!-- Reviews List -->
         <div>
             <div t-if="state.reviews.length === 0" class="text-center text-muted p-4">
                 <i class="fa fa-comments-o fa-2x mb-2 d-block"></i>
@@ -154,7 +164,7 @@
                                     <div class="d-flex align-items-center">
                                         <h6 class="mb-0 me-2 fs-5 fw-bold" t-esc="review.author_name"/>
 
-                                        <!-- Rating Stars -->
+                                            <!-- Rating Stars -->
                                         <div class="rating-stars me-2" t-if="review.rating &gt; 0">
                                             <t t-foreach="[1,2,3,4,5]" t-as="star" t-key="star">
                                                 <i t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'" style="font-size: 1rem;"></i>
@@ -168,7 +178,7 @@
                                     <p class="mb-2 fs-6" t-esc="review.comment" style="white-space: pre-wrap;"/>
                                 </div>
 
-                                <!-- Review Attachments -->
+                                    <!-- Review Attachments -->
                                 <div
                                     t-if="review.attachment_ids and review.attachment_ids.length > 0"
                                     class="attachments mb-2">
@@ -193,7 +203,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Reply buttons -->
+                                    <!-- Reply buttons -->
                                 <div>
                                     <button class="btn btn-sm btn-outline-secondary" 
                                             t-on-click="() => this.toggleReplyForm(review.id)"
@@ -207,7 +217,7 @@
                                     </a>
                                 </div>
 
-                                <!-- Reply Form -->
+                                    <!-- Reply Form -->
                                 <div t-if="state.replyForms[review.id]" class="reply-form mt-2">
                                     <div class="row">
                                         <div class="col-lg-9 col-xl-8">
@@ -219,23 +229,34 @@
                                                         t-model="state.replyForms[review.id].comment"
                                                         style="resize:none;"
                                                         maxlength="1000"></textarea>
-                                                <div class="d-flex justify-content-start">
-                                                    <button class="btn btn-sm btn-secondary me-2" 
-                                                            t-on-click="() => this.toggleReplyForm(review.id)">
-                                                        <small>Cancel</small>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary" 
-                                                            t-on-click="() => this.submitReply(review.id)"
-                                                            t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
-                                                        <small>Send</small>
-                                                    </button>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <button class="btn btn-sm btn-secondary me-2" 
+                                                                t-on-click="() => this.toggleReplyForm(review.id)">
+                                                            <small>Cancel</small>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                t-on-click="() => this.submitReply(review.id)"
+                                                                t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
+                                                            <small>Send</small>
+                                                        </button>
+                                                    </div>
+                                                    <!-- <button
+                                                        t-ref="emoji-button"
+                                                        class="btn border-0 rounded-pill"
+                                                        title="Add Emoji"
+                                                        aria-label="Add Emoji"
+                                                        t-on-click="onClickAddEmoji">
+                                                        <i class="fa fa-smile-o" />
+                                                    </button> -->
                                                 </div>
+                                                <!-- <Picker t-props="picker" /> -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Replies -->
+                                    <!-- Replies -->
                                 <div t-if="review.replies and review.replies.length > 0" class="replies mt-2">
                                     <div t-foreach="review.replies" t-as="reply" t-key="reply.id" 
                                         class="reply card bg-light ms-3 mb-2">

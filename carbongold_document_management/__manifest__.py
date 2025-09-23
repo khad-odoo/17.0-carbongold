@@ -40,9 +40,10 @@ Benefits:
     ],
     "assets": {
         "web.assets_frontend": [
-            "carbongold_document_management/static/src/js/**",
-            "carbongold_document_management/static/src/xml/**",
-            "carbongold_document_management/static/src/scss/**",
+            "carbongold_document_management/static/src/emoji/**",
+            "carbongold_document_management/static/src/js/**/*.js",
+            "carbongold_document_management/static/src/xml/**/*.xml",
+            "carbongold_document_management/static/src/scss/**/*.scss",
         ],
     },
     "installable": True,
