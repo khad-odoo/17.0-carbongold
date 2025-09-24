@@ -3,19 +3,19 @@
 {
     "name": "Bitons Document Plus",
     "version": "17.0.1.0.0",
-    "category": "Custome",
+    "category": "Customization",
     "summary": "Bitons Document Plus",
     "description": """
 Bitons Document Plus | TaskID: 5066289
 ================================================
-Overview: Document Plus module extends the Odoo Document addon to enhance document management and 
-presentation on the website. It enables administrators to easily publish and organize documents 
+Overview: Document Plus module extends the Odoo Document addon to enhance document management and
+presentation on the website. It enables administrators to easily publish and organize documents
 for public download, with improved control over display and user interaction.
 
 Key Features:
 
 Thumbnail Management: Generate, customize, and manage document thumbnails for improved visual presentation.
-Website Integration: Easily embed documents into any webpage using the drag-and-drop Document+ block in the Odoo Website Editor.
+Website Integration: Easily embed documents into any webpage using the drag-and-drop Document+ block in the Odoo Website Editor.
 Document Management Tools:
  - Rating and review system
  - Comment functionality
@@ -28,7 +28,7 @@ Benefits:
  - Enhanced user experience through interactive features.
  - Better insights into document usage and popularity.
 """,
-
+    "author": "Odoo PS",
     "depends": ["website_documents"],
     "data": [
         "security/ir.model.access.csv",
@@ -47,5 +47,6 @@ Benefits:
         ],
     },
     "installable": True,
+    "website": "https://www.odoo.com",
     "license": "OEEL-1",
 }

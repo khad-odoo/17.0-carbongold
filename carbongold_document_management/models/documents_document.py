@@ -1,39 +1,38 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import re
+import uuid
 
 from odoo import api, fields, models
 
-import re
-import uuid
 
 class Documents(models.Model):
     _name = "documents.document"
     _inherit = ["documents.document", "website.searchable.mixin", "website.published.multi.mixin"]
 
     document_category_id = fields.Many2one(comodel_name="category.category", string="Category")
-    author = fields.Char("Author")
-    doc_description = fields.Char("Description")
-    document_click_count = fields.Integer("Document Click Count", default=0)
-    document_download_count = fields.Integer("Document Download Count", default=0)
-    reviews = fields.One2many('document.review', 'document_id', string='Reviews')
-    access_token = fields.Char('Security Token', default=lambda self: uuid.uuid4().hex)
+    author = fields.Char()
+    doc_description = fields.Char()
+    document_click_count = fields.Integer(default=0)
+    document_download_count = fields.Integer(default=0)
+    reviews = fields.One2many("document.review", "document_id")
+    access_token = fields.Char("Security Token", default=lambda self: uuid.uuid4().hex)
     # Computed rating fields
-    rating_avg = fields.Float("Average Rating", compute='_compute_rating_stats', store=True)
-    rating_count = fields.Integer("Review Count", compute='_compute_rating_stats', store=True)
-    allow_reviews = fields.Boolean("Allow Reviews", default=True)
+    rating_avg = fields.Float("Average Rating", compute="_compute_rating_stats", store=True)
+    rating_count = fields.Integer("Review Count", compute="_compute_rating_stats", store=True)
+    allow_reviews = fields.Boolean(default=True)
 
-    @api.depends('reviews.rating', 'reviews.is_published')
+    @api.depends("reviews.rating", "reviews.is_published")
     def _compute_rating_stats(self):
         for record in self:
             reviews_with_rating = record.reviews.filtered(lambda r: r.rating > 0 and r.is_published and not r.is_reply)
             if reviews_with_rating:
-                record.rating_avg = sum(reviews_with_rating.mapped('rating')) / len(reviews_with_rating)
+                record.rating_avg = sum(reviews_with_rating.mapped("rating")) / len(reviews_with_rating)
                 record.rating_count = len(reviews_with_rating)
             else:
                 record.rating_avg = 0.0
                 record.rating_count = 0
-                
+
     def action_publish(self):
         for record in self:
             if not record.is_published:
@@ -84,18 +83,16 @@ class Documents(models.Model):
     def _get_youtube_url_token(self):
         if not self.url:
             return False
-        pattern = re.compile(
-            r'(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|v/))([a-zA-Z0-9_-]{11})'
-        )
+        pattern = re.compile(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|v/))([a-zA-Z0-9_-]{11})")
         match = pattern.search(self.url)
         return match.group(1) if match else False
 
     def action_view_documents_form(self):
         self.ensure_one()
         return {
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'documents.document',
-            'view_id': self.env.ref("documents.document_view_form", False).id,
-            'res_id': self.id,
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "documents.document",
+            "view_id": self.env.ref("documents.document_view_form", False).id,
+            "res_id": self.id,
         }

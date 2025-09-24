@@ -1,12 +1,12 @@
 /* @odoo-module */
 
-import { Component, useExternalListener, useState } from "@odoo/owl";
-import { browser } from "@web/core/browser/browser";
-import { isEventHandled } from "@web/core/utils/misc";
-import { usePopover } from "@web/core/popover/popover_hook";
-import { useService } from "@web/core/utils/hooks";
-import { PickerContent } from "./picker_content";
-import { useLazyExternalListener } from "./hooks";
+import {Component, useExternalListener, useState} from "@odoo/owl";
+import {browser} from "@web/core/browser/browser";
+import {isEventHandled} from "@web/core/utils/misc";
+import {usePopover} from "@web/core/popover/popover_hook";
+import {useService} from "@web/core/utils/hooks";
+import {PickerContent} from "./picker_content";
+import {useLazyExternalListener} from "./hooks";
 
 export function usePicker(setting) {
     const storeScroll = {
@@ -46,16 +46,7 @@ export class Picker extends Component {
     static components = {
         PickerContent,
     };
-    static props = [
-        "PICKERS",
-        "anchor?",
-        "buttons",
-        "close?",
-        "state",
-        "pickers",
-        "position?",
-        "storeScroll",
-    ];
+    static props = ["PICKERS", "anchor?", "buttons", "close?", "state", "pickers", "position?", "storeScroll"];
     static template = "mail.Picker";
 
     setup() {
@@ -75,7 +66,7 @@ export class Picker extends Component {
                 if (this.props.state.picker === this.props.PICKERS.NONE) {
                     return;
                 }
-                await new Promise(setTimeout); // let bubbling to catch marked event handled
+                await new Promise(setTimeout); // Let bubbling to catch marked event handled
                 if (!this.isEventHandledByPicker(ev)) {
                     this.close();
                 }
@@ -112,13 +103,10 @@ export class Picker extends Component {
 
     /**
      * @param {Event} ev
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isEventHandledByPicker(ev) {
-        return (
-            isEventHandled(ev, "Composer.onClickAddEmoji") ||
-            isEventHandled(ev, "PickerContent.onClick")
-        );
+        return isEventHandled(ev, "Composer.onClickAddEmoji") || isEventHandled(ev, "PickerContent.onClick");
     }
 
     async toggle(el, ev) {

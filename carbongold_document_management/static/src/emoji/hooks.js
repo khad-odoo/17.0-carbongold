@@ -1,16 +1,10 @@
 /* @odoo-module */
 
-import {
-    onMounted,
-    onPatched,
-    onWillUnmount,
-    useComponent,
-} from "@odoo/owl";
-
+import {onMounted, onPatched, onWillUnmount, useComponent} from "@odoo/owl";
 
 export function useLazyExternalListener(target, eventName, handler, eventParams) {
     const boundHandler = handler.bind(useComponent());
-    let t;
+    let t = null;
     onMounted(() => {
         t = target();
         if (!t) {

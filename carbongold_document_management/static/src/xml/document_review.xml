@@ -5,13 +5,13 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Reviews &amp; Comments</h4>
                 <button class="btn btn-primary" t-on-click="this.toggleReviewForm" t-if="this.canWriteReview">
-                    <i class="fa fa-comment me-2"></i>
+                    <i class="fa fa-comment me-2"/>
                     <t t-if="state.showReviewForm">Cancel</t>
                     <t t-else="" t-esc="this.reviewButtonText"/>
                 </button>
 
                 <a href="/web/login" class="btn btn-primary" t-if="!state.isLoggedIn">
-                    <i class="fa fa-sign-in me-2"></i>
+                    <i class="fa fa-sign-in me-2"/>
                     <small>Login to Review</small>
                 </a>
             </div>
@@ -25,10 +25,11 @@
                                 <label class="form-label">Rating <span class="text-danger">*</span></label>
                                 <div>
                                     <t t-foreach="[1, 2, 3, 4, 5]" t-as="star" t-key="star">
-                                        <i t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
-                                        t-on-click="this.setRating"
-                                        t-att-data-rating="star"
-                                        style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"></i>
+                                        <i
+                                                t-att-class="star &lt;= state.newReview.rating ? 'fa fa-star text-warning star-clickable' : 'fa fa-star-o text-muted star-clickable'"
+                                                t-on-click="this.setRating"
+                                                t-att-data-rating="star"
+                                                style="font-size: 1.3rem; cursor: pointer; margin-right: 4px;"/>
                                     </t>
                                 </div>
                                 </div>
@@ -39,24 +40,27 @@
                                         <div>
                                             <div class="d-flex flex-column rounded-3">
                                                 <div class="position-relative flex-grow-1">
-                                                    <textarea rows="3" 
+                                                    <textarea
+                                                        rows="3"
                                                         class="form-control rounded-3 shadow-none fs-6"
                                                         placeholder="Write your review..."
                                                         t-model="state.newReview.comment"
                                                         style="resize:none;"
-                                                        maxlength="1000"></textarea>
+                                                        maxlength="1000"/>
                                                 </div>
                                                 <div class="d-flex flex-row justify-content-between p-2">
                                                     <!-- Submit Button -->
                                                     <div class="d-flex justify-content-start">
-                                                        <button class="btn btn-secondary me-2"
+                                                        <button
+                                                            class="btn btn-secondary me-2"
                                                             t-on-click="this.toggleReviewForm">
                                                             Cancel</button>
-                                                        <button class="btn btn-primary"
+                                                        <button
+                                                            class="btn btn-primary"
                                                             t-on-click="this.submitReview"
                                                             t-att-disabled="!state.newReview.rating ">
                                                             <t t-if="state.loading">
-                                                                <i class="fa fa-spinner fa-spin"></i>
+                                                                <i class="fa fa-spinner fa-spin"/>
                                                             </t>
                                                             <t t-else="">
                                                                 Send
@@ -65,10 +69,11 @@
                                                     </div>
                                                     <div class="d-flex px-1 gap-1">
                                                         <t t-if="state.loading">
-                                                                <i class="fa fa-spinner fa-spin"></i>
+                                                                <i class="fa fa-spinner fa-spin"/>
                                                         </t>
                                                         <t t-else="">
-                                                            <button class="btn fa fa-paperclip border-0" 
+                                                            <button
+                                                                class="btn fa fa-paperclip border-0"
                                                                 type="button"
                                                                 title="Add attachment"
                                                                 t-on-click="this.onAttachmentButtonClick"/>
@@ -79,24 +84,25 @@
                                                             title="Add Emoji"
                                                             aria-label="Add Emoji"
                                                             t-on-click="onClickAddEmoji">
-                                                            <i class="fa fa-smile-o" />
+                                                            <i class="fa fa-smile-o"/>
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <Picker t-props="picker" />
+                                                <Picker t-props="picker"/>
                                             </div>
 
                                             <!-- Attachments Display -->
-                                            <div class="document_attachments mt-2"
+                                            <div
+                                                class="document_attachments mt-2"
                                                 t-if="state.newReview.attachments.length &gt; 0">
                                                 <small class="text-muted d-block mb-2">
-                                                    <i class="fa fa-paperclip me-1"></i>
-                                                    Attachments (<t
-                                                        t-esc="state.newReview.attachments.length" />
+                                                    <i class="fa fa-paperclip me-1"/>
+                                                    Attachments (<t t-esc="state.newReview.attachments.length"/>
                                                     )
                                                 </small>
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <div t-foreach="state.newReview.attachments"
+                                                    <div
+                                                        t-foreach="state.newReview.attachments"
                                                         t-as="attachment"
                                                         t-key="attachment_index"
                                                         class="document_attachment bg-light p-2 rounded border d-flex align-items-center"
@@ -107,19 +113,19 @@
                                                             class="document_attachment_delete btn btn-sm btn-outline-danger"
                                                             title="Delete"
                                                             t-on-click="() => this.removeAttachment(attachment_index)">
-                                                            <i class="fa fa-trash"></i>
+                                                            <i class="fa fa-trash"/>
                                                         </button>
 
                                                         <!-- File icon -->
-                                                        <i t-att-class="'fa me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"></i>
+                                                        <i
+                                                            t-att-class="'fa me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"/>
 
                                                         <!-- File info -->
                                                         <div class="flex-grow-1">
                                                             <div
                                                                 class="document_attachment_name text-truncate"
                                                                 t-att-title="attachment.name">
-                                                                <small class="fw-medium"
-                                                                    t-esc="attachment.name" />
+                                                                <small class="fw-medium" t-esc="attachment.name"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -129,8 +135,9 @@
 
                                         <!-- Hidden File Input -->
                                         <div class="d-none">
-                                            <input type="file" 
-                                                class="o_review_file_input" 
+                                            <input
+                                                type="file"
+                                                class="o_review_file_input"
                                                 multiple="multiple"
                                                 accept="image/*,.pdf,.doc,.docx,.txt"
                                                 t-on-change="this.onFileInputChange"/>
@@ -147,7 +154,7 @@
             <!-- Reviews List -->
         <div>
             <div t-if="state.reviews.length === 0" class="text-center text-muted p-4">
-                <i class="fa fa-comments-o fa-2x mb-2 d-block"></i>
+                <i class="fa fa-comments-o fa-2x mb-2 d-block"/>
                 <h6>No reviews yet</h6>
                 <small>Be the first to share your thoughts about this document!</small>
             </div>
@@ -156,9 +163,11 @@
                 <div t-foreach="state.reviews" t-as="review" t-key="review.id" class="review-card card mb-3">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-start">
-                            <img t-att-src="review.author_avatar || '/web/static/img/avatar.png'" 
-                                 class="rounded-circle me-2"
-                                 width="36" height="36"/>
+                            <img
+                                    t-att-src="review.author_avatar || '/web/static/img/avatar.png'"
+                                    class="rounded-circle me-2"
+                                    width="36"
+                                    height="36"/>
                             <div class="flex-grow-1">
                                 <div class="mb-2">
                                     <div class="d-flex align-items-center">
@@ -167,7 +176,9 @@
                                             <!-- Rating Stars -->
                                         <div class="rating-stars me-2" t-if="review.rating &gt; 0">
                                             <t t-foreach="[1,2,3,4,5]" t-as="star" t-key="star">
-                                                <i t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'" style="font-size: 1rem;"></i>
+                                                <i
+                                                        t-att-class="star &lt;= review.rating ? 'fa fa-star text-warning' : 'fa fa-star-o text-muted'"
+                                                        style="font-size: 1rem;"/>
                                             </t>
                                         </div>
                                     </div>
@@ -180,23 +191,21 @@
 
                                     <!-- Review Attachments -->
                                 <div
-                                    t-if="review.attachment_ids and review.attachment_ids.length > 0"
-                                    class="attachments mb-2">
+                                        t-if="review.attachment_ids and review.attachment_ids.length > 0"
+                                        class="attachments mb-2">
                                     <div class="d-flex flex-wrap gap-1">
-                                        <t t-foreach="review.attachment_ids" t-as="attachment"
-                                            t-key="attachment.id">
+                                        <t t-foreach="review.attachment_ids" t-as="attachment" t-key="attachment.id">
                                             <a
-                                                t-att-href="'/web/content/' + attachment.id + '?download=true&amp;access_token=' + attachment.access_token"
-                                                class="document_attachment bg-light p-2 rounded border d-flex align-items-center"
-                                                target="_blank"
-                                                t-att-title="'Download ' + attachment.name">
+                                                    t-att-href="'/web/content/' + attachment.id + '?download=true&amp;access_token=' + attachment.access_token"
+                                                    class="document_attachment bg-light p-2 rounded border d-flex align-items-center"
+                                                    target="_blank"
+                                                    t-att-title="'Download ' + attachment.name">
 
                                                 <i
-                                                    t-att-class="'fa fa-2x me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"></i>
+                                                        t-att-class="'fa fa-2x me-2 text-primary ' + this.getFileIcon(attachment.mimetype || '', attachment.name || '')"/>
 
                                                 <div class="document_attachment_name">
-                                                    <small class="fw-medium fs-8"
-                                                        t-esc="attachment.name" />
+                                                    <small class="fw-medium fs-8" t-esc="attachment.name"/>
                                                 </div>
                                             </a>
                                         </t>
@@ -205,14 +214,15 @@
 
                                     <!-- Reply buttons -->
                                 <div>
-                                    <button class="btn btn-sm btn-outline-secondary" 
+                                    <button
+                                            class="btn btn-sm btn-outline-secondary"
                                             t-on-click="() => this.toggleReplyForm(review.id)"
                                             t-if="this.canReplyToReview(review) and !state.replyForms[review.id]">
-                                        <i class="fa fa-reply me-1"></i>
+                                        <i class="fa fa-reply me-1"/>
                                         <small>Reply</small>
                                     </button>
                                     <a href="/web/login" class="btn btn-sm btn-link" t-if="!state.isLoggedIn">
-                                        <i class="fa fa-sign-in me-1"></i>
+                                        <i class="fa fa-sign-in me-1"/>
                                         <small>Login to Reply</small>
                                     </a>
                                 </div>
@@ -222,20 +232,24 @@
                                     <div class="row">
                                         <div class="col-lg-9 col-xl-8">
                                             <div class="p-2 bg-light rounded">
-                                                <label class="form-label fs-5"><small>Reply to <strong t-esc="review.author_name"/></small></label>
-                                                        <textarea rows="2"
+                                                <label class="form-label fs-5"><small>Reply to <strong
+                                                                t-esc="review.author_name"/></small></label>
+                                                        <textarea
+                                                        rows="2"
                                                         class="form-control rounded-3 shadow-none mb-2 fs-6"
                                                         placeholder="Write your reply..."
                                                         t-model="state.replyForms[review.id].comment"
                                                         style="resize:none;"
-                                                        maxlength="1000"></textarea>
+                                                        maxlength="1000"/>
                                                 <div class="d-flex justify-content-between">
                                                     <div>
-                                                        <button class="btn btn-sm btn-secondary me-2" 
+                                                        <button
+                                                                class="btn btn-sm btn-secondary me-2"
                                                                 t-on-click="() => this.toggleReplyForm(review.id)">
                                                             <small>Cancel</small>
                                                         </button>
-                                                        <button class="btn btn-sm btn-primary" 
+                                                        <button
+                                                                class="btn btn-sm btn-primary"
                                                                 t-on-click="() => this.submitReply(review.id)"
                                                                 t-att-disabled="!state.replyForms[review.id].comment || !state.replyForms[review.id].comment.trim()">
                                                             <small>Send</small>
@@ -246,13 +260,12 @@
                                                             class="btn border-0 rounded-pill"
                                                             title="Add Reply Emoji"
                                                             aria-label="Add Reply Emoji"
-                                                            t-on-click="(ev) => this.onClickAddEmojiReply(review.id, ev)"
-                                                        >
-                                                        <i class="fa fa-smile-o" />
+                                                            t-on-click="(ev) => this.onClickAddEmojiReply(review.id, ev)">
+                                                        <i class="fa fa-smile-o"/>
                                                     </button>
-                                                    
+
                                                 </div>
-                                                <Picker t-props="picker" />
+                                                <Picker t-props="picker"/>
                                             </div>
                                         </div>
                                     </div>
@@ -260,20 +273,28 @@
 
                                     <!-- Replies -->
                                 <div t-if="review.replies and review.replies.length > 0" class="replies mt-2">
-                                    <div t-foreach="review.replies" t-as="reply" t-key="reply.id" 
-                                        class="reply card bg-light ms-3 mb-2">
+                                    <div
+                                            t-foreach="review.replies"
+                                            t-as="reply"
+                                            t-key="reply.id"
+                                            class="reply card bg-light ms-3 mb-2">
                                         <div class="card-body py-2 px-3">
                                             <div class="d-flex align-items-start">
-                                                <img t-att-src="reply.author_avatar || '/web/static/img/avatar.png'" 
-                                                    class="rounded-circle me-2" 
-                                                    width="24" height="24"/>
+                                                <img
+                                                        t-att-src="reply.author_avatar || '/web/static/img/avatar.png'"
+                                                        class="rounded-circle me-2"
+                                                        width="24"
+                                                        height="24"/>
                                                 <div class="flex-grow-1">
                                                     <div class="d-flex align-items-center mb-1">
                                                         <small class="me-2 fs-5 fw-bold" t-esc="reply.author_name"/>
                                                         <small class="text-muted fs-8" t-esc="reply.create_date"/>
                                                     </div>
                                                         <!-- Plain text for replies -->
-                                                    <p class="mb-0 fs-6" t-esc="reply.comment" style="white-space: pre-wrap;"/>
+                                                    <p
+                                                            class="mb-0 fs-6"
+                                                            t-esc="reply.comment"
+                                                            style="white-space: pre-wrap;"/>
                                                 </div>
                                             </div>
                                         </div>

@@ -8,7 +8,7 @@ class DocumentsCategory(models.Model):
     _name = "category.category"
     _description = "Documents Category"
 
-    name = fields.Char(string="Name")
+    name = fields.Char()
     parent_id = fields.Many2one("category.category", string="Parent Category", ondelete="cascade")
     child_ids = fields.One2many("category.category", "parent_id", "Child Categories")
 

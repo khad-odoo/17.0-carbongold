@@ -35,7 +35,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const messageBox = modal.querySelector(".validation-message");
         // Helper to show error in alert box
         const showError = (message) => {
-            messageBox.textContent = message;
+            messageBox.textContent = _t(message);
             messageBox.classList.remove("d-none");
         };
 
@@ -58,7 +58,7 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const showAlert = (message, alertClass) => {
             DocumentMessageBox.classList.remove("d-none");
             DocumentMessageBox.classList.add(alertClass);
-            DocumentMessage.textContent = message
+            DocumentMessage.textContent = _t(message);
         };
 
         const file = fileInput.files[0];
@@ -99,12 +99,12 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
             if (result) {
                 if (modal) modal.classList.remove("show");
                 this._resetForm();
-                showAlert("Your document uploaded successfully!", "alert-success")
+                showAlert("Your document uploaded successfully!", "alert-success");
             } else {
-                showAlert("Document was not uploaded.", "alert-danger")
+                showAlert("Document was not uploaded.", "alert-danger");
             }
         } catch (error) {
-            showAlert("An error occurred while uploading.", "alert-danger")
+            showAlert("An error occurred while uploading.", "alert-danger");
         }
     },
 
