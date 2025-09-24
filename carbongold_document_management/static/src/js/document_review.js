@@ -7,13 +7,19 @@ import { _t } from "@web/core/l10n/translation";
 import { post } from "@web/core/network/http_service";
 import { RPCError } from "@web/core/network/rpc_service";
 import { escape } from "@web/core/utils/strings";
+import { Picker, usePicker } from "../emoji/picker";
+import { markEventHandled } from "@web/core/utils/misc";
+import { useRef } from "@odoo/owl";
 
 export class DocumentReviewComponent extends Component {
     static template = "carbongold_document_management.DocumentReviewComponent";
+    static components = { Picker }
 
     setup() {
         this.rpc = useService("rpc");
         this.notification = useService("notification");
+        this.emojiButton = useRef("emoji-button");
+        this.replyEmojiButton = useRef("reply-emoji-button");
 
         this.state = useState({
             reviews: this.props.reviews || [],
@@ -24,11 +30,25 @@ export class DocumentReviewComponent extends Component {
                 attachments: []
             },
             replyForms: {},
+            activeReplyId: null,
             loading: false,
             csrfToken: this.props.csrfToken,
             isLoggedIn: this.props.isLoggedIn || false,
             userHasReviewed: this.props.userHasReviewed || false,
             isDocumentOwner: this.props.isDocumentOwner || false
+        });
+
+
+        this.picker = usePicker({
+            buttons: [this.emojiButton, this.replyEmojiButton],
+            pickers: {
+                emoji: (emoji) => this.addEmoji(emoji),
+                // replyEmoji: (emoji) => this.addEmojiToReply(emoji)
+            },
+            close: () => {
+                this.state.activeReplyId = null;
+            },
+            position: "top-end",
         });
 
         // onWillStart(() => this.loadReviews());
@@ -52,6 +72,27 @@ export class DocumentReviewComponent extends Component {
 
     get currentPartnerName() {
         return this.props.currentPartnerName || '';
+    }
+
+
+    onClickAddEmoji(ev) {
+        markEventHandled(ev, "Composer.onClickAddEmoji");
+    }
+
+    addEmoji(emoji) {
+        const id = this.state.activeReplyId;
+        if (!id || !this.state.replyForms[id]) {
+            const comment = this.state.newReview.comment || "";
+            this.state.newReview.comment = comment + emoji;
+        } else {
+            this.state.replyForms[id].comment += emoji;
+        }
+    }
+
+
+    onClickAddEmojiReply(replyId, ev) {
+        markEventHandled(ev, "Composer.onClickAddEmoji");
+        this.state.activeReplyId = replyId;
     }
 
     // async loadReviews() {
@@ -195,112 +236,112 @@ export class DocumentReviewComponent extends Component {
             this.state.showReviewForm = false;
             this.state.userHasReviewed = true;
             this.state.newReview = { comment: '', rating: 0, attachments: [] };
-        } catch(error) {
-        console.error('Error submitting review:', error);
-        this.notification.add(_t("Error submitting review"), { type: "danger" });
-    }
-}
-
-toggleReplyForm(reviewId) {
-    if (!this.state.isLoggedIn) {
-        window.location.href = '/web/login';
-        return;
-    }
-
-    if (this.state.replyForms[reviewId]) {
-        delete this.state.replyForms[reviewId];
-    } else {
-        this.state.replyForms[reviewId] = { comment: '' };
-    }
-}
-    
-    async submitReply(reviewId) {
-    if (!this.state.isLoggedIn) {
-        window.location.href = '/web/login';
-        return;
-    }
-
-    const reply = this.state.replyForms[reviewId];
-    if (!reply || !reply.comment.trim()) {
-        this.notification.add(_t("Please enter a reply"), { type: "warning" });
-        return;
-    }
-
-    if (this.state.isDocumentOwner) {
-        this.notification.add(_t("Document owners cannot reply to reviews"), { type: "warning" });
-        return;
-    }
-
-
-    try {
-        const result = await this.rpc('/document/review/reply', {
-            review_id: reviewId,
-            reply: reply.comment
-        });
-
-        if (result.error) {
-            this.notification.add(result.error, { type: "danger" });
-        } else {
-            this.notification.add(_t("Reply submitted successfully!"), { type: "success" });
-            delete this.state.replyForms[reviewId];
-            // await this.loadReviews();
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            this.notification.add(_t("Error submitting review"), { type: "danger" });
         }
-    } catch (error) {
-        this.notification.add(_t("Error submitting reply"), { type: "danger" });
     }
-}
 
-canReplyToReview(review) {
-    if (!this.state.isLoggedIn) return false;
-    if (review.author_name === this.currentPartnerName) return false;
-    if (this.state.isDocumentOwner) return false;
+    toggleReplyForm(reviewId) {
+        if (!this.state.isLoggedIn) {
+            window.location.href = '/web/login';
+            return;
+        }
 
-    // Check if user already replied to this review
-    const userReplies = review.replies.filter(reply =>
-        reply.author_name === this.currentPartnerName
-    );
+        if (this.state.replyForms[reviewId]) {
+            delete this.state.replyForms[reviewId];
+        } else {
+            this.state.replyForms[reviewId] = { comment: '' };
+        }
+    }
 
-    return userReplies.length === 0; // Can reply only if not already replied
-}
+    async submitReply(reviewId) {
+        if (!this.state.isLoggedIn) {
+            window.location.href = '/web/login';
+            return;
+        }
 
-getFileIcon(mimetype, filename = '') {
-    // Keep your existing file icon logic
-    if (mimetype.startsWith('video/') || /\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i.test(filename)) {
-        return 'fa-file-video-o';
+        const reply = this.state.replyForms[reviewId];
+        if (!reply || !reply.comment.trim()) {
+            this.notification.add(_t("Please enter a reply"), { type: "warning" });
+            return;
+        }
+
+        if (this.state.isDocumentOwner) {
+            this.notification.add(_t("Document owners cannot reply to reviews"), { type: "warning" });
+            return;
+        }
+
+
+        try {
+            const result = await this.rpc('/document/review/reply', {
+                review_id: reviewId,
+                reply: reply.comment
+            });
+
+            if (result.error) {
+                this.notification.add(result.error, { type: "danger" });
+            } else {
+                this.notification.add(_t("Reply submitted successfully!"), { type: "success" });
+                delete this.state.replyForms[reviewId];
+                // await this.loadReviews();
+            }
+        } catch (error) {
+            this.notification.add(_t("Error submitting reply"), { type: "danger" });
+        }
     }
-    if (mimetype.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(filename)) {
-        return 'fa-file-audio-o';
+
+    canReplyToReview(review) {
+        if (!this.state.isLoggedIn) return false;
+        if (review.author_name === this.currentPartnerName) return false;
+        if (this.state.isDocumentOwner) return false;
+
+        // Check if user already replied to this review
+        const userReplies = review.replies.filter(reply =>
+            reply.author_name === this.currentPartnerName
+        );
+
+        return userReplies.length === 0; // Can reply only if not already replied
     }
-    if (mimetype.startsWith('image/') || /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i.test(filename)) {
-        return 'fa-file-image-o';
+
+    getFileIcon(mimetype, filename = '') {
+        // Keep your existing file icon logic
+        if (mimetype.startsWith('video/') || /\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i.test(filename)) {
+            return 'fa-file-video-o';
+        }
+        if (mimetype.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(filename)) {
+            return 'fa-file-audio-o';
+        }
+        if (mimetype.startsWith('image/') || /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i.test(filename)) {
+            return 'fa-file-image-o';
+        }
+        if (mimetype === 'application/pdf' || filename.toLowerCase().endsWith('.pdf')) {
+            return 'fa-file-pdf-o';
+        }
+        if (mimetype.includes('word') || mimetype.includes('officedocument.wordprocessingml') ||
+            /\.(doc|docx)$/i.test(filename)) {
+            return 'fa-file-word-o';
+        }
+        if (mimetype.includes('excel') || mimetype.includes('spreadsheetml') ||
+            /\.(xls|xlsx)$/i.test(filename)) {
+            return 'fa-file-excel-o';
+        }
+        if (mimetype.includes('powerpoint') || mimetype.includes('presentationml') ||
+            /\.(ppt|pptx)$/i.test(filename)) {
+            return 'fa-file-powerpoint-o';
+        }
+        if (mimetype.startsWith('text/') || /\.(txt|rtf)$/i.test(filename)) {
+            return 'fa-file-text-o';
+        }
+        if (/\.(zip|rar|7z|tar|gz)$/i.test(filename)) {
+            return 'fa-file-archive-o';
+        }
+        if (/\.(js|css|html|php|py|java|cpp|c)$/i.test(filename)) {
+            return 'fa-file-code-o';
+        }
+        return 'fa-file-o';
     }
-    if (mimetype === 'application/pdf' || filename.toLowerCase().endsWith('.pdf')) {
-        return 'fa-file-pdf-o';
-    }
-    if (mimetype.includes('word') || mimetype.includes('officedocument.wordprocessingml') ||
-        /\.(doc|docx)$/i.test(filename)) {
-        return 'fa-file-word-o';
-    }
-    if (mimetype.includes('excel') || mimetype.includes('spreadsheetml') ||
-        /\.(xls|xlsx)$/i.test(filename)) {
-        return 'fa-file-excel-o';
-    }
-    if (mimetype.includes('powerpoint') || mimetype.includes('presentationml') ||
-        /\.(ppt|pptx)$/i.test(filename)) {
-        return 'fa-file-powerpoint-o';
-    }
-    if (mimetype.startsWith('text/') || /\.(txt|rtf)$/i.test(filename)) {
-        return 'fa-file-text-o';
-    }
-    if (/\.(zip|rar|7z|tar|gz)$/i.test(filename)) {
-        return 'fa-file-archive-o';
-    }
-    if (/\.(js|css|html|php|py|java|cpp|c)$/i.test(filename)) {
-        return 'fa-file-code-o';
-    }
-    return 'fa-file-o';
-}
-    
+
 }
 
 registry.category("public_components").add("carbongold_document_management.document_review", DocumentReviewComponent);

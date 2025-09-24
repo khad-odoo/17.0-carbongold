@@ -1,0 +1,48 @@
+// o-mail-Picker handles the styling of picker in mobile view only
+.o-mail-Picker {
+    height: 55vh;
+
+    .o-mail-PickerContent {
+        overflow-y: auto;
+    }
+
+    .o-EmojiPicker {
+        width: 100% !important;
+
+        .o-Emoji {
+            width: 40px;
+            font-size: 1.5rem !important;
+        }
+    }
+
+    .o-EmojiPicker-navbar {
+        gap: 0.5rem !important;
+    }
+}
+
+.o-EmojiPicker-search {
+    input:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+}
+
+.o-Emoji {
+    font-size: 1.3rem !important;
+    margin-right: 10px !important;
+}
+
+.bg-view {
+    background-color: rgb(249, 250, 251) !important;
+}
+
+.popover .o-mail-PickerContent {
+    width: 300px;
+    height: 365px;
+
+    .o-EmojiPicker {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
