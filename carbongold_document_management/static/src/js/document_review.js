@@ -19,14 +19,7 @@ export class DocumentReviewComponent extends Component {
         this.rpc = useService("rpc");
         this.notification = useService("notification");
         this.emojiButton = useRef("emoji-button");
-        this.picker = usePicker({
-            buttons: [this.emojiButton],
-            pickers: {
-                emoji: (emoji) => this.addEmoji(emoji), // see next step
-            },
-            close: () => { }, 
-            position: "top-end",
-        });
+        this.replyEmojiButton = useRef("reply-emoji-button");
 
         this.state = useState({
             reviews: this.props.reviews || [],
@@ -37,11 +30,25 @@ export class DocumentReviewComponent extends Component {
                 attachments: []
             },
             replyForms: {},
+            activeReplyId: null,
             loading: false,
             csrfToken: this.props.csrfToken,
             isLoggedIn: this.props.isLoggedIn || false,
             userHasReviewed: this.props.userHasReviewed || false,
             isDocumentOwner: this.props.isDocumentOwner || false
+        });
+
+
+        this.picker = usePicker({
+            buttons: [this.emojiButton, this.replyEmojiButton],
+            pickers: {
+                emoji: (emoji) => this.addEmoji(emoji),
+                // replyEmoji: (emoji) => this.addEmojiToReply(emoji)
+            },
+            close: () => {
+                this.state.activeReplyId = null;
+            },
+            position: "top-end",
         });
 
         // onWillStart(() => this.loadReviews());
@@ -67,13 +74,25 @@ export class DocumentReviewComponent extends Component {
         return this.props.currentPartnerName || '';
     }
 
-    addEmoji(emoji) {
-        const comment = this.state.newReview.comment || "";
-        this.state.newReview.comment = comment + emoji;
-    }
 
     onClickAddEmoji(ev) {
         markEventHandled(ev, "Composer.onClickAddEmoji");
+    }
+
+    addEmoji(emoji) {
+        const id = this.state.activeReplyId;
+        if (!id || !this.state.replyForms[id]) {
+            const comment = this.state.newReview.comment || "";
+            this.state.newReview.comment = comment + emoji;
+        } else {
+            this.state.replyForms[id].comment += emoji;
+        }
+    }
+
+
+    onClickAddEmojiReply(replyId, ev) {
+        markEventHandled(ev, "Composer.onClickAddEmoji");
+        this.state.activeReplyId = replyId;
     }
 
     // async loadReviews() {

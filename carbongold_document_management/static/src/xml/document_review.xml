@@ -241,16 +241,18 @@
                                                             <small>Send</small>
                                                         </button>
                                                     </div>
-                                                    <!-- <button
-                                                        t-ref="emoji-button"
-                                                        class="btn border-0 rounded-pill"
-                                                        title="Add Emoji"
-                                                        aria-label="Add Emoji"
-                                                        t-on-click="onClickAddEmoji">
+                                                        <button
+                                                            t-ref="reply-emoji-button"
+                                                            class="btn border-0 rounded-pill"
+                                                            title="Add Reply Emoji"
+                                                            aria-label="Add Reply Emoji"
+                                                            t-on-click="(ev) => this.onClickAddEmojiReply(review.id, ev)"
+                                                        >
                                                         <i class="fa fa-smile-o" />
-                                                    </button> -->
+                                                    </button>
+                                                    
                                                 </div>
-                                                <!-- <Picker t-props="picker" /> -->
+                                                <Picker t-props="picker" />
                                             </div>
                                         </div>
                                     </div>
