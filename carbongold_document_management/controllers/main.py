@@ -60,7 +60,7 @@ class DocumentController(http.Controller):
             .sudo()
             .search(
                 domain,
-                order="name asc",
+                order="write_date DESC",
                 limit=documents_per_page,
                 offset=pager["offset"],
             )
@@ -92,7 +92,8 @@ class DocumentController(http.Controller):
     def document_download(self, document, **kwargs):
         document_id = request.env["documents.document"].sudo().browse(document)
         datas = document_id.attachment_id.datas
-        filename = document_id.name or document_id.attachment_id.name
+        extension = document_id.attachment_id.mimetype.replace('application/', '').replace(';base64', '')
+        filename = f'{document_id.name}.{extension}'
         mimetype = document_id.attachment_id.mimetype or "application/octet-stream"
 
         if not document_id.attachment_id.datas:
