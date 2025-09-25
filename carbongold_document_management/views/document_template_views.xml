@@ -91,21 +91,27 @@
 
     <template id="document_image_preview" name="Document Image">
         <div class="o_kanban_image">
-            <t t-set="isPdf" t-value="record.mimetype in ['application/pdf', 'application/pdf;base64']"/>
             <t
                 t-set="hasThumbnail"
-                t-value="(isPdf and record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
+                t-value="(record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
             <t t-set="youtubeVideoToken" t-value="record._get_youtube_url_token() if record.url else False"/>
+            <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
             <div name="document_preview" class="o_kanban_image_wrapper">
-                <img
-                    t-if="youtubeVideoToken"
-                    t-attf-style="#{style}"
-                    alt="Document"
-                    t-att-class="'o_attachment_image ' + img_class"
-                    t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
-                <a t-elif="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
+                <a t-if="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
                     <img
-                        t-if="record.url_preview_image"
+                        t-if="(record.thumbnail_status == 'present')"
+                        t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
+                        t-att-class="img_class"
+                        t-attf-style="#{style}"
+                        alt="Link preview"/>
+                    <img
+                        t-elif="youtubeVideoToken"
+                        t-attf-style="#{style}"
+                        alt="Document"
+                        t-att-class="'o_attachment_image ' + img_class"
+                        t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
+                    <img
+                        t-elif="record.url_preview_image"
                         t-attf-style="#{style}"
                         t-att-class="img_class"
                         t-att-src="record.url_preview_image"
@@ -115,7 +121,6 @@
                     </t>
                 </a>
                 <t t-elif="hasThumbnail">
-                    <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
                     <div class="o_documents_image">
                         <img
                             t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
@@ -428,7 +433,7 @@
 
     <template
         id="star_ratings"
-        name="Document Star Rating"
+        name="Star Rating"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
@@ -470,7 +475,7 @@
 
     <template
         id="document_comments"
-        name="Document Comment"
+        name="Comments"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
@@ -488,7 +493,7 @@
 
     <template
         id="template_id"
-        name="Document Image"
+        name="Download Button"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
