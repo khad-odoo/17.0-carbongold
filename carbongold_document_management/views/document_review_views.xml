@@ -141,7 +141,7 @@
                             <field name="create_date"/>
                         </group>
                         <group>
-                            <field name="is_reply"/>
+                            <field name="is_reply" readonly="1"/>
                             <field name="is_published"/>
                             <field name="comment"/>
                         </group>

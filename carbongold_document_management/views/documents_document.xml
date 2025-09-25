@@ -32,6 +32,9 @@ if records:
         <field name="model">documents.document</field>
         <field name="inherit_id" ref="documents.document_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='owner_id']" position="after">
+                <field name="author" />
+            </xpath>
             <xpath expr="//field[@name='type']" position="before">
                 <field name="thumbnail"/>
             </xpath>
