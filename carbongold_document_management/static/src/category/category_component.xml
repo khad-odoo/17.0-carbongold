@@ -1,0 +1,26 @@
+<templates xml:space="preserve">
+    <t t-name="carbongold_document_management.categorySelector" owl="1">
+        <div class="cat-pill-input form-control d-flex flex-wrap gap-1" t-on-click.stop="">
+            <t t-foreach="state.selectedCategories" t-as="cat" t-key="cat.id">
+                <span
+                    t-att-cat_id="cat.id"
+                    t-attf-class="badge rounded-pill mt-2 bg-300 border px-2">
+                    <t t-esc="cat.name"/>
+                    <i
+                        class="fa fa-times ms-2"
+                        role="button"
+                        tabindex="-1"
+                        t-on-click.prevent="() => this.removeCategory(cat.id)"
+                        t-att-title="'Remove ' + cat.name"/>
+                </span>
+            </t>
+            <select id="category_ids" class="form-select border-1 flex-grow-1 mt-1" size="1" t-on-change="onSelectChange">
+                <option value="0">Select</option>
+                <t t-foreach="state.allCategories" t-as="cat" t-key="cat.id">
+                    <option t-att-value="cat.id"><t t-esc="cat.name"/></option>
+                </t>
+            </select>
+        </div>
+        <input type="hidden" name="category_ids_json" t-att-value="getCategoriesAsJSON()"/>
+    </t>
+</templates>

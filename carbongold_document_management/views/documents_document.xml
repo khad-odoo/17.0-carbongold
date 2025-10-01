@@ -40,7 +40,7 @@ if records:
             </xpath>
             <xpath expr="//field[@name='create_uid']" position="after">
                 <field name="is_published" widget="boolean_toggle"/>
-                <field name="document_category_id"/>
+                <field name="document_category_ids"  widget="documents_many2many_tags" />
             </xpath>
 
             <xpath expr="//field[@name='mimetype']/.." position="after">
@@ -57,8 +57,35 @@ if records:
         <field name="inherit_id" ref="documents.documents_view_list"/>
         <field name="arch" type="xml">
             <xpath expr="//tree" position="inside">
+                <field name="doc_description" column_invisible="1" />
+                <field name="document_category_ids" widget="documents_many2many_tags" />
                 <field name="is_published" widget="boolean_toggle" optional="show"/>
                 <button name="action_view_documents_form" type="object" string="View"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="document_view_kanban_inherite_carbongold_document_management" model="ir.ui.view">
+        <field name="name">documents.document.kanban.inherite.carbongold.document.management</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//templates" position="before">
+                <field name="doc_description" />
+                <field name="document_category_ids" />
+                <field name="rating_avg" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- documents search view -->
+    <record id="document_view_search_inherite_carbongold_document_management" model="ir.ui.view">
+        <field name="name">documents.search.view.inherite.carbongold.document.management</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//searchpanel" position="inside">
+                <field name="document_category_ids" select="multi" />
             </xpath>
         </field>
     </record>

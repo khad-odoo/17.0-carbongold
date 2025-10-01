@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="carbongold_document_management.DocumentsInspector.category_ids">
+        <div class="o_inspector_tags">
+            <t t-set="categories" t-value="getCommonCategories()"/>
+            <t t-set="additionalCategories" t-value="getAdditionalCategories(categories)"/>
+            <t t-foreach="categories" t-as="tag" t-key="tag.id">
+                <div class="o_inspector_tag o_inspector_trigger_hover_target">
+                    <span class="o_documents_tag_name" t-att-title="tag.display_name" t-esc="tag.name"/>
+                    <span class="o_inspector_tag_remove float-end o_inspector_trigger_hover fa-fw"
+                        t-on-click.stop.prevent="(ev) => this.removeCategory(tag)">
+                        &#215;
+                    </span>
+                </div>
+            </t>
+            <AutoComplete t-if="additionalCategories.length" t-props="getCategoryAutocompleteProps(additionalCategories)"/>
+        </div>
+    </t>
+
+    <t t-inherit="documents.DocumentsInspector.documentsInfo" t-inherit-mode="extension">
+        <xpath expr="//t[@t-set='icon']/.." position="before">
+            <tr class="o_inspector_custom_field">
+                <td class="o_inspector_label align-baseline">
+                    <label>Category</label>
+                </td>
+                <td class="o_inspector_value w-100">
+                    <t t-call="carbongold_document_management.DocumentsInspector.category_ids"/>
+                </td>
+            </tr>
+
+            <t t-call="documents.DocumentsInspector.field">
+                <t t-set="fieldName" t-translation="off">doc_description</t>
+            </t>
+            <t t-call="documents.DocumentsInspector.field">
+                <t t-set="fieldName" t-translation="off">rating_avg</t>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

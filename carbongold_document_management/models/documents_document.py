@@ -10,9 +10,9 @@ class Documents(models.Model):
     _name = "documents.document"
     _inherit = ["documents.document", "website.searchable.mixin", "website.published.multi.mixin"]
 
-    document_category_id = fields.Many2one(comodel_name="category.category", string="Category")
-    author = fields.Char()
-    doc_description = fields.Char()
+    document_category_ids = fields.Many2many(comodel_name="category.category", string="Category")
+    author = fields.Char(string="Author")
+    doc_description = fields.Char(string="Description")
     document_click_count = fields.Integer(default=0)
     document_download_count = fields.Integer(default=0)
     reviews = fields.One2many("document.review", "document_id")
@@ -42,7 +42,7 @@ class Documents(models.Model):
     def _search_get_detail(self, website, order, options):
         with_image = options["displayImage"]
         with_description = options["displayDescription"]
-        search_fields = ["name"]
+        search_fields = ["name", "doc_description"]
         fetch_fields = ["id", "name", "type", "url_preview_image"]
         domain = [website.website_domain(), [("is_published", "!=", False)]]
         mapping = {
