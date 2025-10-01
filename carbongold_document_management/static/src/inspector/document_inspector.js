@@ -29,7 +29,6 @@ patch(DocumentsInspector.prototype, {
     },
 
     async addCategory(category, { input }) {
-        debugger
         const resIds = this.props.documents.map((r) => r.resId);
         await this.env.searchModel.updateRecordCategoryId(resIds, category.value);
         input.focus();

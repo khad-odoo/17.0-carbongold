@@ -34,6 +34,7 @@
             </t>
             <t t-call="documents.DocumentsInspector.field">
                 <t t-set="fieldName" t-translation="off">rating_avg</t>
+                <t t-set="additionalProps" t-value="{inspectorReadonly: true}" />
             </t>
         </xpath>
     </t>
