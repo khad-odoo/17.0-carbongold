@@ -91,21 +91,27 @@
 
     <template id="document_image_preview" name="Document Image">
         <div class="o_kanban_image">
-            <t t-set="isPdf" t-value="record.mimetype in ['application/pdf', 'application/pdf;base64']"/>
             <t
                 t-set="hasThumbnail"
-                t-value="(isPdf and record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
+                t-value="(record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
             <t t-set="youtubeVideoToken" t-value="record._get_youtube_url_token() if record.url else False"/>
+            <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
             <div name="document_preview" class="o_kanban_image_wrapper">
-                <img
-                    t-if="youtubeVideoToken"
-                    t-attf-style="#{style}"
-                    alt="Document"
-                    t-att-class="'o_attachment_image ' + img_class"
-                    t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
-                <a t-elif="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
+                <a t-if="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
                     <img
-                        t-if="record.url_preview_image"
+                        t-if="(record.thumbnail_status == 'present')"
+                        t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
+                        t-att-class="img_class"
+                        t-attf-style="#{style}"
+                        alt="Link preview"/>
+                    <img
+                        t-elif="youtubeVideoToken"
+                        t-attf-style="#{style}"
+                        alt="Document"
+                        t-att-class="'o_attachment_image ' + img_class"
+                        t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
+                    <img
+                        t-elif="record.url_preview_image"
                         t-attf-style="#{style}"
                         t-att-class="img_class"
                         t-att-src="record.url_preview_image"
@@ -115,7 +121,6 @@
                     </t>
                 </a>
                 <t t-elif="hasThumbnail">
-                    <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
                     <div class="o_documents_image">
                         <img
                             t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
@@ -165,14 +170,15 @@
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Category <span class="text-danger">*</span></label>
-                            <select name="category" class="form-control">
-                                <option value="">Select Category</option>
-                                <t t-foreach="categories or []" t-as="category">
-                                    <option t-att-value="category.id">
-                                        <t t-esc="category.name"/>
-                                    </option>
-                                </t>
-                            </select>
+                            <owl-component name="category_component" t-att-props="json.dumps(category_props)"/>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Thumbnail</label>
+                            <input
+                                type="file"
+                                name="document_thumbnail"
+                                class="form-control"
+                                accept=".jpg,.jpeg,.png,.webp,.svg"/>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Attachment Type <span class="text-danger">*</span></label>
@@ -270,10 +276,10 @@
                                                     <t
                                                         t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')"/>
                                                 </h5>
-                                                <div t-if="doc.document_category_id" class="d-flex gap-2 mb-2">
-                                                    <span class="badge rounded-pill mt-2 bg-300 border px-2">
-                                                        <t t-esc="doc.document_category_id.name"/>
-                                                    </span>
+                                                <div t-if="doc.document_category_ids" class="d-flex gap-2 mb-2">
+                                                    <t t-foreach="doc.document_category_ids" t-as="tag">
+                                                        <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                                    </t>
                                                 </div>
                                                 <div t-if="doc.doc_description">
                                                     <small
@@ -313,12 +319,11 @@
                                                                 </h5>
 
                                                                 <div
-                                                                    t-if="doc.document_category_id"
-                                                                    class="d-flex gap-2">
-                                                                    <span
-                                                                        class="badge rounded-pill mt-2 bg-300 border px-2">
-                                                                        <t t-esc="doc.document_category_id.name"/>
-                                                                    </span>
+                                                                    t-if="doc.document_category_ids"
+                                                                    class="gap-2">
+                                                                    <t t-foreach="doc.document_category_ids" t-as="tag">
+                                                                        <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                                                    </t>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -390,10 +395,10 @@
                             <h2 class="fw-bold mb-3">
                                 <t t-esc="document.name"/>
                             </h2>
-                            <div t-if="document.document_category_id" class="mb-3 d-flex gap-2">
-                                <span class="rounded-pill bg-300 border px-2">
-                                    <t t-esc="document.document_category_id.name"/>
-                                </span>
+                            <div t-if="document.document_category_ids" class="mb-3 d-flex gap-2">
+                                <t t-foreach="document.document_category_ids" t-as="tag">
+                                    <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                </t>
                             </div>
                             <div class="mb-4 o_document_image" t-if="not request.env.user._is_public()">
                             </div>
@@ -428,7 +433,7 @@
 
     <template
         id="star_ratings"
-        name="Document Star Rating"
+        name="Star Rating"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
@@ -470,7 +475,7 @@
 
     <template
         id="document_comments"
-        name="Document Comment"
+        name="Comments"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
@@ -488,7 +493,7 @@
 
     <template
         id="template_id"
-        name="Document Image"
+        name="Download Button"
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"

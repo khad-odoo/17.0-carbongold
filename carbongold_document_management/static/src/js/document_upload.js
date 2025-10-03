@@ -49,23 +49,25 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         const author = this.el.querySelector("input[name='author']").value;
         const description = this.el.querySelector("textarea[name='description']").value;
         const attachmentType = this.el.querySelector("select[name='attachment_type']").value;
-        const category = this.el.querySelector("select[name='category']").value;
+        const categories = this.el.querySelector("input[name='category_ids_json']").value;
         const fileInput = this.el.querySelector("input[name='document_file']");
+        const filethumbnail = this.el.querySelector("input[name='document_thumbnail']");
         const link = this.el.querySelector("input[name='document_link']").value.trim();
         const DocumentMessageBox = document.querySelector(".document-alert");
         const DocumentMessage = document.querySelector(".o_document_alert_msg");
 
         const showAlert = (message, alertClass) => {
-            DocumentMessageBox.classList.remove("d-none");
+            DocumentMessageBox.classList.remove("d-none", "alert-success", "alert-danger");
             DocumentMessageBox.classList.add(alertClass);
             DocumentMessage.textContent = _t(message);
         };
 
         const file = fileInput.files[0];
+        const thumbnail = filethumbnail.files[0];
         clearError();
 
         if (!name) return showError("Please enter the name of the document.");
-        if (!category) return showError("Please select a document category.");
+        if (!categories || JSON.parse(categories).length == 0) return showError("Please select a document category.");
         if (attachmentType === "file") {
             if (!file) return showError("Please select a file to upload.");
             const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -82,11 +84,18 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         formData.append("author", author);
         formData.append("description", description);
         formData.append("attachment_type", attachmentType);
-        formData.append("category", category);
+        formData.append("category_ids", categories);
         if (file) {
             formData.append("document_file", file);
         } else if (link) {
             formData.append("document_link", link);
+        }
+
+        if(thumbnail){
+            if (thumbnail.size > 5242880) {
+                return showError(`Thumbnail size must not exceed 1 MB.`);
+            }
+            formData.append("thumbnail", thumbnail);
         }
 
         try {
@@ -95,15 +104,16 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
                 body: formData,
             });
             const result = await response.json();
-
+            if (modal) modal.classList.remove("show");
+            this._resetForm();
             if (result) {
-                if (modal) modal.classList.remove("show");
-                this._resetForm();
                 showAlert("Your document uploaded successfully!", "alert-success");
             } else {
                 showAlert("Document was not uploaded.", "alert-danger");
             }
         } catch (error) {
+            if (modal) modal.classList.remove("show");
+            this._resetForm();
             showAlert("An error occurred while uploading.", "alert-danger");
         }
     },
@@ -114,5 +124,6 @@ publicWidget.registry.WebsiteDocument = publicWidget.Widget.extend({
         this.el.querySelector("textarea[name='description']").value = "";
         this.el.querySelector("input[name='document_file']").value = "";
         this.el.querySelector("input[name='document_link']").value = "";
+        this.el.querySelector("input[name='document_thumbnail']").value = "";
     },
 });

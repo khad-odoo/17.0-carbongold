@@ -1,13 +1,15 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
-
+import json
 from odoo import http
 from odoo.exceptions import UserError
 from odoo.http import content_disposition, request
 from odoo.osv import expression
 
 from odoo.addons.portal.controllers.portal import pager as website_pager
+from odoo.tools import image_process
+from base64 import b64decode
 
 
 ALLOWED_EXTENSIONS = {
@@ -43,7 +45,7 @@ class DocumentController(http.Controller):
                 category_ids = [int(x) for x in request.httprequest.args.getlist("category_ids")]
             else:
                 category_ids = [int(category_ids)]
-            domain = expression.AND([domain, [("document_category_id", "in", category_ids)]])
+            domain = expression.AND([domain, [("document_category_ids", "in", category_ids)]])
 
         document_count = request.env["documents.document"].sudo().search_count(domain)
         pager = website_pager(
@@ -60,7 +62,7 @@ class DocumentController(http.Controller):
             .sudo()
             .search(
                 domain,
-                order="name asc",
+                order="write_date DESC",
                 limit=documents_per_page,
                 offset=pager["offset"],
             )
@@ -74,6 +76,7 @@ class DocumentController(http.Controller):
             "parent_categories": request.env["category.category"].sudo().search([("parent_id", "=", False)]),
             "search_count": document_count,
             "selected_categories": category_ids,
+            "category_props": {"all_cat_ids" : request.env["category.category"].sudo().search_read([], ["id", "name"], order="name")}
         }
         return request.render("carbongold_document_management.all_documents", values)
 
@@ -92,7 +95,8 @@ class DocumentController(http.Controller):
     def document_download(self, document, **kwargs):
         document_id = request.env["documents.document"].sudo().browse(document)
         datas = document_id.attachment_id.datas
-        filename = document_id.name or document_id.attachment_id.name
+        extension = document_id.attachment_id.mimetype.replace('application/', '').replace(';base64', '')
+        filename = f'{document_id.name}.{extension}'
         mimetype = document_id.attachment_id.mimetype or "application/octet-stream"
 
         if not document_id.attachment_id.datas:
@@ -119,13 +123,12 @@ class DocumentController(http.Controller):
         name = post.get("name")
         attachment_type = post.get("attachment_type")
         document = request.env["documents.document"]
-
         vals = {
             "name": name,
             "author": post.get("author", ""),
             "doc_description": post.get("description", ""),
             "owner_id": request.env.user.id,
-            "document_category_id": int(post.get("category")),
+            "document_category_ids": [(6, 0, json.loads(post.get("category_ids") or []))],
             "folder_id": request.env.ref("carbongold_document_management.documents_upload_folder").id,
         }
 
@@ -167,6 +170,21 @@ class DocumentController(http.Controller):
         document_id = document.sudo().create(vals)
         if document_id and attachment_type == "link":
             document_id._compute_name_and_preview()
+
+        upload_thumbnail = request.httprequest.files.get("thumbnail")
+        if upload_thumbnail and document_id:
+            filename = upload_thumbnail.filename
+            file_ext = "." + filename.split(".")[-1].lower() if "." in filename else ""
+            if file_ext not in {".jpg", ".jpeg", ".png", ".webp", ".svg"}:
+                raise UserError("Only JPG and PNG images are supported.")
+
+            try:
+                file_content = upload_thumbnail.read()
+                processed = base64.b64encode(file_content)
+                document_id.write({"thumbnail": processed})
+
+            except Exception as error:
+                raise UserError("Error saving the document: %s" % error) from error
 
         return request.make_json_response(bool(document_id))
 

@@ -44,6 +44,10 @@ Benefits:
             "carbongold_document_management/static/src/js/**/*.js",
             "carbongold_document_management/static/src/xml/**/*.xml",
             "carbongold_document_management/static/src/scss/**/*.scss",
+            "carbongold_document_management/static/src/category/**",
+        ],
+        "web.assets_backend":[
+            "carbongold_document_management/static/src/inspector/**/*",
         ],
     },
     "installable": True,
