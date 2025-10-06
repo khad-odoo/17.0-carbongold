@@ -181,7 +181,7 @@ class DocumentController(http.Controller):
             try:
                 file_content = upload_thumbnail.read()
                 processed = base64.b64encode(file_content)
-                document_id.write({"thumbnail": processed})
+                document_id.write({"portal_thumbnail": processed})
 
             except Exception as error:
                 raise UserError("Error saving the document: %s" % error) from error
