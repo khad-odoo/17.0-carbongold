@@ -2,7 +2,7 @@
 
 {
     "name": "Bitons Document Plus",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "category": "Customization",
     "summary": "Bitons Document Plus",
     "description": """
