@@ -14,9 +14,9 @@
                             t-att-data-parent-id="parent_cat.id"
                             t-att-id="'cat_%s' % parent_cat.id"
                             t-att-value="parent_cat.id"
-                            t-att-checked="'checked' if parent_cat.id in selected_categories else None"/>
+                            t-att-checked="'checked' if parent_cat.id in selected_categories else None" />
                         <label class="form-check-label fw-bold" t-att-for="'cat_%s' % parent_cat.id">
-                            <t t-esc="parent_cat.name"/>
+                            <t t-esc="parent_cat.name" />
                         </label>
                     </div>
                 </li>
@@ -31,9 +31,9 @@
                                 t-att-data-parent-id="parent_cat.id"
                                 t-att-id="'cat_%s' % subc.id"
                                 t-att-value="subc.id"
-                                t-att-checked="'checked' if subc.id in selected_categories else None"/>
+                                t-att-checked="'checked' if subc.id in selected_categories else None" />
                             <label class="form-check-label" t-att-for="'cat_%s' % subc.id">
-                                <t t-esc="subc.name"/>
+                                <t t-esc="subc.name" />
                             </label>
                         </div>
                     </li>
@@ -47,43 +47,46 @@
         inherit_id="website.website_search_box_input"
         primary="True">
         <xpath expr="//form" position="inside">
-            <input name="view_type" type="hidden" t-att-value="view_type"/>
+            <input name="view_type" type="hidden" t-att-value="view_type" />
             <t t-call="carbongold_document_management.document_categories_list">
-                <t t-set="is_search_bar" t-value="true"/>
+                <t t-set="is_search_bar" t-value="true" />
             </t>
         </xpath>
     </template>
 
     <template id="document_search" name="Search Box">
-        <t t-call="carbongold_document_management.website_search_box_input_inherite_carbongold_document_management">
-            <t t-set="_classes" t-valuef="px-3"/>
-            <t t-set="_form_classes" t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 d-lg-inline"/>
-            <t t-set="_submit_classes" t-valuef="btn btn-light"/>
-            <t t-set="_input_classes" t-valuef="border-0 text-bg-light"/>
-            <t t-set="search_type" t-value="'document'"/>
-            <t t-set="action" t-valuef="/documents"/>
-            <t t-set="display_description" t-valuef="false"/>
-            <t t-set="display_detail" t-valuef="false"/>
-            <t t-set="display_image" t-valuef="true"/>
-            <t t-set="view_type" t-value="view_type"/>
+        <t
+            t-call="carbongold_document_management.website_search_box_input_inherite_carbongold_document_management">
+            <t t-set="_classes" t-valuef="px-3" />
+            <t t-set="_form_classes"
+                t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 d-lg-inline" />
+            <t t-set="_submit_classes" t-valuef="btn btn-light" />
+            <t t-set="_input_classes" t-valuef="border-0 text-bg-light" />
+            <t t-set="search_type" t-value="'document'" />
+            <t t-set="action" t-valuef="/documents" />
+            <t t-set="display_description" t-valuef="false" />
+            <t t-set="display_detail" t-valuef="false" />
+            <t t-set="display_image" t-valuef="true" />
+            <t t-set="view_type" t-value="view_type" />
         </t>
     </template>
 
     <template id="document_add_grid_or_list_option" name="Grid or List button">
         <t t-set="_activeClasses" t-translation="off">btn-outline-primary</t>
-        <div t-attf-class="o_wsale_apply_layout btn-group d-flex" t-att-data-active-classes="_activeClasses">
+        <div t-attf-class="o_wsale_apply_layout btn-group d-flex"
+            t-att-data-active-classes="_activeClasses">
             <a t-att-href="'/documents?view_type=grid'">
                 <button
                     type="button"
                     t-attf-class="btn #{_activeClasses if view_type != 'list' else None} o_wsale_apply_grid">
-                    <i class="fa fa-th-large"/>
+                    <i class="fa fa-th-large" />
                 </button>
             </a>
             <a t-att-href="'/documents?view_type=list'">
                 <button
                     type="button"
                     t-attf-class="btn #{_activeClasses if view_type == 'list' else None} o_wsale_apply_list">
-                    <i class="oi oi-view-list"/>
+                    <i class="oi oi-view-list" />
                 </button>
             </a>
         </div>
@@ -93,68 +96,88 @@
         <div class="o_kanban_image">
             <t
                 t-set="hasThumbnail"
-                t-value="(record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))"/>
-            <t t-set="youtubeVideoToken" t-value="record._get_youtube_url_token() if record.url else False"/>
-            <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''"/>
+                t-value="(record.thumbnail_status == 'present') or (record.mimetype and record.mimetype.startswith('image/'))" />
+            <t t-set="youtubeVideoToken"
+                t-value="record._get_youtube_url_token() if record.url else False" />
+            <t t-set="unique" t-value="record.checksum[-8:] if record.checksum else ''" />
             <div name="document_preview" class="o_kanban_image_wrapper">
-                <a t-if="record.type =='url'" target="_blank" t-att-href="record.url" class="o_kanban_image_wrapper">
-                    <img
-                        t-if="(record.thumbnail_status == 'present')"
-                        t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
-                        t-att-class="img_class"
-                        t-attf-style="#{style}"
-                        alt="Link preview"/>
-                    <img
-                        t-elif="youtubeVideoToken"
-                        t-attf-style="#{style}"
-                        alt="Document"
-                        t-att-class="'o_attachment_image ' + img_class"
-                        t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg"/>
-                    <img
-                        t-elif="record.url_preview_image"
-                        t-attf-style="#{style}"
-                        t-att-class="img_class"
-                        t-att-src="record.url_preview_image"
-                        alt="Link preview"/>
-                    <t t-else="">
-                        <span t-att-class="'fa fa-link fa-3x text-muted ' + img_class" t-attf-style="#{style}"/>
-                    </t>
-                </a>
-                <t t-elif="hasThumbnail">
-                    <div class="o_documents_image">
+                <t t-if="record.type =='url'">
+                    <a target="_blank" t-att-href="record.url"
+                        class="o_kanban_image_wrapper">
                         <img
+                            t-if="(record.thumbnail_status == 'present')"
                             t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;unique=#{unique}"
                             t-att-class="img_class"
                             t-attf-style="#{style}"
-                            alt="Document preview"/>
+                            alt="Link preview" />
+                        <img
+                            t-elif="youtubeVideoToken"
+                            t-attf-style="#{style}"
+                            alt="Document"
+                            t-att-class="'o_attachment_image ' + img_class"
+                            t-attf-src="https://img.youtube.com/vi/{{youtubeVideoToken}}/0.jpg" />
+                        <img
+                            t-elif="record.url_preview_image"
+                            t-attf-style="#{style}"
+                            t-att-class="img_class"
+                            t-att-src="record.url_preview_image"
+                            alt="Link preview" />
+                        <t t-else="">
+                            <span t-att-class="'fa fa-link fa-3x text-muted ' + img_class"
+                                t-attf-style="#{style}" />
+                        </t>
+                    </a>
+                </t>
+                <t t-elif="record.portal_thumbnail">
+                    <div class="o_documents_image">
+                        <img
+                            t-attf-src="/documents/image/#{record.id}?field=portal_thumbnail&amp;"
+                            t-att-class="img_class"
+                            t-attf-style="#{style}"
+                            alt="Document preview" />
                     </div>
                 </t>
-                <div
-                    t-else=""
-                    t-attf-style="#{style}"
-                    class="o_image o_image_thumbnail"
-                    t-att-data-mimetype="record.mimetype"/>
+                <t t-elif="(not record.portal_thumbnail) and hasThumbnail">
+                    <div class="o_documents_image">
+                        <img
+                            t-attf-src="/documents/image/#{record.id}?field=thumbnail&amp;"
+                            t-att-class="img_class"
+                            t-attf-style="#{style}"
+                            alt="Document preview" />
+                    </div>
+                </t>
+                <t t-else="">
+                    <div
+                        t-attf-style="#{style}"
+                        class="o_image o_image_thumbnail"
+                        t-att-data-mimetype="record.mimetype" />
+                </t>
             </div>
         </div>
     </template>
 
     <template id="upload_document" name="Upload Document">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#getDocumentModal">
-            Upload Document
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#getDocumentModal">
+            <span class="d-lg-inline-block d-none">
+                Upload Document
+            </span>
+            <i class="fa fa-upload d-inline-block d-lg-none" />
         </button>
         <div class="modal fade" id="getDocumentModal" tabindex="-1" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content website-document">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Document</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close" />
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-danger d-none validation-message" role="alert"/>
+                        <div class="alert alert-danger d-none validation-message" role="alert" />
 
                         <div class="mb-2">
                             <label class="form-label">Name of Document <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control"/>
+                            <input type="text" name="name" class="form-control" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Author</label>
@@ -162,15 +185,16 @@
                                 type="text"
                                 name="author"
                                 t-att-value="env.user.partner_id.name"
-                                class="form-control"/>
+                                class="form-control" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control"/>
+                            <textarea name="description" class="form-control" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Category <span class="text-danger">*</span></label>
-                            <owl-component name="category_component" t-att-props="json.dumps(category_props)"/>
+                            <owl-component name="category_component"
+                                t-att-props="json.dumps(category_props)" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Thumbnail</label>
@@ -178,7 +202,7 @@
                                 type="file"
                                 name="document_thumbnail"
                                 class="form-control"
-                                accept=".jpg,.jpeg,.png,.webp,.svg"/>
+                                accept=".jpg,.jpeg,.png,.webp,.svg" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Attachment Type <span class="text-danger">*</span></label>
@@ -193,12 +217,12 @@
                                 type="file"
                                 name="document_file"
                                 class="form-control"
-                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp,.zip"/>
+                                accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp,.zip" />
                             <input
                                 type="text"
                                 name="document_link"
                                 class="form-control d-none"
-                                placeholder="Enter link"/>
+                                placeholder="Enter link" />
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -213,12 +237,14 @@
 
     <template id="all_documents" name="All Documents">
         <t t-call="website.layout">
-            <div class="oe_structure"/>
+            <div class="oe_structure" />
             <div id="wrap" class="o_wsale_products_page">
                 <div class="container pt-2">
                     <div class="row mr16 mt-2">
-                        <div class="col-lg-12 mr16 ml16 alert alert-dismissable document-alert d-none" role="status">
-                            <strong class="o_document_alert_msg"/>
+                        <div
+                            class="col-lg-12 mr16 ml16 alert alert-dismissable document-alert d-none"
+                            role="status">
+                            <strong class="o_document_alert_msg" />
                             <a
                                 href="#"
                                 class="close float-end"
@@ -235,9 +261,11 @@
                                 </h6>
                                 <div class="wsale_products_categories_list">
                                     <form id="doc_category_form" method="get" action="/documents">
-                                        <t t-call="carbongold_document_management.document_categories_list"/>
-                                        <input type="hidden" name="search" t-att-value="search"/>
-                                        <input type="hidden" name="view_type" t-att-value="view_type"/>
+                                        <t
+                                            t-call="carbongold_document_management.document_categories_list" />
+                                        <input type="hidden" name="search" t-att-value="search" />
+                                        <input type="hidden" name="view_type"
+                                            t-att-value="view_type" />
                                     </form>
                                 </div>
                             </div>
@@ -249,11 +277,12 @@
                             <div
                                 class="products_header btn-toolbar flex-nowrap align-items-center justify-content-between gap-3 mb-3">
                                 <t t-call="carbongold_document_management.document_search">
-                                    <t t-set="search" t-value="search"/>
+                                    <t t-set="search" t-value="search" />
                                 </t>
-                                <t t-call="carbongold_document_management.document_add_grid_or_list_option"/>
+                                <t
+                                    t-call="carbongold_document_management.document_add_grid_or_list_option" />
                                 <t t-if="not request.env.user._is_public()">
-                                    <t t-call="carbongold_document_management.upload_document"/>
+                                    <t t-call="carbongold_document_management.upload_document" />
                                 </t>
                             </div>
                             <div t-if="documents" class="pt-3 pt-lg-0">
@@ -264,27 +293,32 @@
                                             t-attf-onclick="location.href='/document/#{doc.id}';"
                                             style="cursor: pointer;"
                                             class="list-group-item list-group-item-action d-flex align-items-start gap-3 p-3">
-                                            <t t-call="carbongold_document_management.document_image_preview">
-                                                <t t-set="record" t-value="doc"/>
+                                            <t
+                                                t-call="carbongold_document_management.document_image_preview">
+                                                <t t-set="record" t-value="doc" />
                                                 <t
                                                     t-set="style"
-                                                    t-value="'width:80px; height:80px; object-fit:cover;'"/>
-                                                <t t-set="img_class" t-value="'rounded'"/>
+                                                    t-value="'width:80px; height:80px; object-fit:cover;'" />
+                                                <t t-set="img_class" t-value="'rounded'" />
                                             </t>
                                             <div class="flex-grow-1">
                                                 <h5 class="mb-1">
                                                     <t
-                                                        t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')"/>
+                                                        t-esc="doc.name[:80] + ('...' if len(doc.name) &gt; 80 else '')" />
                                                 </h5>
-                                                <div t-if="doc.document_category_ids" class="d-flex gap-2 mb-2">
-                                                    <t t-foreach="doc.document_category_ids" t-as="tag">
-                                                        <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                                <div t-if="doc.document_category_ids"
+                                                    class="d-flex gap-2 mb-2">
+                                                    <t t-foreach="doc.document_category_ids"
+                                                        t-as="tag">
+                                                        <span
+                                                            class="badge rounded-pill mt-2 bg-300 border px-2"
+                                                            t-out="tag.name" />
                                                     </t>
                                                 </div>
                                                 <div t-if="doc.doc_description">
                                                     <small
                                                         class="text-muted"
-                                                        t-esc="doc.doc_description[:250] + ('...' if len(doc.doc_description) &gt; 250 else '')"/>
+                                                        t-esc="doc.doc_description[:250] + ('...' if len(doc.doc_description) &gt; 250 else '')" />
                                                 </div>
                                             </div>
                                         </div>
@@ -292,46 +326,54 @@
                                 </div>
 
                                 <!-- Grid View -->
-                                <div t-if="view_type=='grid'" class="row row-cols-1 row-cols-md-2 g-4">
+                                <div t-if="view_type=='grid'"
+                                    class="row row-cols-1 row-cols-md-2 g-4">
                                     <t t-foreach="documents" t-as="doc">
                                         <div class="col">
                                             <div
                                                 class="card h-100 shadow-sm border-0"
                                                 style="cursor: pointer;"
                                                 t-attf-onclick="location.href='/document/#{doc.id}';">
-                                                <div class="card-body gap-3" style="max-height:195px;">
+                                                <div class="card-body gap-3"
+                                                    style="max-height:195px;">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <t
                                                                 t-call="carbongold_document_management.document_image_preview">
-                                                                <t t-set="record" t-value="doc"/>
+                                                                <t t-set="record" t-value="doc" />
                                                                 <t
                                                                     t-set="style"
-                                                                    t-value="'width:130px; height:80px; object-fit:cover;'"/>
-                                                                <t t-set="img_class" t-value="'rounded'"/>
+                                                                    t-value="'width:130px; height:80px; object-fit:cover;'" />
+                                                                <t t-set="img_class"
+                                                                    t-value="'rounded'" />
                                                             </t>
                                                         </div>
                                                         <div class="col-md-8">
                                                             <div class="align-items-center mb-1">
                                                                 <h5 class="mb-0 fw-bold">
                                                                     <t
-                                                                        t-esc="doc.name[:40] + ('...' if len(doc.name) &gt; 40 else '')"/>
+                                                                        t-esc="doc.name[:40] + ('...' if len(doc.name) &gt; 40 else '')" />
                                                                 </h5>
 
                                                                 <div
                                                                     t-if="doc.document_category_ids"
                                                                     class="gap-2">
-                                                                    <t t-foreach="doc.document_category_ids" t-as="tag">
-                                                                        <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                                                    <t
+                                                                        t-foreach="doc.document_category_ids"
+                                                                        t-as="tag">
+                                                                        <span
+                                                                            class="badge rounded-pill mt-2 bg-300 border px-2"
+                                                                            t-out="tag.name" />
                                                                     </t>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
-                                                            <p class="text-muted mb-2 mt-2" t-if="doc.doc_description">
+                                                            <p class="text-muted mb-2 mt-2"
+                                                                t-if="doc.doc_description">
                                                                 <t
                                                                     class="text-muted"
-                                                                    t-esc="doc.doc_description[:150] + ('...' if len(doc.doc_description) &gt; 150 else '')"/>
+                                                                    t-esc="doc.doc_description[:150] + ('...' if len(doc.doc_description) &gt; 150 else '')" />
                                                             </p>
                                                         </div>
                                                     </div>
@@ -351,25 +393,25 @@
                                 </t>
                                 <t t-else="">
                                     <h3>No results</h3>
-                                    <p>No results found for "<strong t-esc='search'/>".</p>
+                                    <p>No results found for "<strong t-esc='search' />".</p>
                                 </t>
                             </div>
 
                             <!-- Pager -->
                             <div class="products_pager d-flex justify-content-center pt-5 pb-3">
-                                <t t-call="website.pager"/>
+                                <t t-call="website.pager" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="oe_structure"/>
+            <div class="oe_structure" />
         </t>
     </template>
 
     <template id="detail_document_page" name="Detail Document">
         <t t-call="website.layout">
-            <div class="oe_structure"/>
+            <div class="oe_structure" />
             <div class="oe_structure oe_empty">
                 <section id="document_detail" class="container py-5">
                     <div class="mb-4">
@@ -378,56 +420,62 @@
                                 <a href="/documents">All Documents</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                <t t-esc="document.name"/>
+                                <t t-esc="document.name" />
                             </li>
                         </ol>
                     </div>
 
                     <div class="row g-4 mt-4">
-                        <div class="col-xl-3 text-center">
+                        <div class="col-xl-4 text-center d-flex flex-column justify-content-center">
                             <t t-call="carbongold_document_management.document_image_preview">
-                                <t t-set="record" t-value="document"/>
-                                <t t-set="style" t-value="'height: 160px; width:240px; object-fit: cover;'"/>
-                                <t t-set="img_class" t-value="'img-fluid rounded shadow-sm'"/>
+                                <t t-set="record" t-value="document" />
+                                <t t-set="style"
+                                    t-value="'height: 320px; width:400px; object-fit: cover;'" />
+                                <t t-set="img_class" t-value="'img-fluid rounded shadow-sm'" />
                             </t>
                         </div>
-                        <div class="col-xl-9">
+                        <div class="col-xl-8">
                             <h2 class="fw-bold mb-3">
-                                <t t-esc="document.name"/>
+                                <t t-esc="document.name" />
                             </h2>
+
+                            <div class="d-flex gap-2 text-center o_star_ratings">
+                            </div>
+
                             <div t-if="document.document_category_ids" class="mb-3 d-flex gap-2">
                                 <t t-foreach="document.document_category_ids" t-as="tag">
-                                    <span class="badge rounded-pill mt-2 bg-300 border px-2" t-out="tag.name"/>
+                                    <span class="badge rounded-pill mt-2 bg-300 border px-2"
+                                        t-out="tag.name" />
                                 </t>
                             </div>
-                            <div class="mb-4 o_document_image" t-if="not request.env.user._is_public()">
+
+                                <div class="mb-4">
+                                    <p class="text-muted" t-esc="document.doc_description" />
+                                </div>
+
+                                <p t-if="document.owner_id" class="mb-3">
+                                    <strong>Owner:</strong>
+                                    <span t-esc="document.owner_id.name" />
+                                </p>
+                                <p t-if="document.author" class="mb-3">
+                                    <strong>Author:</strong>
+                                    <span t-esc="document.author" />
+                                </p>
+
+
+                            <div class="mb-4 o_document_image"
+                                t-if="not request.env.user._is_public()">
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xl-12">
-                        <div class="mb-4">
-                            <p class="text-muted" t-esc="document.doc_description"/>
-                        </div>
-
-                        <p t-if="document.owner_id" class="mb-3">
-                            <strong>Owner:</strong>
-                            <span t-esc="document.owner_id.name"/>
-                        </p>
-                        <p t-if="document.author" class="mb-3">
-                            <strong>Author:</strong>
-                            <span t-esc="document.author"/>
-                        </p>
-                    </div>
-
-                    <div class="d-flex gap-2 text-center o_star_ratings">
-                    </div>
+                  
 
                     <div class="row mt-5 o_document_comments">
                     </div>
                 </section>
             </div>
-            <div class="oe_structure"/>
+            <div class="oe_structure" />
         </t>
     </template>
 
@@ -439,36 +487,26 @@
         inherit_id="carbongold_document_management.detail_document_page"
         priority="10">
         <xpath expr="//div[hasclass('o_star_ratings')]" position="inside">
-            <div class="d-flex gap-4 p-3 ms-3">
-                <h1 class="fs-2 text-center">
-                    <t t-if="rating_count == 0">
-                        0
+
+            <div class="d-flex gap-2">
+                <div class="mb-2">
+                    <t t-set="full_stars" t-value="int(rating_avg)" />
+                    <t t-set="half_star" t-value="rating_avg % 1 >= 0.5" />
+                    <t t-set="empty_stars" t-value="5 - full_stars - (1 if half_star else 0)" />
+                    <t t-foreach="range(full_stars)" t-as="star">
+                        <i class="fa fa-star text-warning" />
                     </t>
-                    <t t-else="">
-                        <t t-esc="'%.1f' % rating_avg"/>
+                    <t t-if="half_star">
+                        <i class="fa fa-star-half-o text-warning" />
                     </t>
-                </h1>
-                <div>
-                    <div class="mb-2">
-                        <t t-set="full_stars" t-value="int(rating_avg)"/>
-                        <t t-set="half_star" t-value="rating_avg % 1 >= 0.5"/>
-                        <t t-set="empty_stars" t-value="5 - full_stars - (1 if half_star else 0)"/>
-                        <t t-foreach="range(full_stars)" t-as="star">
-                            <i class="fa fa-star text-warning"/>
-                        </t>
-                        <t t-if="half_star">
-                            <i class="fa fa-star-half-o text-warning"/>
-                        </t>
-                        <t t-foreach="range(empty_stars)" t-as="star">
-                            <i class="fa fa-star-o text-muted"/>
-                        </t>
-                    </div>
-                    <div class="text-muted"><span class="fa fa-comments"/>
-                        <span>
-                            <t t-out="rating_count"/>
-                        </span>reviews
-                    </div>
+                    <t t-foreach="range(empty_stars)" t-as="star">
+                        <i class="fa fa-star-o text-muted" />
+                    </t>
                 </div>
+                <div class="text-muted">
+                    <span>(
+                        <t t-out="rating_count" />
+                    </span>reviews )</div>
             </div>
         </xpath>
     </template>
@@ -479,13 +517,14 @@
         active="True"
         customize_show="True"
         inherit_id="carbongold_document_management.detail_document_page"
-        priority="10">
+        priority="10"
+    >
         <xpath expr="//div[hasclass('o_document_comments')]" position="inside">
             <div class="col-12">
                 <div class="d-flex flex-column justify-content-center h5 flex-grow-1 mb-md-5">
                     <owl-component
                         name="carbongold_document_management.document_review"
-                        t-att-props="json.dumps(component_values)"/>
+                        t-att-props="json.dumps(component_values)" />
                 </div>
             </div>
         </xpath>

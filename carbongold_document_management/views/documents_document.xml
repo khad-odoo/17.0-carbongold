@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="action_publish_on_public" model="ir.actions.server">
-            <field name="name">Publish On Public</field>
-            <field name="model_id" ref="documents.model_documents_document"/>
-            <field name="binding_model_id" ref="documents.model_documents_document"/>
-            <field name="binding_view_types">list</field>
-            <field name="state">code</field>
-            <field name="code">
-if records:
-    records.action_publish()
-            </field>
+        <field name="name">Publish On Public</field>
+        <field name="model_id" ref="documents.model_documents_document" />
+        <field name="binding_model_id" ref="documents.model_documents_document" />
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            records.action_publish()
+        </field>
     </record>
 
     <record id="view_documents_report_search" model="ir.ui.view">
@@ -17,11 +17,14 @@ if records:
         <field name="model">documents.document</field>
         <field name="arch" type="xml">
             <search string="Documents Report">
-                <filter string="Downloads" name="downloads" domain="[('document_download_count','>',0)]"/>
-                <filter string="Clicks" name="clicked" domain="[('document_click_count','>',0)]"/>
-                <filter string="User Ratings" name="avg_user_rating" domain="[('rating_avg','>','0')]"/>
+                <filter string="Downloads" name="downloads"
+                    domain="[('document_download_count','>',0)]" />
+                <filter string="Clicks" name="clicked" domain="[('document_click_count','>',0)]" />
+                <filter string="User Ratings" name="avg_user_rating"
+                    domain="[('rating_avg','>','0')]" />
                 <group expand="1" string="Group By">
-                    <filter string="Published" name="group_is_published" context="{'group_by':'is_published'}"/>
+                    <filter string="Published" name="group_is_published"
+                        context="{'group_by':'is_published'}" />
                 </group>
             </search>
         </field>
@@ -30,23 +33,30 @@ if records:
     <record id="document_view_form_inherite_carbongold_document_management" model="ir.ui.view">
         <field name="name">documents.form.inherite.carbongold.document.management</field>
         <field name="model">documents.document</field>
-        <field name="inherit_id" ref="documents.document_view_form"/>
+        <field name="inherit_id" ref="documents.document_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='owner_id']" position="after">
                 <field name="author" />
             </xpath>
             <xpath expr="//field[@name='type']" position="before">
-                <field name="thumbnail"/>
+                <field name="mimetype" invisible="1" />
+                <field name="portal_thumbnail" invisible="'image/' in mimetype or type == 'url'"
+                    widget="image" class="oe_avatar"
+                    options="{&quot;preview_image&quot;:&quot;portal_thumbnail&quot;}"
+                />
+            </xpath>
+            <xpath expr="//field[@name='thumbnail']" position="attributes">
+                <attribute name="invisible">not thumbnail or ('image/' not in mimetype)</attribute>
             </xpath>
             <xpath expr="//field[@name='create_uid']" position="after">
-                <field name="is_published" widget="boolean_toggle"/>
-                <field name="document_category_ids"  widget="documents_many2many_tags" />
+                <field name="is_published" widget="boolean_toggle" />
+                <field name="document_category_ids" widget="documents_many2many_tags" />
                 <field name="rating_avg" />
             </xpath>
 
             <xpath expr="//field[@name='mimetype']/.." position="after">
                 <group>
-                    <field name="doc_description"/>
+                    <field name="doc_description" />
                 </group>
             </xpath>
         </field>
@@ -55,14 +65,14 @@ if records:
     <record id="documents_view_list_inherite_carbongold_document_management" model="ir.ui.view">
         <field name="name">documents.document.inherite.carbongold.document.management</field>
         <field name="model">documents.document</field>
-        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="inherit_id" ref="documents.documents_view_list" />
         <field name="arch" type="xml">
             <xpath expr="//tree" position="inside">
                 <field name="rating_avg" column_invisible="1" />
                 <field name="doc_description" column_invisible="1" />
                 <field name="document_category_ids" widget="documents_many2many_tags" />
-                <field name="is_published" widget="boolean_toggle" optional="show"/>
-                <button name="action_view_documents_form" type="object" string="View"/>
+                <field name="is_published" widget="boolean_toggle" optional="show" />
+                <button name="action_view_documents_form" type="object" string="View" />
             </xpath>
         </field>
     </record>
@@ -70,12 +80,37 @@ if records:
     <record id="document_view_kanban_inherite_carbongold_document_management" model="ir.ui.view">
         <field name="name">documents.document.kanban.inherite.carbongold.document.management</field>
         <field name="model">documents.document</field>
-        <field name="inherit_id" ref="documents.document_view_kanban"/>
+        <field name="inherit_id" ref="documents.document_view_kanban" />
         <field name="arch" type="xml">
             <xpath expr="//templates" position="before">
                 <field name="doc_description" />
                 <field name="document_category_ids" />
                 <field name="rating_avg" />
+                <field name="portal_thumbnail" />
+            </xpath>
+            <xpath expr="//div/t[@t-set='hasThumbnail']" position="before">
+                <t t-set="hasPortalThumbnail" t-value="record.portal_thumbnail.value" />
+            </xpath>
+
+            <xpath expr="//t[@t-elif='hasThumbnail']" position="before">
+                <t t-elif="hasPortalThumbnail">
+                    <div class="o_documents_image">
+                        <img
+                            t-attf-src="/documents/image/#{record.id.raw_value}?field=portal_thumbnail&amp;"
+                            alt="Document preview" />
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-elif='hasThumbnail']" position="replace">
+                <t t-elif="hasThumbnail">
+                    <div class="o_documents_image">
+                        <t t-if="!hasPortalThumbnail">
+                            <img
+                                t-attf-src="/documents/image/#{record.id.raw_value}?field=thumbnail&amp;"
+                                alt="Document preview" />
+                        </t>
+                    </div>
+                </t>
             </xpath>
         </field>
     </record>
@@ -84,7 +119,7 @@ if records:
     <record id="document_view_search_inherite_carbongold_document_management" model="ir.ui.view">
         <field name="name">documents.search.view.inherite.carbongold.document.management</field>
         <field name="model">documents.document</field>
-        <field name="inherit_id" ref="documents.document_view_search"/>
+        <field name="inherit_id" ref="documents.document_view_search" />
         <field name="arch" type="xml">
             <xpath expr="//searchpanel" position="inside">
                 <field name="document_category_ids" select="multi" />
@@ -96,7 +131,7 @@ if records:
         <field name="name">Documents Analysis</field>
         <field name="res_model">documents.document</field>
         <field name="view_mode">graph,pivot</field>
-        <field name="search_view_id" ref="view_documents_report_search"/>
+        <field name="search_view_id" ref="view_documents_report_search" />
     </record>
 
     <menuitem
@@ -104,5 +139,5 @@ if records:
         name="Report"
         parent="documents.menu_root"
         action="action_documents_report"
-        sequence="3"/>
+        sequence="3" />
 </odoo>

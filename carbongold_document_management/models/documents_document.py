@@ -21,6 +21,9 @@ class Documents(models.Model):
     rating_avg = fields.Float("Average Rating", compute="_compute_rating_stats", store=True)
     rating_count = fields.Integer("Review Count", compute="_compute_rating_stats", store=True)
     allow_reviews = fields.Boolean(default=True)
+    
+    # Thumbnail for Portal Documents
+    portal_thumbnail = fields.Binary(attachment=True)
 
     @api.depends("reviews.rating", "reviews.is_published")
     def _compute_rating_stats(self):
