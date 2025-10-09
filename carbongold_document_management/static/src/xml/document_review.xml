@@ -10,7 +10,8 @@
                     <t t-else="" t-esc="this.reviewButtonText"/>
                 </button>
 
-                <a href="/web/login" class="btn btn-primary" t-if="!state.isLoggedIn">
+                    <a t-attf-href="/web/login?return_to=#{window.location.pathname}"
+                        class="btn btn-primary" t-if="!state.isLoggedIn">
                     <i class="fa fa-sign-in me-2"/>
                     <small>Login to Review</small>
                 </a>
@@ -221,7 +222,8 @@
                                         <i class="fa fa-reply me-1"/>
                                         <small>Reply</small>
                                     </button>
-                                    <a href="/web/login" class="btn btn-sm btn-link" t-if="!state.isLoggedIn">
+                                    <a t-attf-href="/web/login?return_to=#{window.location.pathname}"
+                                        class="btn btn-sm btn-link" t-if="!state.isLoggedIn">
                                         <i class="fa fa-sign-in me-1"/>
                                         <small>Login to Reply</small>
                                     </a>
